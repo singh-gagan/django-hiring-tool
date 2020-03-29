@@ -25,7 +25,7 @@ admin.site.register(CredentialsModel)
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
     change_list_template="sign_in_button.html"
-
+    """
     def get_urls(self):
         urls=super().get_urls()
         my_urls=[
@@ -34,7 +34,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             path('logout/',self.log_out),
         ]
         return my_urls+urls
-    
+    """
     def changelist_view(self, request, extra_context=None):
         status = True
         if not request.user.is_authenticated:
@@ -56,6 +56,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         
         return super(SubmissionAdmin, self).changelist_view(request, extra_context=extra_context)
 
+    """
     def gmail_authenticate(self,request):
         storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
         credential = storage.get()
@@ -81,3 +82,4 @@ class SubmissionAdmin(admin.ModelAdmin):
         instance = CredentialsModel.objects.get(id=request.user)
         instance.delete()
         return HttpResponseRedirect("../")
+    """    
