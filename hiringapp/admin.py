@@ -25,16 +25,7 @@ admin.site.register(CredentialsModel)
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
     change_list_template="sign_in_button.html"
-    """
-    def get_urls(self):
-        urls=super().get_urls()
-        my_urls=[
-            path('authenticate/',self.gmail_authenticate),
-            path('oauth2callback/',self.auth_return),
-            path('logout/',self.log_out),
-        ]
-        return my_urls+urls
-    """
+    
     def changelist_view(self, request, extra_context=None):
         status = True
         if not request.user.is_authenticated:
@@ -55,31 +46,4 @@ class SubmissionAdmin(admin.ModelAdmin):
         extra_context['status'] = status
         
         return super(SubmissionAdmin, self).changelist_view(request, extra_context=extra_context)
-
-    """
-    def gmail_authenticate(self,request):
-        storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
-        credential = storage.get()
-        FLOW.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,
-                                                       request.user)
-        authorize_url = FLOW.step1_get_authorize_url()
-        return HttpResponseRedirect(authorize_url)
-
-
-    def auth_return(self,request):
-        get_state = bytes(request.GET.get('state'), 'utf8')
-        if not xsrfutil.validate_token(settings.SECRET_KEY, get_state,
-                                      request.user):
-            return HttpResponseBadRequest()
-        credential = FLOW.step2_exchange(request.GET.get('code'))
-        storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
-        storage.put(credential)
-        print("access_token: %s" % credential.access_token)
-        return HttpResponseRedirect("../")
-
-
-    def log_out(self,request):
-        instance = CredentialsModel.objects.get(id=request.user)
-        instance.delete()
-        return HttpResponseRedirect("../")
-    """    
+    
