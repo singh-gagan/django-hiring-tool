@@ -19,6 +19,8 @@ from .utils import FLOW
 from mysite import settings
 from django.conf.urls import url
 from .models import CredentialsModel,MailModel
+from django_summernote.admin import SummernoteModelAdmin
+from .models import MailModel
 
 # Register your models here.
 admin.site.register(CredentialsModel)
@@ -49,7 +51,6 @@ class SubmissionAdmin(admin.ModelAdmin):
         return super(SubmissionAdmin, self).changelist_view(request, extra_context=extra_context)
     
 
-"""
 @admin.register(MailModel)
-class MailAdmin(admin.ModelAdmin):
-"""
+class MailAdmin(SummernoteModelAdmin):
+    summernote_fields=('mail_content',)

@@ -22,6 +22,11 @@ class Submission(models.Model):
         default=ActivityStatus.Not_Yet_Started
     )
 
+    def __str__(self):
+        str="Invitation No.{}".format(self.pk)
+        return str
+
+
 class CredentialsModel(models.Model): 
     id = models.ForeignKey(User, primary_key = True, on_delete = models.CASCADE) 
     credential = CredentialsField() 
@@ -31,9 +36,14 @@ class CredentialsAdmin(admin.ModelAdmin):
 
 
 class MailModel(models.Model):
-    mail_status=models.CharField(
+    mail_type=models.CharField(
         max_length=100,
-        choices=[(tag,tag.value) for tag in EmailType],
+        choices=[(key.value, key.name) for key in EmailType],
+        unique=True,
+        default=EmailType.Invitation,
     )
     mail_subject=models.CharField(max_length=100)
     mail_content=models.CharField(max_length=1000)
+
+    def __str__(self):
+        return self.mail_type
