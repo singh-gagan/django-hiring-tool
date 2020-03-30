@@ -17,5 +17,5 @@ FLOW = flow_from_clientsecrets(
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/gmail.send',
         'https://www.googleapis.com/auth/gmail.compose'],
-        redirect_uri='http://127.0.0.1:8000/oauth2callback',
+        redirect_uri='http://127.0.0.1:8000/admin/oauth2callback',
         prompt='consent')
