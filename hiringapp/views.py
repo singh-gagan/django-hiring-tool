@@ -20,32 +20,36 @@ from .utils import FLOW
 from mysite import settings
 from django.conf.urls import url
 from .models import CredentialsModel
+from django.views import View
 
 
 # Create your views here.
 
-def gmail_authenticate(request):
-    storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
-    credential = storage.get()
-    FLOW.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,
-                                                   request.user)
-    authorize_url = FLOW.step1_get_authorize_url()
-    return HttpResponseRedirect(authorize_url)
+class Gmail_Authenticate(View):
+    def post(self,request):
+        storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
+        credential = storage.get()
+        FLOW.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,
+                                                       request.user)
+        authorize_url = FLOW.step1_get_authorize_url()
+        return HttpResponseRedirect(authorize_url)
 
 
-def auth_return(request):
-    get_state = bytes(request.GET.get('state'), 'utf8')
-    if not xsrfutil.validate_token(settings.SECRET_KEY, get_state,
-                                  request.user):
-        return HttpResponseBadRequest()
-    credential = FLOW.step2_exchange(request.GET.get('code'))
-    storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
-    storage.put(credential)
-    print("access_token: %s" % credential.access_token)
-    return HttpResponseRedirect("../admin/hiringapp/submission/")
+class Auth_Return(View):
+    def get(self,request):
+        get_state = bytes(request.GET.get('state'), 'utf8')
+        if not xsrfutil.validate_token(settings.SECRET_KEY, get_state,
+                                      request.user):
+            return HttpResponseBadRequest()
+        credential = FLOW.step2_exchange(request.GET.get('code'))
+        storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
+        storage.put(credential)
+        print("access_token: %s" % credential.access_token)
+        return HttpResponseRedirect("../admin/hiringapp/submission/")
 
 
-def log_out(request):
-    instance = CredentialsModel.objects.get(id=request.user)
-    instance.delete()
-    return HttpResponseRedirect("../admin/hiringapp/submission/")
+class Log_Out(View):
+    def post(self,request):
+        instance = CredentialsModel.objects.get(id=request.user)
+        instance.delete()
+        return HttpResponseRedirect("../admin/hiringapp/submission/")    
