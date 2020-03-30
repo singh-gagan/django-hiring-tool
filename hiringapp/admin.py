@@ -18,10 +18,11 @@ from django.contrib import messages
 from .utils import FLOW
 from mysite import settings
 from django.conf.urls import url
-from .models import CredentialsModel
+from .models import CredentialsModel,MailModel
 
 # Register your models here.
 admin.site.register(CredentialsModel)
+#admin.site.register(MailModel)
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
     change_list_template="sign_in_button.html"
@@ -47,3 +48,8 @@ class SubmissionAdmin(admin.ModelAdmin):
         
         return super(SubmissionAdmin, self).changelist_view(request, extra_context=extra_context)
     
+
+"""
+@admin.register(MailModel)
+class MailAdmin(admin.ModelAdmin):
+"""

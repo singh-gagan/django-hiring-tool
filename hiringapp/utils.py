@@ -9,6 +9,12 @@ class ActivityStatus(Enum):
         Expired='expired'
 
 
+class EmailType(Enum):
+        Invitation='invitation'
+        Reminder='reminder'
+        Feedback='feedback'
+
+
 
 FLOW = flow_from_clientsecrets(
         settings.GOOGLE_OAUTH2_CLIENT_SECRETS_JSON,

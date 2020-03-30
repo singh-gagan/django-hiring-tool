@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib import admin
-from .utils import ActivityStatus
+from .utils import ActivityStatus,EmailType
 import uuid
 from django.contrib.auth.models import User 
 from oauth2client.contrib.django_util.models import CredentialsField 
@@ -13,7 +13,7 @@ class Submission(models.Model):
     activity_duration=models.TimeField(auto_now=False,auto_now_add=False)
     activity_start_time=models.DateTimeField(blank=True,null=True)
     activity_drive_link= models.URLField(max_length = 500)
-    activity_invite_link= models.UUIDField(primary_key = True, default = uuid.uuid4())
+    activity_uuid_link= models.UUIDField(primary_key = True, default = uuid.uuid4())
     activity_solution_link= models.URLField(max_length = 500,blank=True,null=True)
     reminder_for_submission_time=models.TimeField(auto_now=False,auto_now_add=False)
     activity_status=models.CharField(
@@ -28,3 +28,12 @@ class CredentialsModel(models.Model):
 
 class CredentialsAdmin(admin.ModelAdmin): 
     pass
+
+
+class MailModel(models.Model):
+    mail_status=models.CharField(
+        max_length=100,
+        choices=[(tag,tag.value) for tag in EmailType],
+    )
+    mail_subject=models.CharField(max_length=100)
+    mail_content=models.CharField(max_length=1000)
