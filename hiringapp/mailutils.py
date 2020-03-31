@@ -2,7 +2,7 @@ import httplib2
 from googleapiclient.discovery import build
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
-from .models import CredentialsModel
+from . import models
 from oauth2client.contrib import xsrfutil
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.contrib.django_util.storage import DjangoORMStorage
@@ -36,7 +36,7 @@ def send_message(service, user_id, message):
 
 
 def get_mail_service(user):
-    storage = DjangoORMStorage(CredentialsModel, 'id', user, 'credential')
+    storage = DjangoORMStorage(models.CredentialsModel, 'id', user, 'credential')
     credential = storage.get()
     if credential is None or credential.invalid:
         FLOW.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,user)
