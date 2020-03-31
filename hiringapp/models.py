@@ -4,6 +4,7 @@ from .utils import ActivityStatus,EmailType
 import uuid
 from django.contrib.auth.models import User 
 from oauth2client.contrib.django_util.models import CredentialsField 
+from .tasks import say_hello
 #Create your models here.
 
 class Submission(models.Model):
@@ -45,6 +46,10 @@ class MailModel(models.Model):
     )
     mail_subject=models.CharField(max_length=100)
     mail_content=models.CharField(max_length=1000)
+
+    def save(self, *args, **kwargs): 
+        #say_hello.delay()
+        super(MailModel, self).save(*args, **kwargs) 
 
     def __str__(self):
         return self.mail_type
