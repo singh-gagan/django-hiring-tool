@@ -1,0 +1,18 @@
+{% extends 'admin/change_list.html' %}
+{% block object-tools %}
+    <div>
+        {% if not status %}
+            <form action="{% url 'gmail_authenticate' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class=button>Sign In with Google</button>
+            </form>    
+        {% else %}
+            <form action="{% url 'log_out' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class=button>Log out</button>
+            </form>
+        {% endif %}    
+    </div>
+    <br />
+    {{ block.super }}
+{% endblock %}
