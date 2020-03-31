@@ -25,8 +25,12 @@ FLOW = flow_from_clientsecrets(
         redirect_uri='http://127.0.0.1:8000/admin/oauth2callback',
         prompt='consent')
 
-"""
+
 def create_invite_message(submission):
-        message=""
-        return message
-"""
+        #logic to create message from submission details and invite mail details 
+        #invite_mail=MailModel.object.filter(mail_type='invitation')
+        
+        
+        
+        
+        return ""

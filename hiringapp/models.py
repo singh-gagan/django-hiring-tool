@@ -5,7 +5,7 @@ import uuid
 from django.contrib.auth.models import User 
 from oauth2client.contrib.django_util.models import CredentialsField 
 from django.utils import timezone
-
+from .tasks import send_invite_mail
 class Submission(models.Model):
 
     #Candidate's related Info
@@ -16,7 +16,7 @@ class Submission(models.Model):
     activity_duration=models.TimeField(auto_now=False,auto_now_add=False)
     activity_start_time=models.DateTimeField(blank=True,null=True)
     activity_drive_link= models.URLField(max_length = 500)
-    activity_uuid_link= models.UUIDField(primary_key = True, default = uuid.uuid4())
+    activity_uuid= models.UUIDField(primary_key = True, default = uuid.uuid4())
     activity_solution_link= models.URLField(max_length = 500,blank=True,null=True)
     activity_status=models.CharField(
         max_length = 500,
@@ -33,6 +33,7 @@ class Submission(models.Model):
     
 
     def save(self, *args, **kwargs): 
+        send_invite_mail.delay(self)
         super(Submission, self).save(*args, **kwargs) 
 
     def __str__(self):
