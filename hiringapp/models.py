@@ -33,7 +33,7 @@ class Submission(models.Model):
     
 
     def save(self, *args, **kwargs): 
-        send_invite_mail.delay(self)
+        #send_invite_mail.delay(self)
         super(Submission, self).save(*args, **kwargs) 
 
     def __str__(self):
