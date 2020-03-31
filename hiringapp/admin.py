@@ -49,7 +49,14 @@ class SubmissionAdmin(admin.ModelAdmin):
         extra_context['status'] = status
         
         return super(SubmissionAdmin, self).changelist_view(request, extra_context=extra_context)
-    
+   
+    """
+    def save_model(self, request, obj, form, change):
+        obj.invite_creation
+        return super().save_model(request, obj, form, change)
+    """
+
+
 
 @admin.register(MailModel)
 class MailAdmin(SummernoteModelAdmin):

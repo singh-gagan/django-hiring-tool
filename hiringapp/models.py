@@ -4,7 +4,7 @@ from .utils import ActivityStatus,EmailType
 import uuid
 from django.contrib.auth.models import User 
 from oauth2client.contrib.django_util.models import CredentialsField 
-from .tasks import say_hello
+from django.utils import timezone
 #Create your models here.
 
 class Submission(models.Model):
@@ -17,6 +17,7 @@ class Submission(models.Model):
     activity_uuid_link= models.UUIDField(primary_key = True, default = uuid.uuid4())
     activity_solution_link= models.URLField(max_length = 500,blank=True,null=True)
     reminder_for_submission_time=models.TimeField(auto_now=False,auto_now_add=False)
+    invitation_host=models.ForeignKey(User, editable=False,blank=True,null=True)
     invitation_creation_dateandtime=models.DateTimeField(editable=False,blank=True,null=True)
     activity_status=models.CharField(
         max_length = 500,
@@ -46,10 +47,6 @@ class MailModel(models.Model):
     )
     mail_subject=models.CharField(max_length=100)
     mail_content=models.CharField(max_length=1000)
-
-    def save(self, *args, **kwargs): 
-        #say_hello.delay()
-        super(MailModel, self).save(*args, **kwargs) 
 
     def __str__(self):
         return self.mail_type
