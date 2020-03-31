@@ -16,6 +16,7 @@ class Submission(models.Model):
     activity_uuid_link= models.UUIDField(primary_key = True, default = uuid.uuid4())
     activity_solution_link= models.URLField(max_length = 500,blank=True,null=True)
     reminder_for_submission_time=models.TimeField(auto_now=False,auto_now_add=False)
+    invitation_creation_dateandtime=models.DateTimeField(editable=False,blank=True,null=True)
     activity_status=models.CharField(
         max_length = 500,
         choices=[(tag, tag.value) for tag in ActivityStatus],
