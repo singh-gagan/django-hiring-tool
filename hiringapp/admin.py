@@ -21,8 +21,8 @@ from django.conf.urls import url
 from .models import CredentialsModel,MailModel
 from django_summernote.admin import SummernoteModelAdmin
 from .models import MailModel
+from django.utils import timezone
 
-# Register your models here.
 admin.site.register(CredentialsModel)
 #admin.site.register(MailModel)
 @admin.register(Submission)
@@ -50,12 +50,14 @@ class SubmissionAdmin(admin.ModelAdmin):
         
         return super(SubmissionAdmin, self).changelist_view(request, extra_context=extra_context)
    
-    """
+    
     def save_model(self, request, obj, form, change):
-        obj.invite_creation
+        if not change:
+            obj.invitation_host=request.user
+            obj.invitation_creation_dateandtime=timezone.now()
+        obj.save()
         return super().save_model(request, obj, form, change)
-    """
-
+    
 
 
 @admin.register(MailModel)
