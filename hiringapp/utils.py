@@ -28,16 +28,4 @@ FLOW = flow_from_clientsecrets(
         'https://www.googleapis.com/auth/gmail.compose'],
         redirect_uri='http://127.0.0.1:8000/admin/oauth2callback',
         prompt='consent')
-
-
-def create_invite_message(submission):
-        #logic to create message from submission details and 'invite mail' details 
-        invitation=models.MailModel.objects.get(mail_type='invitation')
-        message=invitation.mail_content
-        mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_uuid=submission.activity_uuid)
-        message=MIMEText(mail_body,'html')
-        message['to']=submission.candidate_email
-        message['subject']=invitation.mail_subject
-        return {'raw': base64.urlsafe_b64encode(message.as_string().encode()).decode()}
-
         

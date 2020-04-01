@@ -17,14 +17,6 @@ from django.views.generic.edit import FormView
 from mysite import settings
 from .utils import FLOW
 
-def create_message(sender,to,subject,message_text):
-    message=MIMEText(message_text,'html')
-    message['to'] = to
-    message['from'] = sender
-    message['subject'] = subject
-    return {'raw': base64.urlsafe_b64encode(message.as_string().encode()).decode()}
-
-
 def send_message(service, user_id, message):
     try:
         message = (service.users().messages().send(userId=user_id, body=message)
@@ -44,3 +36,22 @@ def get_mail_service(user):
         return HttpResponseRedirect(authorize_url)
     service = build('gmail', 'v1', credentials=credential,cache_discovery=False)
     return service
+
+def create_messages(submission,email_type):
+    #logic to create message from submission details and email_type 
+    mail=models.MailModel.objects.get(mail_type=email_type)
+    message=mail.mail_content
+    mail_body=create_mail_body(submission,email_type,message)
+    message=MIMEText(mail_body,'html')
+    message['to']=submission.candidate_email
+    message['subject']=mail.mail_subject
+    return {'raw': base64.urlsafe_b64encode(message.as_string().encode()).decode()}
+
+def create_mail_body(submission,email_type,message):
+    mail_body=""
+    if email_type=='reminder':
+        mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_uuid=submission.activity_uuid)
+    elif email_type=='invitation':
+        mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_uuid=submission.activity_uuid)
+
+    return mail_body

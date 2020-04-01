@@ -5,7 +5,7 @@ import uuid
 from django.contrib.auth.models import User 
 from oauth2client.contrib.django_util.models import CredentialsField 
 from django.utils import timezone
-from .tasks import send_invite_mail
+from .tasks import send_emails_to_candidates
 import datetime
 
 class Submission(models.Model):
@@ -36,7 +36,7 @@ class Submission(models.Model):
 
     def save(self, *args, **kwargs): 
         id=self.activity_uuid
-        send_invite_mail.delay(id)
+        send_emails_to_candidates.delay(id,'invitation')
         super(Submission, self).save(*args, **kwargs) 
 
     def __str__(self):
@@ -70,9 +70,8 @@ class MailSummary(models.Model):
     mail_type=models.CharField(
         max_length=100,
         choices=[(key.value, key.name) for key in EmailType],
-        unique=True,
         default=EmailType.Invitation,
     )
     activity_uuid=models.UUIDField(null=True)
     candidate_name=models.CharField(max_length=200)
-    date_of_mail=models.DateTimeField(blank=True,null=True,editable=False)
+    date_of_mail=models.DateTimeField(blank=True,null=True)
