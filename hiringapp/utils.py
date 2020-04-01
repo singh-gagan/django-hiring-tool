@@ -17,6 +17,7 @@ class EmailType(Enum):
         Invitation='invitation'
         Reminder='reminder'
         Feedback='feedback'
+        SubmissionReminder='reminder_to_submit'
 
 
 FLOW = flow_from_clientsecrets(

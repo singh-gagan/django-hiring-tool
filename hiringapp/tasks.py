@@ -7,6 +7,7 @@ from celery import shared_task
 from . import models
 from .utils import EmailType
 from django.utils import timezone
+from datetime import datetime,timedelta
 
 @shared_task
 def send_emails_to_candidates(id,email_type):
@@ -22,3 +23,29 @@ def send_emails_to_candidates(id,email_type):
     return "celery_task_executed"
 
 
+@shared_task
+def checkout_pending_tasks():
+    # This schedulded method will iterate for every submission objects and check for pending tasks of sending emails
+    #All reminders mail will be sent in accordance with the pattern given in reminders_gap_list[]
+    current_date=datetime.now().date()
+    reminders_gap_list=[1,2,3]
+    all_submissions=models.Submission.objects.all()
+    for submission in all_submissions:
+        if submission.status=='not_yet_started':
+            latest_mail_summary=models.MailSummary.objects.filter(activity_uuid=submission.uuid).latest('date_of_mail')
+            latest_mail_sent_date=latest_mail_summary.date_of_mail.date()
+            if current_date==latest_mail_sent_date:
+                continue
+            gap=current_date-submission.invitation_creation_dateandtime.date()
+            if gap in reminders_gap_list:
+                send_emails_to_candidates.delay(submission.uuid,'reminder')
+        elif submission.status=='started':
+            latest_mail_summary=models.MailSummary.objects.filter(activity_uuid=submission.uuid).latest('date_of_mail')
+            if latest_mail_summary.mail_type=='reminder_to_submit':
+                continue
+            activity_end_time=submission.activity_start_time+timedelta(days=2,hours=0)
+            activity_reminder_time=activity_end_time-submission.reminder_for_submission_time
+            if datetime.now()>=activity_reminder_time:
+                send_emails_to_candidates.delay(submission.activity_uuid,'reminder_to_start')
+    
+    return "checkout done"
