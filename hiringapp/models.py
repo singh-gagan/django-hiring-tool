@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from oauth2client.contrib.django_util.models import CredentialsField 
 from django.utils import timezone
 from .tasks import send_invite_mail
+import datetime
+
 class Submission(models.Model):
 
     #Candidate's related Info
@@ -13,19 +15,19 @@ class Submission(models.Model):
     candidate_email=models.EmailField(max_length = 254)
 
     #Activity Realted Info
-    activity_duration=models.TimeField(auto_now=False,auto_now_add=False)
+    activity_duration=models.DurationField(default=datetime.timedelta(days=2, hours=0))
     activity_start_time=models.DateTimeField(blank=True,null=True)
     activity_drive_link= models.URLField(max_length = 500)
     activity_uuid= models.UUIDField(primary_key = True, default = uuid.uuid4())
     activity_solution_link= models.URLField(max_length = 500,blank=True,null=True)
     activity_status=models.CharField(
         max_length = 500,
-        choices=[(tag, tag.value) for tag in ActivityStatus],
+        choices=[(key.value, key.name) for key in ActivityStatus],
         default=ActivityStatus.Not_Yet_Started
     )
 
     #remainder mails related Info
-    reminder_for_submission_time=models.TimeField(auto_now=False,auto_now_add=False)
+    reminder_for_submission_time=models.DurationField(default=datetime.timedelta(days=0,hours=2))
 
     #Invitation realted Info who and when
     invitation_host=models.ForeignKey(User,on_delete=models.CASCADE,editable=False,blank=True,null=True)
@@ -33,11 +35,12 @@ class Submission(models.Model):
     
 
     def save(self, *args, **kwargs): 
-        #send_invite_mail.delay(self)
+        id=self.activity_uuid
+        send_invite_mail.delay(id)
         super(Submission, self).save(*args, **kwargs) 
 
     def __str__(self):
-        str="Invitation No.{}".format(self.pk)
+        str="Invitation No.{}".format(self.candidate_name)
         return str
 
 

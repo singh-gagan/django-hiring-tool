@@ -42,5 +42,5 @@ def get_mail_service(user):
         FLOW.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,user)
         authorize_url = FLOW.step1_get_authorize_url()
         return HttpResponseRedirect(authorize_url)
-    service = build('gmail', 'v1', credentials=credential)
+    service = build('gmail', 'v1', credentials=credential,cache_discovery=False)
     return service
