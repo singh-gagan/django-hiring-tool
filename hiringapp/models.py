@@ -64,3 +64,15 @@ class MailModel(models.Model):
 
     def __str__(self):
         return self.mail_type
+
+
+class MailSummary(models.Model):
+    mail_type=models.CharField(
+        max_length=100,
+        choices=[(key.value, key.name) for key in EmailType],
+        unique=True,
+        default=EmailType.Invitation,
+    )
+    activity_uuid=models.UUIDField(null=True)
+    candidate_name=models.CharField(max_length=200)
+    date_of_mail=models.DateTimeField(blank=True,null=True,editable=False)

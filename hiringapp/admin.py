@@ -20,10 +20,11 @@ from mysite import settings
 from django.conf.urls import url
 from .models import CredentialsModel,MailModel
 from django_summernote.admin import SummernoteModelAdmin
-from .models import MailModel
+from .models import MailModel,MailSummary
 from django.utils import timezone
 
 admin.site.register(CredentialsModel)
+admin.site.register(MailSummary)
 #admin.site.register(MailModel)
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
