@@ -28,7 +28,7 @@ admin.site.register(MailSummary)
 #admin.site.register(MailModel)
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
-    change_list_template="sign_in_button.html"
+    change_list_template="change_list.html"
     
     def changelist_view(self, request, extra_context=None):
         status = True
