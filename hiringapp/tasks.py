@@ -17,7 +17,7 @@ def send_emails_to_candidates(id,email_type):
         service=get_mail_service(submission.invitation_host)
         sent = send_message(service,'me', message)
         models.MailSummary.objects.create(mail_type=email_type,activity_uuid=id,candidate_name=submission.candidate_name,date_of_mail=timezone.now())     
-        print('Mail sent successfully')
+        print('{} mail sent successfully to {} activity_uuid {}'.format(email_type,submission.candidate_name,submission.activity_uuid))
     except:
         print('Mail not sent')
     return "celery_task_executed"
@@ -28,24 +28,24 @@ def checkout_pending_tasks():
     # This schedulded method will iterate for every submission objects and check for pending tasks of sending emails
     #All reminders mail will be sent in accordance with the pattern given in reminders_gap_list[]
     current_date=datetime.now().date()
-    reminders_gap_list=[1,2,3]
+    reminders_gap_list=[1,3,6]
     all_submissions=models.Submission.objects.all()
     for submission in all_submissions:
-        if submission.status=='not_yet_started':
-            latest_mail_summary=models.MailSummary.objects.filter(activity_uuid=submission.uuid).latest('date_of_mail')
+        if submission.activity_status=='not_yet_started':
+            latest_mail_summary=models.MailSummary.objects.filter(activity_uuid=submission.activity_uuid).latest('date_of_mail')
             latest_mail_sent_date=latest_mail_summary.date_of_mail.date()
             if current_date==latest_mail_sent_date:
                 continue
             gap=current_date-submission.invitation_creation_dateandtime.date()
             if gap in reminders_gap_list:
                 send_emails_to_candidates.delay(submission.uuid,'reminder')
-        elif submission.status=='started':
-            latest_mail_summary=models.MailSummary.objects.filter(activity_uuid=submission.uuid).latest('date_of_mail')
+        elif submission.activity_status=='started':
+            latest_mail_summary=models.MailSummary.objects.filter(activity_uuid=submission.activity_uuid).latest('date_of_mail')
             if latest_mail_summary.mail_type=='reminder_to_submit':
                 continue
-            activity_end_time=submission.activity_start_time+timedelta(days=2,hours=0)
+            activity_end_time=submission.activity_start_time+submission.activity_duration
             activity_reminder_time=activity_end_time-submission.reminder_for_submission_time
             if datetime.now()>=activity_reminder_time:
-                send_emails_to_candidates.delay(submission.activity_uuid,'reminder_to_start')
+                send_emails_to_candidates.delay(submission.activity_uuid,'reminder_to_submit')
     
-    return "checkout done"
+    return "pending tasks executed"

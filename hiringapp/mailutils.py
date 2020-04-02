@@ -53,5 +53,6 @@ def create_mail_body(submission,email_type,message):
         mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_uuid=submission.activity_uuid)
     elif email_type=='invitation':
         mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_uuid=submission.activity_uuid)
-
+    elif email_type=='reminder_to_submit':
+        mail_body=message.format(candidate_name=submission.candidate_name,time_left=submission.reminder_for_submission_time)
     return mail_body
