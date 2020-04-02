@@ -35,7 +35,8 @@ class Submission(models.Model):
     invitation_creation_dateandtime=models.DateTimeField(editable=False,blank=True,null=True)
     
 
-    def save(self, *args, **kwargs): 
+    def save(self, *args, **kwargs):
+        self.clean() 
         if self._state.adding is True:
             id=self.activity_uuid
             send_emails_to_candidates.delay(id,'invitation')

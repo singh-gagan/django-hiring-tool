@@ -23,6 +23,7 @@ from django_summernote.admin import SummernoteModelAdmin
 from .models import MailModel,MailSummary
 from django.utils import timezone
 
+
 admin.site.register(CredentialsModel)
 admin.site.register(MailSummary)
 #admin.site.register(MailModel)
