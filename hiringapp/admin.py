@@ -64,7 +64,3 @@ class SubmissionAdmin(admin.ModelAdmin):
 @admin.register(MailModel)
 class MailAdmin(SummernoteModelAdmin):
     summernote_fields=('mail_content',)
-<<<<<<< HEAD
-
-=======
->>>>>>> branch3c
