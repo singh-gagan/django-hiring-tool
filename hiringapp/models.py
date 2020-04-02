@@ -35,8 +35,7 @@ class Submission(models.Model):
     invitation_creation_dateandtime=models.DateTimeField(editable=False,blank=True,null=True)
     
 
-    def save(self, *args, **kwargs):
-        self.clean() 
+    def save(self, *args, **kwargs): 
         if self._state.adding is True:
             id=self.activity_uuid
             send_emails_to_candidates.delay(id,'invitation')
@@ -45,11 +44,6 @@ class Submission(models.Model):
     def __str__(self):
         str="Invitation to {}".format(self.candidate_name)
         return str
-
-    def clean(self):
-        if not CredentialsModel.objects.filter(id=self.invitation_host).exists():
-            raise ValidationError('You need to sign in before creating an invitation.')
-
 
 class CredentialsModel(models.Model): 
     id = models.ForeignKey(User, primary_key = True, on_delete = models.CASCADE) 
