@@ -7,6 +7,7 @@ from oauth2client.contrib.django_util.models import CredentialsField
 from django.utils import timezone
 from .tasks import send_emails_to_candidates
 import datetime
+from django.core.exceptions import ValidationError
 
 class Submission(models.Model):
 
@@ -43,6 +44,10 @@ class Submission(models.Model):
     def __str__(self):
         str="Invitation to {}".format(self.candidate_name)
         return str
+
+    def clean(self):
+        if not CredentialsModel.objects.filter(id=self.invitation_host).exists():
+            raise ValidationError('You need to sign in before creating an invitation.')
 
 
 class CredentialsModel(models.Model): 
