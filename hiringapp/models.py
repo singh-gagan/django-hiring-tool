@@ -4,27 +4,50 @@ from .utils import ActivityStatus,EmailType
 import uuid
 from django.contrib.auth.models import User 
 from oauth2client.contrib.django_util.models import CredentialsField 
-#Create your models here.
+from django.utils import timezone
+from .tasks import send_emails_to_candidates
+import datetime
+from django.core.exceptions import ValidationError
 
 class Submission(models.Model):
 
+    #Candidate's related Info
     candidate_name=models.CharField(max_length=200)
     candidate_email=models.EmailField(max_length = 254)
-    activity_duration=models.TimeField(auto_now=False,auto_now_add=False)
+
+    #Activity Realted Info
+    activity_duration=models.DurationField(default=datetime.timedelta(days=2, hours=0))
     activity_start_time=models.DateTimeField(blank=True,null=True)
     activity_drive_link= models.URLField(max_length = 500)
     activity_uuid= models.UUIDField(primary_key = True, default = uuid.uuid4())
     activity_solution_link= models.URLField(max_length = 500,blank=True,null=True)
-    reminder_for_submission_time=models.TimeField(auto_now=False,auto_now_add=False)
     activity_status=models.CharField(
         max_length = 500,
-        choices=[(tag, tag.value) for tag in ActivityStatus],
+        choices=[(key.value, key.name) for key in ActivityStatus],
         default=ActivityStatus.Not_Yet_Started
     )
 
+    #remainder mails related Info
+    reminder_for_submission_time=models.DurationField(default=datetime.timedelta(days=0,hours=2))
+
+    #Invitation realted Info who and when
+    invitation_host=models.ForeignKey(User,on_delete=models.CASCADE,editable=False,blank=True,null=True)
+    invitation_creation_dateandtime=models.DateTimeField(editable=False,blank=True,null=True)
+    
+
+    def save(self, *args, **kwargs): 
+        if self._state.adding is True:
+            id=self.activity_uuid
+            send_emails_to_candidates.delay(id,'invitation')
+        super(Submission, self).save(*args, **kwargs) 
+
     def __str__(self):
-        str="Invitation No.{}".format(self.pk)
+        str="Invitation to {}".format(self.candidate_name)
         return str
+
+    def clean(self):
+        if not CredentialsModel.objects.filter(id=self.invitation_host).exists():
+            raise ValidationError('You need to sign in before creating an invitation.')
 
 
 class CredentialsModel(models.Model): 
@@ -47,3 +70,14 @@ class MailModel(models.Model):
 
     def __str__(self):
         return self.mail_type
+
+
+class MailSummary(models.Model):
+    mail_type=models.CharField(
+        max_length=100,
+        choices=[(key.value, key.name) for key in EmailType],
+        default=EmailType.Invitation,
+    )
+    activity_uuid=models.UUIDField(null=True)
+    candidate_name=models.CharField(max_length=200)
+    date_of_mail=models.DateTimeField(blank=True,null=True)

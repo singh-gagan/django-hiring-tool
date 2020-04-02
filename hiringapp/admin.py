@@ -20,14 +20,15 @@ from mysite import settings
 from django.conf.urls import url
 from .models import CredentialsModel,MailModel
 from django_summernote.admin import SummernoteModelAdmin
-from .models import MailModel
+from .models import MailModel,MailSummary
+from django.utils import timezone
 
-# Register your models here.
 admin.site.register(CredentialsModel)
+admin.site.register(MailSummary)
 #admin.site.register(MailModel)
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
-    change_list_template="sign_in_button.html"
+    change_list_template="change_list.html"
     
     def changelist_view(self, request, extra_context=None):
         status = True
@@ -49,9 +50,21 @@ class SubmissionAdmin(admin.ModelAdmin):
         extra_context['status'] = status
         
         return super(SubmissionAdmin, self).changelist_view(request, extra_context=extra_context)
+   
     
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.invitation_host=request.user
+            obj.invitation_creation_dateandtime=timezone.now()
+        obj.save()
+        return super().save_model(request, obj, form, change)
+    
+
 
 @admin.register(MailModel)
 class MailAdmin(SummernoteModelAdmin):
     summernote_fields=('mail_content',)
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch3c
