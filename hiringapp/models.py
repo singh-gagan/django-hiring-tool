@@ -36,9 +36,9 @@ class Submission(models.Model):
     
 
     def save(self, *args, **kwargs): 
-        if self._state.adding is True:
-            id=self.activity_uuid
-            send_emails_to_candidates.delay(id,'invitation')
+        #if self._state.adding is True:
+        id=self.activity_uuid
+        send_emails_to_candidates.delay(id,'invitation')
         super(Submission, self).save(*args, **kwargs) 
 
     def __str__(self):

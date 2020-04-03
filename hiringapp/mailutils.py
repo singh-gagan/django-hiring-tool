@@ -3,6 +3,7 @@ from googleapiclient.discovery import build
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
 from . import models
+from django.urls import reverse
 from oauth2client.contrib import xsrfutil
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.contrib.django_util.storage import DjangoORMStorage
@@ -49,10 +50,13 @@ def create_messages(submission,email_type):
 
 def create_mail_body(submission,email_type,message):
     mail_body=""
+    activity_invite_url="127.0.0.1:8000"+reverse('submission_invite',args=(submission.activity_uuid,))
+    #print("in mailbody")
+    #print(activity_invite_url)
     if email_type=='reminder':
-        mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_uuid=submission.activity_uuid)
+        mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_url=activity_invite_url)
     elif email_type=='invitation':
-        mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_uuid=submission.activity_uuid)
+        mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_url=activity_invite_url)
     elif email_type=='reminder_to_submit':
         mail_body=message.format(candidate_name=submission.candidate_name,time_left=submission.reminder_for_submission_time)
     return mail_body
