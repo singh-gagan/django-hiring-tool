@@ -19,7 +19,7 @@ class Submission(models.Model):
     activity_duration=models.DurationField(default=datetime.timedelta(days=2, hours=0))
     activity_start_time=models.DateTimeField(blank=True,null=True)
     activity_drive_link= models.URLField(max_length = 500)
-    activity_uuid= models.UUIDField(primary_key = True, default = uuid.uuid4())
+    activity_uuid= models.UUIDField(primary_key = True, default = uuid.uuid4)
     activity_solution_link= models.URLField(max_length = 500,blank=True,null=True)
     activity_status=models.CharField(
         max_length = 500,
@@ -36,19 +36,14 @@ class Submission(models.Model):
     
 
     def save(self, *args, **kwargs): 
-        if self._state.adding is True:
-            id=self.activity_uuid
-            send_emails_to_candidates.delay(id,'invitation')
+        #if self._state.adding is True:
+        id=self.activity_uuid
+        send_emails_to_candidates.delay(id,'invitation')
         super(Submission, self).save(*args, **kwargs) 
 
     def __str__(self):
         str="Invitation to {}".format(self.candidate_name)
         return str
-
-    def clean(self):
-        if not CredentialsModel.objects.filter(id=self.invitation_host).exists():
-            raise ValidationError('You need to sign in before creating an invitation.')
-
 
 class CredentialsModel(models.Model): 
     id = models.ForeignKey(User, primary_key = True, on_delete = models.CASCADE) 

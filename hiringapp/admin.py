@@ -22,6 +22,8 @@ from .models import CredentialsModel,MailModel
 from django_summernote.admin import SummernoteModelAdmin
 from .models import MailModel,MailSummary
 from django.utils import timezone
+from logging import CRITICAL
+
 
 admin.site.register(CredentialsModel)
 admin.site.register(MailSummary)
@@ -29,7 +31,6 @@ admin.site.register(MailSummary)
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
     change_list_template="change_list.html"
-    
     def changelist_view(self, request, extra_context=None):
         status = True
         if not request.user.is_authenticated:
@@ -45,20 +46,19 @@ class SubmissionAdmin(admin.ModelAdmin):
         except:
             status = False
             #print('Not Found')
-        
         extra_context = extra_context or {}
         extra_context['status'] = status
-        
         return super(SubmissionAdmin, self).changelist_view(request, extra_context=extra_context)
    
-    
     def save_model(self, request, obj, form, change):
         if not change:
             obj.invitation_host=request.user
             obj.invitation_creation_dateandtime=timezone.now()
-        obj.save()
         return super().save_model(request, obj, form, change)
-    
+
+    def has_add_permission(self, request):
+        return CredentialsModel.objects.filter(id=request.user).exists()
+        
 
 
 @admin.register(MailModel)

@@ -13,6 +13,7 @@ from datetime import datetime,timedelta
 def send_emails_to_candidates(id,email_type):
     submission=models.Submission.objects.get(activity_uuid=id)
     try:
+        #print('in try block')
         message=create_messages(submission,email_type)
         service=get_mail_service(submission.invitation_host)
         sent = send_message(service,'me', message)
