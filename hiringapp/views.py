@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.contrib import admin
 from .models import Submission
 from django.urls import path
@@ -21,7 +21,8 @@ from mysite import settings
 from django.conf.urls import url
 from .models import CredentialsModel
 from django.views import View
-
+from django.views.generic import TemplateView
+from datetime import datetime,date
 
 # Create your views here.
 
@@ -53,3 +54,23 @@ class Log_Out(View):
         instance = CredentialsModel.objects.get(id=request.user)
         instance.delete()
         return HttpResponseRedirect("../admin/hiringapp/submission/")    
+
+
+class SubmissionInvite(View):
+    
+    #This will run every time whenever the invite link is opened whether the status is started,not_started,expired,finished
+    def get(self,request,factory_id):
+        if not Submission.objects.filter(Submission,activity_uuid=factory_id).exist():
+            invalid=True
+            return render(request,'hiringapp/display_activity.html',{'invalid':invalid})    
+        submission=get_object_or_404(Submission,activity_uuid=factory_id)
+        return render(request,'hiringapp/display_activity.html',{'submission':submission})
+    
+    #This will only arise when the candidate clicks on start button
+    def post(self, request,factory_id):
+        submission=get_object_or_404(Submission,activity_uuid=factory_id)
+        submission.activity_status="started"
+        submission.activity_start_time=datetime.now()
+        submission.save()
+        return render(request,'hiringapp/display_activity.html',{'submission':submission})
+         
