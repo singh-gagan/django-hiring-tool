@@ -1,20 +1,38 @@
 {% extends 'hiringapp/base.html' %}
     {% block content %} 
+
+        <!-- We will check whether a valid candidate or not    -->
         {% if invalid %}
             <h3>This is not a valid link.You can contact the recruiter for any communication</h3>
         {% endif %}
+    
+
+
+        <!-- This region is for the candidate who has not started yet-->
         {% ifequal submission.activity_status "not_yet_started" %}
             <form action={% url 'submission_invite' factory_id=submission.activity_uuid %} method="POST">
             {% csrf_token %}
             <button type="submit" class="button button1">Start the Activity</button>
             </form>
         {% endifequal %}
+    
+
+
+        <!-- This region is for the candidate who has started but not yet submitted   -->
         {% ifequal submission.activity_status "started" %}
             <iframe src="{{submission.activity_drive_link}}" width="1000"height="600"></iframe>
         {% endifequal %}
+
+
+
+        <!-- This region is for the candidate who has submitted the solution but he will be allowed to view the activity-->
         {% ifequal submission.activity_status "submitted" %}
             <h3>You have submitted the solution.We will revert back to you soon.</h3>
+            <iframe src="{{submission.activity_drive_link}}" width="1000"height="600"></iframe>
         {% endifequal %}
+
+
+        <!-- This region is for time up case-->
         {% ifequal submission.activity_status "expired" %}
             <h3>This activity is expired.You can contact the recruiter for any communication</h3>
         {% endifequal %}    
