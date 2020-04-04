@@ -23,12 +23,11 @@
         <!-- In this region we will show activity content,time left,submit button.  -->
         <!-- And we will also have a time trigger which will update the status to expired-->
         {% ifequal submission.activity_status "started" %}
-            <iframe src="{{submission.activity_drive_link}}" width="1000"height="600"></iframe>
             <form action={% url 'submission_solution' factory_id=submission.activity_uuid %} method="post">
-                {% csrf_token %}
-                <input type="text" name="solution_link" placeholder="Solution link"/>
-                <button type="submit" class="button button1">Submit Solution</button>
+                <input type="text" name="solution_link" size="50" placeholder="Solution link"/>
+                <button type="submit" class="button button2">Submit Solution</button>
             </form>
+            <iframe src="{{submission.activity_drive_link}}" width="1000"height="600"></iframe>
         {% endifequal %}
 
 

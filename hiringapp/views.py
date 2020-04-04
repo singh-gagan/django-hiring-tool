@@ -60,7 +60,7 @@ class SubmissionInvite(View):
     
     #This will run every time whenever the invite link is loaded whether the status is started,not_started,expired,finished
     def get(self,request,factory_id):
-        if not Submission.objects.filter(Submission,activity_uuid=factory_id).exist():
+        if not Submission.objects.filter(activity_uuid=factory_id).exists():
             invalid=True
             return render(request,'hiringapp/display_activity.html',{'invalid':invalid})    
         submission=get_object_or_404(Submission,activity_uuid=factory_id)
@@ -75,11 +75,13 @@ class SubmissionInvite(View):
         return render(request,'hiringapp/display_activity.html',{'submission':submission})
 
 class SubmitSolution(View):
-    def put(self,request,factory_id):
+
+    def post(self,request,factory_id):
         submission=get_object_or_404(Submission,activity_uuid=factory_id)
         submission.activity_status="submitted"
+        print("In submit solution view")
         submission.activity_solution_link=request.POST['solution_link']
         submission.save()
-        return reverse('submission_invite',args=(submission.activity_uuid,))
+        return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
 
         
