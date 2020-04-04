@@ -1,4 +1,4 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,reverse
 from django.contrib import admin
 from .models import Submission
 from django.urls import path
@@ -58,7 +58,7 @@ class Log_Out(View):
 
 class SubmissionInvite(View):
     
-    #This will run every time whenever the invite link is opened whether the status is started,not_started,expired,finished
+    #This will run every time whenever the invite link is loaded whether the status is started,not_started,expired,finished
     def get(self,request,factory_id):
         if not Submission.objects.filter(Submission,activity_uuid=factory_id).exist():
             invalid=True
@@ -73,4 +73,13 @@ class SubmissionInvite(View):
         submission.activity_start_time=datetime.now()
         submission.save()
         return render(request,'hiringapp/display_activity.html',{'submission':submission})
-         
+
+class SubmitSolution(View):
+    def put(self,request,factory_id):
+        submission=get_object_or_404(Submission,activity_uuid=factory_id)
+        submission.activity_status="submitted"
+        submission.activity_solution_link=request.POST['solution_link']
+        submission.save()
+        return reverse('submission_invite',args=(submission.activity_uuid,))
+
+        

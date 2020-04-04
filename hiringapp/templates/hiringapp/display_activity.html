@@ -9,6 +9,7 @@
 
 
         <!-- This region is for the candidate who has not started yet-->
+        <!-- We will have a start the activity button which will update start time and status to started-->
         {% ifequal submission.activity_status "not_yet_started" %}
             <form action={% url 'submission_invite' factory_id=submission.activity_uuid %} method="POST">
             {% csrf_token %}
@@ -19,18 +20,26 @@
 
 
         <!-- This region is for the candidate who has started but not yet submitted   -->
+        <!-- In this region we will show activity content,time left,submit button.  -->
+        <!-- And we will also have a time trigger which will update the status to expired-->
         {% ifequal submission.activity_status "started" %}
             <iframe src="{{submission.activity_drive_link}}" width="1000"height="600"></iframe>
+            <form action={% url 'submission_solution' factory_id=submission.activity_uuid %} method="post">
+                {% csrf_token %}
+                <input type="text" name="solution_link" placeholder="Solution link"/>
+                <button type="submit" class="button button1">Submit Solution</button>
+            </form>
         {% endifequal %}
 
 
-
-        <!-- This region is for the candidate who has submitted the solution but he will be allowed to view the activity-->
+        <!--This region is for the activity whose status is submitted-->
         {% ifequal submission.activity_status "submitted" %}
+            <!--First case is when current time is less than activity ending time and we will display activity content and time left-->
+            <!--Also we will have a trigger which will only refresh the page after time up so that second case arises-->
             <h3>You have submitted the solution.We will revert back to you soon.</h3>
             <iframe src="{{submission.activity_drive_link}}" width="1000"height="600"></iframe>
         {% endifequal %}
-
+        
 
         <!-- This region is for time up case-->
         {% ifequal submission.activity_status "expired" %}
