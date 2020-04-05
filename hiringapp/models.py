@@ -5,7 +5,7 @@ import uuid
 from django.contrib.auth.models import User 
 from oauth2client.contrib.django_util.models import CredentialsField 
 from django.utils import timezone
-from .tasks import send_emails_to_candidates
+from .tasks import send_emails
 import datetime
 from django.core.exceptions import ValidationError
 
@@ -38,7 +38,7 @@ class Submission(models.Model):
     def save(self, *args, **kwargs): 
         #if self._state.adding is True:
         id=self.activity_uuid
-        send_emails_to_candidates.delay(id,'invitation')
+        send_emails.delay(id,'invitation')
         super(Submission, self).save(*args, **kwargs) 
 
     def __str__(self):

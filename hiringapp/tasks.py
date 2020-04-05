@@ -10,10 +10,9 @@ from django.utils import timezone
 from datetime import datetime,timedelta
 
 @shared_task
-def send_emails_to_candidates(id,email_type):
+def send_emails(id,email_type):
     submission=models.Submission.objects.get(activity_uuid=id)
     try:
-        #print('in try block')
         message=create_messages(submission,email_type)
         service=get_mail_service(submission.invitation_host)
         sent = send_message(service,'me', message)
@@ -39,7 +38,7 @@ def checkout_pending_tasks():
                 continue
             gap=current_date-submission.invitation_creation_dateandtime.date()
             if gap in reminders_gap_list:
-                send_emails_to_candidates.delay(submission.uuid,'reminder')
+                send_emails.delay(submission.uuid,'reminder')
         elif submission.activity_status=='started' and submission.activity_start_time+submission.activity_duration > datetime.now():
             latest_mail_summary=models.MailSummary.objects.filter(activity_uuid=submission.activity_uuid).latest('date_of_mail')
             if latest_mail_summary.mail_type=='reminder_to_submit':
@@ -47,10 +46,10 @@ def checkout_pending_tasks():
             activity_end_time=submission.activity_start_time+submission.activity_duration
             activity_reminder_time=activity_end_time-submission.reminder_for_submission_time
             if datetime.now()>=activity_reminder_time:
-                send_emails_to_candidates.delay(submission.activity_uuid,'reminder_to_submit')
+                send_emails.delay(submission.activity_uuid,'reminder_to_submit')
         elif submission.activity_status=='started' and submission.activity_start_time+submission.activity_duration < datetime.now():
             submission.activity_status="expired"
             submission.save()
-
+            send_emails.delay(submission.activity_uuid,'activity_expired')
 
     return "pending tasks executed"
