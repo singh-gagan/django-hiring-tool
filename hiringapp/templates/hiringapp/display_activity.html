@@ -1,47 +1,63 @@
 {% extends 'hiringapp/base.html' %}
     {% block content %} 
-
-        <!-- We will check whether a valid candidate or not    -->
+    
+    
         {% if invalid %}
             <h3>This is not a valid link.You can contact the recruiter for any communication</h3>
-        {% endif %}
-    
+        {% endif %}    
 
 
-        <!-- This region is for the candidate who has not started yet-->
-        <!-- We will have a start the activity button which will update start time and status to started-->
         {% ifequal submission.activity_status "not_yet_started" %}
             <form action={% url 'submission_invite' factory_id=submission.activity_uuid %} method="POST">
             {% csrf_token %}
             <button type="submit" class="button button1">Start the Activity</button>
             </form>
         {% endifequal %}
-    
 
 
-        <!-- This region is for the candidate who has started but not yet submitted   -->
-        <!-- In this region we will show activity content,time left,submit button.  -->
-        <!-- And we will also have a time trigger which will update the status to expired-->
-        {% ifequal submission.activity_status "started" %}
+        {% ifequal submission.activity_status "started"  %}
             <form action={% url 'submission_solution' factory_id=submission.activity_uuid %} method="post">
-                <input type="text" name="solution_link" size="50" placeholder="Solution link"/>
-                <button type="submit" class="button button2">Submit Solution</button>
+            <input type="text" name="solution_link" size="50" placeholder="Solution link"/>
+            <button id="btn" type="submit" class="button button2">Submit Solution</button>
             </form>
-            <iframe src="{{submission.activity_drive_link}}" width="1000"height="600"></iframe>
-        {% endifequal %}
-
-
-        <!--This region is for the activity whose status is submitted-->
-        {% ifequal submission.activity_status "submitted" %}
-            <!--First case is when current time is less than activity ending time and we will display activity content and time left-->
-            <!--Also we will have a trigger which will only refresh the page after time up so that second case arises-->
-            <h3>You have submitted the solution.We will revert back to you soon.</h3>
+            <p align= "right" id="timer"></p>
+            <script>
+            // Set the date we're counting down to
+            var countDownDate = new Date("{{ end_time|date:'U' }}" * 1000).getTime();
+            // Update the count down every 1 second
+            var x = setInterval(function() {
+            // Get today's date and time
+            var now = new Date().getTime();
+            // Find the distance between now and the count down date
+            var distance = countDownDate - now; 
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            // Output the result in an element with id="demo"
+            document.getElementById("timer").innerHTML = days + "d " + hours + "h "
+            + minutes + "m " + seconds + "s ";
+            // If the count down is over, write some text 
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("timer").innerHTML = "This activity is expired.You can contact the recruiter for any communication";
+                document.getElementById("btn").disabled = true;
+            }
+            }, 1000);
+            </script>            
             <iframe src="{{submission.activity_drive_link}}" width="1000"height="600"></iframe>
         {% endifequal %}
         
+        
+        {% if submission.activity_status is "submitted" %}
+            <h3>You have submitted the solution.We will revert back to you soon.</h3>
+        {% endif %}        
 
-        <!-- This region is for time up case-->
+        
         {% ifequal submission.activity_status "expired" %}
             <h3>This activity is expired.You can contact the recruiter for any communication</h3>
-        {% endifequal %}    
+        {% endifequal %}
+        
+        
     {% endblock %}
