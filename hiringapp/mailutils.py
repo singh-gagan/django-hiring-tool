@@ -65,10 +65,10 @@ def create_mail_body(submission,email_type,message):
     elif email_type=='invitation':
         mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_url=activity_invite_url)
     elif email_type=='reminder_to_submit':
-        mail_body=message.format(candidate_name=submission.candidate_name,time_left=submission.reminder_for_submission_time)
+        mail_body=message.format(candidate_name=submission.candidate_name,time_left=submission.reminder_for_submission_time,activity_url=activity_invite_url)
     elif email_type=='activity_expired':
         mail_body=message.format(candidate_name=submission.candidate_name,candidate_email=submission.candidate_email,activity_start_time=submission.activity_start_time)
     elif email_type=='activity_solution':
-        mail_body=message.format(candidate_name=submission.candidate_name,candidate_email=submission.candidate_email,activity_solution=submission.activity_solution)    
+        mail_body=message.format(candidate_name=submission.candidate_name,candidate_email=submission.candidate_email,activity_solution=submission.activity_solution_link)    
     return mail_body
         

@@ -47,7 +47,6 @@ class SubmissionAdmin(admin.ModelAdmin):
                                             'Authorization': access_token})                                    
         except:
             status = False
-            #print('Not Found')
         extra_context = extra_context or {}
         extra_context['status'] = status
         return super(SubmissionAdmin, self).changelist_view(request, extra_context=extra_context)
