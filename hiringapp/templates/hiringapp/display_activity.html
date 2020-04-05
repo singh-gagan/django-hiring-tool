@@ -17,6 +17,7 @@
 
         {% ifequal submission.activity_status "started"  %}
             <form action={% url 'submission_solution' factory_id=submission.activity_uuid %} method="post">
+            {% csrf_token %}
             <input type="text" name="solution_link" size="50" placeholder="Solution link"/>
             <button id="btn" type="submit" class="button button2">Submit Solution</button>
             </form>
@@ -50,9 +51,9 @@
         {% endifequal %}
         
         
-        {% if submission.activity_status is "submitted" %}
+        {% ifequal submission.activity_status "submitted" %}
             <h3>You have submitted the solution.We will revert back to you soon.</h3>
-        {% endif %}        
+        {% endifequal %}        
 
         
         {% ifequal submission.activity_status "expired" %}

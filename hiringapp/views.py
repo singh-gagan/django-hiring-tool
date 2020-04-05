@@ -80,13 +80,7 @@ class SubmitSolution(View):
 
     def post(self,request,factory_id):
         submission=get_object_or_404(Submission,activity_uuid=factory_id)
-        end_time=submission.activity_start_time+submission.activity_duration
-        if timezone.now()>end_time:
-            submission.activity_status="expired"
-            submission.save()
-            return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))       
         submission.activity_status="submitted"
-        print("In submit solution view")
         submission.activity_solution_link=request.POST['solution_link']
         submission.save()
         return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
