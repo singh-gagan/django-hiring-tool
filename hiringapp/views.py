@@ -65,9 +65,11 @@ class SubmissionInvite(View):
             invalid=True
             return render(request,'hiringapp/display_activity.html',{'invalid':invalid})    
         submission=get_object_or_404(Submission,activity_uuid=activity_uuid)
+        if submission.activity_start_time is None:
+            return render(request,'hiringapp/display_activity.html',{'submission':submission,})
         if submission.activity_start_time is not None:
             end_time=submission.activity_start_time+submission.activity_duration
-        return render(request,'hiringapp/display_activity.html',{'submission':submission,'end_time':end_time})
+            return render(request,'hiringapp/display_activity.html',{'submission':submission,'end_time':end_time,})
     
     #This will only arise when the candidate clicks on start button
     def post(self, request,activity_uuid):

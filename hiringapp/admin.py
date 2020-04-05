@@ -31,6 +31,8 @@ admin.site.register(MailSummary)
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
     change_list_template="change_list.html"
+    actions = ['cancel_flow',]
+    list_display = ('candidate_name','activity_status','invitation_creation_dateandtime')
     def changelist_view(self, request, extra_context=None):
         status = True
         if not request.user.is_authenticated:
@@ -59,6 +61,12 @@ class SubmissionAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return CredentialsModel.objects.filter(id=request.user).exists()
         
+    def cancel_flow(self,request,queryset):
+        for submission in queryset:
+            submission.activity_status='expired'
+            submission.save()
+    cancel_flow.short_description='Cancel process flow'
+
 
 
 @admin.register(MailModel)
