@@ -6,6 +6,7 @@ from . import models
 from email.mime.text import MIMEText
 import base64
 from django.utils.dateparse import parse_duration
+
 class ActivityStatus(Enum):
         Started='started'
         Submitted='submitted'
@@ -16,7 +17,8 @@ class ActivityStatus(Enum):
 class EmailType(Enum):
         Invitation='invitation'
         Reminder='reminder'
-        Feedback='feedback'
+        ActivityExpired='activity_expired'
+        ActivitySolution='activity_solution'
         SubmissionReminder='reminder_to_submit'
 
 
@@ -29,4 +31,3 @@ FLOW = flow_from_clientsecrets(
         'https://www.googleapis.com/auth/gmail.compose'],
         redirect_uri='http://127.0.0.1:8000/admin/oauth2callback',
         prompt='consent')
-        

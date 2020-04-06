@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404,reverse
 from django.contrib import admin
 from .models import Submission
 from django.urls import path
@@ -21,8 +21,10 @@ from mysite import settings
 from django.conf.urls import url
 from .models import CredentialsModel
 from django.views import View
-
-
+from django.views.generic import TemplateView
+from datetime import datetime,date
+from django.utils import timezone
+from .tasks import send_emails
 # Create your views here.
 
 class Gmail_Authenticate(View):
@@ -53,3 +55,38 @@ class Log_Out(View):
         instance = CredentialsModel.objects.get(id=request.user)
         instance.delete()
         return HttpResponseRedirect("../admin/hiringapp/submission/")    
+
+
+class SubmissionInvite(View):
+    
+    #This will run every time whenever the invite link is loaded whether the status is started,not_started,expired,finished
+    def get(self,request,activity_uuid):
+        if not Submission.objects.filter(activity_uuid=activity_uuid).exists():
+            invalid=True
+            return render(request,'hiringapp/display_activity.html',{'invalid':invalid})    
+        submission=get_object_or_404(Submission,activity_uuid=activity_uuid)
+        if submission.activity_start_time is None:
+            return render(request,'hiringapp/display_activity.html',{'submission':submission,})
+        if submission.activity_start_time is not None:
+            end_time=submission.activity_start_time+submission.activity_duration
+            return render(request,'hiringapp/display_activity.html',{'submission':submission,'end_time':end_time,})
+    
+    #This will only arise when the candidate clicks on start button
+    def post(self, request,activity_uuid):
+        submission=get_object_or_404(Submission,activity_uuid=activity_uuid)
+        submission.activity_status="started"
+        submission.activity_start_time=datetime.now()
+        submission.save()
+        return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
+
+class SubmitSolution(View):
+
+    def post(self,request,activity_uuid):
+        submission=get_object_or_404(Submission,activity_uuid=activity_uuid)
+        submission.activity_status="submitted"
+        submission.activity_solution_link=request.POST['solution_link']
+        submission.save()
+        send_emails.delay(submission.activity_uuid,'activity_solution')
+        return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
+
+        

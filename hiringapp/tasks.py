@@ -10,15 +10,17 @@ from django.utils import timezone
 from datetime import datetime,timedelta
 
 @shared_task
-def send_emails_to_candidates(id,email_type):
+def send_emails(id,email_type):
     submission=models.Submission.objects.get(activity_uuid=id)
     try:
-        #print('in try block')
         message=create_messages(submission,email_type)
         service=get_mail_service(submission.invitation_host)
         sent = send_message(service,'me', message)
-        models.MailSummary.objects.create(mail_type=email_type,activity_uuid=id,candidate_name=submission.candidate_name,date_of_mail=timezone.now())     
-        print('{} mail sent successfully to {} activity_uuid {}'.format(email_type,submission.candidate_name,submission.activity_uuid))
+        models.MailSummary.objects.create(mail_type=email_type,activity_uuid=id,candidate_name=submission.candidate_name,date_of_mail=timezone.now()) 
+        if email_type=="activity_expired" or email_type=="activity_solution":
+            print('{} mail sent successfully to {} activity_uuid {}'.format(email_type,"host",submission.activity_uuid))
+        else:            
+            print('{} mail sent successfully to {} activity_uuid {}'.format(email_type,submission.candidate_name,submission.activity_uuid))
     except:
         print('Mail not sent')
     return "celery_task_executed"
@@ -39,14 +41,18 @@ def checkout_pending_tasks():
                 continue
             gap=current_date-submission.invitation_creation_dateandtime.date()
             if gap in reminders_gap_list:
-                send_emails_to_candidates.delay(submission.uuid,'reminder')
-        elif submission.activity_status=='started':
+                send_emails.delay(submission.uuid,'reminder')
+        elif submission.activity_status=='started' and submission.activity_start_time+submission.activity_duration > datetime.now():
             latest_mail_summary=models.MailSummary.objects.filter(activity_uuid=submission.activity_uuid).latest('date_of_mail')
             if latest_mail_summary.mail_type=='reminder_to_submit':
                 continue
             activity_end_time=submission.activity_start_time+submission.activity_duration
             activity_reminder_time=activity_end_time-submission.reminder_for_submission_time
             if datetime.now()>=activity_reminder_time:
-                send_emails_to_candidates.delay(submission.activity_uuid,'reminder_to_submit')
-    
+                send_emails.delay(submission.activity_uuid,'reminder_to_submit')
+        elif submission.activity_status=='started' and submission.activity_start_time+submission.activity_duration < datetime.now():
+            submission.activity_status="expired"
+            submission.save()
+            send_emails.delay(submission.activity_uuid,'activity_expired')
+
     return "pending tasks executed"
