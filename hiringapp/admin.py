@@ -26,13 +26,12 @@ from logging import CRITICAL
 
 
 admin.site.register(CredentialsModel)
-admin.site.register(MailSummary)
 #admin.site.register(MailModel)
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
     change_list_template="change_list.html"
     actions = ['cancel_flow',]
-    list_display = ('candidate_name','activity_status','invitation_creation_dateandtime')
+    list_display = ('candidate_name','activity_status','invitation_creation_dateandtime','activity_start_time')
     def changelist_view(self, request, extra_context=None):
         status = True
         if not request.user.is_authenticated:
@@ -71,3 +70,8 @@ class SubmissionAdmin(admin.ModelAdmin):
 @admin.register(MailModel)
 class MailAdmin(SummernoteModelAdmin):
     summernote_fields=('mail_content',)
+
+
+@admin.register(MailSummary)
+class MailSummary(admin.ModelAdmin):
+    list_display = ('candidate_name','mail_type','date_of_mail')

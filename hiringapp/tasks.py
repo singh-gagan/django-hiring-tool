@@ -16,8 +16,11 @@ def send_emails(id,email_type):
         message=create_messages(submission,email_type)
         service=get_mail_service(submission.invitation_host)
         sent = send_message(service,'me', message)
-        models.MailSummary.objects.create(mail_type=email_type,activity_uuid=id,candidate_name=submission.candidate_name,date_of_mail=timezone.now())     
-        print('{} mail sent successfully to {} activity_uuid {}'.format(email_type,submission.candidate_name,submission.activity_uuid))
+        models.MailSummary.objects.create(mail_type=email_type,activity_uuid=id,candidate_name=submission.candidate_name,date_of_mail=timezone.now()) 
+        if email_type=="activity_expired" or email_type=="activity_solution":
+            print('{} mail sent successfully to {} activity_uuid {}'.format(email_type,"host",submission.activity_uuid))
+        else:            
+            print('{} mail sent successfully to {} activity_uuid {}'.format(email_type,submission.candidate_name,submission.activity_uuid))
     except:
         print('Mail not sent')
     return "celery_task_executed"

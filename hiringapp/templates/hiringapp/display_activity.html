@@ -21,7 +21,7 @@
             <input type="text" name="solution_link" size="50" placeholder="Solution link"/>
             <button id="btn" type="submit" class="button button2">Submit Solution</button>
             </form>
-            <p align= "right" id="timer"></p>
+            <p id="timer"></p>
             <script>
             // Set the date we're counting down to
             var countDownDate = new Date("{{ end_time|date:'U' }}" * 1000).getTime();
@@ -37,7 +37,9 @@
             var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             var seconds = Math.floor((distance % (1000 * 60)) / 1000);
             // Output the result in an element with id="demo"
-            document.getElementById("timer").innerHTML = days + "d " + hours + "h "
+            document.getElementById("timer").style.textAlign = "right"; 
+            document.getElementById("timer").style.fontSize = "large"; 
+            document.getElementById("timer").innerHTML = "Time Left -> "+days + "d " + hours + "h "
             + minutes + "m " + seconds + "s ";
             // If the count down is over, write some text 
             if (distance < 0) {

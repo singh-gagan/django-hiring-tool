@@ -17,10 +17,10 @@ class Submission(models.Model):
 
     #Activity Realted Info
     activity_duration=models.DurationField(default=datetime.timedelta(days=2, hours=0))
-    activity_start_time=models.DateTimeField(blank=True,null=True)
+    activity_start_time=models.DateTimeField(blank=True,null=True,editable=False)
     activity_drive_link= models.URLField(max_length = 500)
     activity_uuid= models.UUIDField(primary_key = True, default = uuid.uuid4)
-    activity_solution_link= models.URLField(max_length = 500,blank=True,null=True)
+    activity_solution_link= models.URLField(max_length = 500,blank=True,null=True,editable=False)
     activity_status=models.CharField(
         max_length = 500,
         choices=[(key.value, key.name) for key in ActivityStatus],
