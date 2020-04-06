@@ -8,9 +8,9 @@ import base64
 from django.utils.dateparse import parse_duration
 
 class ActivityStatus(Enum):
+        Not_Yet_Started='not_yet_started'
         Started='started'
         Submitted='submitted'
-        Not_Yet_Started='not_yet_started'
         Expired='expired'
 
 
