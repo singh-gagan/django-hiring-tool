@@ -32,6 +32,8 @@ class SubmissionAdmin(admin.ModelAdmin):
     change_list_template="change_list.html"
     actions = ['cancel_flow',]
     list_display = ('candidate_name','activity_status','invitation_creation_dateandtime','activity_start_time')
+    
+    #Overriding the view to authenticate the user everytime the request is made to the submissionmodel list page
     def changelist_view(self, request, extra_context=None):
         status = True
         if not request.user.is_authenticated:

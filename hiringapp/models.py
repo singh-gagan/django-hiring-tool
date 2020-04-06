@@ -34,7 +34,7 @@ class Submission(models.Model):
     invitation_host=models.ForeignKey(User,on_delete=models.CASCADE,editable=False,blank=True,null=True)
     invitation_creation_dateandtime=models.DateTimeField(editable=False,blank=True,null=True)
     
-
+    #Overriding save method so that we can send invitation mail to candidate just after submitting
     def save(self, *args, **kwargs): 
         if self._state.adding is True:
             id=self.activity_uuid
