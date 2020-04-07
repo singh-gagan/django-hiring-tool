@@ -11,7 +11,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 import os
-from decouple import  config,Csv
+from decouple import config, Csv
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -79,9 +79,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
-        'PASSWORD':config('PASSWORD'),
-        'HOST':config('DB_HOST'),
-        'PORT':config('PORT', cast=int), 
+        'PASSWORD': config('PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('PORT', cast=int),
     }
 }
 
@@ -129,8 +129,8 @@ GOOGLE_OAUTH2_CLIENT_SECRETS_JSON = 'client_secrets.json'
 
 CELERY_BROKER_URL = 'amqp://localhost'
 CELERY_BEAT_SCHEDULE = {
- 'send_pending_mails': {
-       'task': 'hiringapp.tasks.checkout_pending_tasks', 
-       'schedule': 120,
+    'send_pending_mails': {
+        'task': 'hiringapp.tasks.checkout_pending_tasks',
+        'schedule': 120,
     },
 }
