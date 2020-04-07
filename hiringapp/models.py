@@ -53,7 +53,7 @@ class Submission(models.Model):
 
 
 class CredentialsModel(models.Model):
-    id = models.ForeignKey(User, primary_key=True, on_delete=models.CASCADE)
+    id = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
     credential = CredentialsField()
 
 
