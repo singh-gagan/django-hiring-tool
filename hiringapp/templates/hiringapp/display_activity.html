@@ -1,66 +1,66 @@
 {% extends 'hiringapp/base.html' %}
-{% block content %}
+    {% block content %} 
+    
+    
+        {% if invalid %}
+            <h3>This is not a valid link.You may contact the recruiter for any communication</h3>
+        {% endif %}    
 
 
-{% if invalid %}
-<h3>This is not a valid link.You may contact the recruiter for any communication</h3>
-{% endif %}
+        {% ifequal submission.activity_status "not_yet_started" %}
+            <form action={% url 'submission_invite' activity_uuid=submission.activity_uuid %} method="POST">
+            {% csrf_token %}
+            <button type="submit" class="button button1">Start the Activity</button>
+            </form>
+        {% endifequal %}
 
 
-{% ifequal submission.activity_status "not_yet_started" %}
-<form action={% url 'submission_invite' activity_uuid=submission.activity_uuid %} method="POST">
-    {% csrf_token %}
-    <button type="submit" class="button button1">Start the Activity</button>
-</form>
-{% endifequal %}
-
-
-{% ifequal submission.activity_status "started"  %}
-<form action={% url 'submission_solution' activity_uuid=submission.activity_uuid %} method="post">
-    {% csrf_token %}
-    <input type="text" name="solution_link" size="50" placeholder="Solution link" />
-    <button id="btn" type="submit" class="button button2">Submit Solution</button>
-</form>
-<p id="timer"></p>
-<script>
-    // Set the date we're counting down to
-    var countDownDate = new Date("{{ end_time|date:'U' }}" * 1000).getTime();
-    // Update the count down every 1 second
-    var x = setInterval(function () {
-        // Get today's date and time
-        var now = new Date().getTime();
-        // Find the distance between now and the count down date
-        var distance = countDownDate - now;
-        // Time calculations for days, hours, minutes and seconds
-        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        // Output the result in an element with id="demo"
-        document.getElementById("timer").style.textAlign = "right";
-        document.getElementById("timer").style.fontSize = "large";
-        document.getElementById("timer").innerHTML = "Time Left -> " + days + "d " + hours + "h "
+        {% ifequal submission.activity_status "started"  %}
+            <form action={% url 'submission_solution' activity_uuid=submission.activity_uuid %} method="post">
+            {% csrf_token %}
+            <input type="text" name="solution_link" size="50" placeholder="Solution link"/>
+            <button id="btn" type="submit" class="button button2">Submit Solution</button>
+            </form>
+            <p id="timer"></p>
+            <script>
+            // Set the date we're counting down to
+            var countDownDate = new Date("{{ end_time|date:'U' }}" * 1000).getTime();
+            // Update the count down every 1 second
+            var x = setInterval(function() {
+            // Get today's date and time
+            var now = new Date().getTime();
+            // Find the distance between now and the count down date
+            var distance = countDownDate - now; 
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            // Output the result in an element with id="demo"
+            document.getElementById("timer").style.textAlign = "right"; 
+            document.getElementById("timer").style.fontSize = "large"; 
+            document.getElementById("timer").innerHTML = "Time Left -> "+days + "d " + hours + "h "
             + minutes + "m " + seconds + "s ";
-        // If the count down is over, write some text 
-        if (distance < 0) {
-            clearInterval(x);
-            document.getElementById("timer").innerHTML = "This activity is expired.You can contact the recruiter for any communication";
-            document.getElementById("btn").disabled = true;
-        }
-    }, 1000);
-</script>
-<iframe src="{{submission.activity_drive_link}}" width="1000" height="600"></iframe>
-{% endifequal %}
+            // If the count down is over, write some text 
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("timer").innerHTML = "This activity is expired.You can contact the recruiter for any communication";
+                document.getElementById("btn").disabled = true;
+            }
+            }, 1000);
+            </script>            
+            <iframe src="{{submission.activity_drive_link}}" width="1000"height="600"></iframe>
+        {% endifequal %}
+        
+        
+        {% ifequal submission.activity_status "submitted" %}
+            <h3>You have submitted the solution.We will revert back to you soon.</h3>
+        {% endifequal %}        
 
-
-{% ifequal submission.activity_status "submitted" %}
-<h3>You have submitted the solution.We will revert back to you soon.</h3>
-{% endifequal %}
-
-
-{% ifequal submission.activity_status "expired" %}
-<h3>This activity is expired.You can contact the recruiter for any communication</h3>
-{% endifequal %}
-
-
-{% endblock %}
+        
+        {% ifequal submission.activity_status "expired" %}
+            <h3>This activity is expired.You can contact the recruiter for any communication</h3>
+        {% endifequal %}
+        
+        
+    {% endblock %}
