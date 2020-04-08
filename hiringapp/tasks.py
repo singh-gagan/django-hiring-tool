@@ -43,7 +43,7 @@ def checkout_pending_tasks():
             gap=current_date-submission.invitation_creation_dateandtime.date()
             if gap.days in reminders_gap_list:
                 send_emails.delay(submission.activity_uuid,'reminder')
-        elif submission.activity_status == ActivityStatus.Started.value and submission.activity_start_time+submission.activity_duration > datetime.now():
+        elif submission.activity_status == ActivityStatus.Started.value and submission.activity_start_time+submission.activity_duration >= datetime.now():
             latest_mail_summary=models.MailSummary.objects.filter(activity_uuid=submission.activity_uuid).latest('date_of_mail')
             if latest_mail_summary.mail_type=='reminder_to_submit':
                 continue
