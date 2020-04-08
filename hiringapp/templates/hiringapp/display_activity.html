@@ -19,7 +19,7 @@
             <form action={% url 'submission_solution' activity_uuid=submission.activity_uuid %} method="post">
             {% csrf_token %}
             <input type="text" name="solution_link" size="50" placeholder="Solution link"/>
-            <button id="btn" type="submit" class="button button2">Submit Solution</button>
+            <button id="btn" type="submit" class="button button2" required>Submit Solution</button>
             </form>
             <p id="timer"></p>
             <script>
@@ -39,7 +39,7 @@
             // Output the result in an element with id="demo"
             document.getElementById("timer").style.textAlign = "right"; 
             document.getElementById("timer").style.fontSize = "large"; 
-            document.getElementById("timer").innerHTML = "Time Left -> "+days + "d " + hours + "h "
+            document.getElementById("timer").innerHTML = "Time Left :     "+days + "d " + hours + "h "
             + minutes + "m " + seconds + "s ";
             // If the count down is over, write some text 
             if (distance < 0) {
@@ -49,7 +49,7 @@
             }
             }, 1000);
             </script>            
-            <iframe src="{{submission.activity_drive_link}}" width="1000"height="600"></iframe>
+            <iframe src="{{submission.activity_drive_link}}" width="1300"height="400"></iframe>
         {% endifequal %}
         
         
