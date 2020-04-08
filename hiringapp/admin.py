@@ -23,6 +23,7 @@ from django_summernote.admin import SummernoteModelAdmin
 from .models import MailModel,MailSummary
 from django.utils import timezone
 from logging import CRITICAL
+from .utils import ActivityStatus
 
 
 admin.site.register(CredentialsModel)
@@ -61,7 +62,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         
     def cancel_flow(self,request,queryset):
         for submission in queryset:
-            submission.activity_status='expired'
+            submission.activity_status=ActivityStatus.Expired.value
             submission.save()
     cancel_flow.short_description='Cancel process flow'
 

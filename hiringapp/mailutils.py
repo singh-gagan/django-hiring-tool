@@ -51,7 +51,7 @@ def create_messages(submission,email_type):
     mail_body=""
     mail_body=create_mail_body(submission,email_type,message)
     message=MIMEText(mail_body,'html')
-    if email_type=='activity_expired' or email_type=='activity_solution':
+    if email_type==EmailType.ActivityExpired.value or email_type==EmailType.ActivitySolution.value:
         message['to']=get_user_emailaddress(submission)
     else:    
         message['to']=submission.candidate_email
@@ -61,15 +61,15 @@ def create_messages(submission,email_type):
 def create_mail_body(submission,email_type,message):
     mail_body=""
     activity_invite_url="127.0.0.1:8000"+reverse('submission_invite',args=(submission.activity_uuid,))
-    if email_type=='reminder':
+    if email_type==EmailType.Reminder.value:
         mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_url=activity_invite_url)
-    elif email_type=='invitation':
+    elif email_type==EmailType.Invitation.value:
         mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_url=activity_invite_url)
-    elif email_type=='reminder_to_submit':
+    elif email_type==EmailType.SubmissionReminder.value:
         mail_body=message.format(candidate_name=submission.candidate_name,time_left=submission.reminder_for_submission_time,activity_url=activity_invite_url)
-    elif email_type=='activity_expired':
+    elif email_type==EmailType.ActivityExpired.value:
         mail_body=message.format(candidate_name=submission.candidate_name,candidate_email=submission.candidate_email,activity_start_time=submission.activity_start_time)
-    elif email_type=='activity_solution':
+    elif email_type==EmailType.ActivitySolution.value:
         mail_body=message.format(candidate_name=submission.candidate_name,candidate_email=submission.candidate_email,activity_solution=submission.activity_solution_link)    
     return mail_body
         

@@ -4,6 +4,7 @@ import uuid
 from hiringapp.models import Submission
 from unittest.mock import patch
 from django.contrib.auth.models import User
+from hiringapp.utils import ActivityStatus
 
 
 class TestViews(TestCase):
@@ -36,7 +37,7 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 302)
         submission = Submission.objects.get(
             activity_uuid=submission.activity_uuid)
-        self.assertEquals(submission.activity_status, "started")
+        self.assertEquals(submission.activity_status, ActivityStatus.Started.value)
 
     def test_submission_solution_with_random_uuid_POST(self):
         response = self.client.post(
@@ -53,4 +54,4 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 302)
         submission = Submission.objects.get(
             activity_uuid=submission.activity_uuid)
-        self.assertEquals(submission.activity_status, "submitted")
+        self.assertEquals(submission.activity_status, ActivityStatus.Submitted.value)

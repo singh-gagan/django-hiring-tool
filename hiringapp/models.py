@@ -8,6 +8,7 @@ from django.utils import timezone
 from .tasks import send_emails
 import datetime
 from django.core.exceptions import ValidationError
+from .utils import EmailType
 
 class Submission(models.Model):
 
@@ -32,13 +33,13 @@ class Submission(models.Model):
 
     #Invitation realted Info who and when
     invitation_host=models.ForeignKey(User,on_delete=models.CASCADE,editable=False,blank=True,null=True)
-    invitation_creation_dateandtime=models.DateTimeField(editable=False,blank=True,null=True)
+    invitation_creation_dateandtime=models.DateTimeField(blank=True,null=True)
     
 
     def save(self, *args, **kwargs): 
         if self._state.adding is True:
             id=self.activity_uuid
-            send_emails.delay(id,'invitation')
+            send_emails.delay(id,EmailType.Invitation.value)
         super(Submission, self).save(*args, **kwargs) 
 
     def __str__(self):

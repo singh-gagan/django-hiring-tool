@@ -18,7 +18,7 @@ def send_emails(id,email_type):
         service=get_mail_service(submission.invitation_host)
         sent = send_message(service,'me', message)
         models.MailSummary.objects.create(mail_type=email_type,activity_uuid=id,candidate_name=submission.candidate_name,date_of_mail=timezone.now()) 
-        if email_type=="activity_expired" or email_type=="activity_solution":
+        if email_type==EmailType.ActivityExpired.value or email_type==EmailType.ActivitySolution.value:
             print('{} mail sent successfully to {} activity_uuid {}'.format(email_type,submission.invitation_host.get_username(),submission.activity_uuid))
         else:            
             print('{} mail sent successfully to {} activity_uuid {}'.format(email_type,submission.candidate_name,submission.activity_uuid))
@@ -42,18 +42,18 @@ def checkout_pending_tasks():
                 continue
             gap=current_date-submission.invitation_creation_dateandtime.date()
             if gap.days in reminders_gap_list:
-                send_emails.delay(submission.activity_uuid,'reminder')
+                send_emails.delay(submission.activity_uuid,EmailType.Reminder.value)
         elif submission.activity_status == ActivityStatus.Started.value and submission.activity_start_time+submission.activity_duration >= datetime.now():
             latest_mail_summary=models.MailSummary.objects.filter(activity_uuid=submission.activity_uuid).latest('date_of_mail')
-            if latest_mail_summary.mail_type=='reminder_to_submit':
+            if latest_mail_summary.mail_type==EmailType.SubmissionReminder.value: 
                 continue
             activity_end_time=submission.activity_start_time+submission.activity_duration
             activity_reminder_time=activity_end_time-submission.reminder_for_submission_time
             if datetime.now()>=activity_reminder_time:
-                send_emails.delay(submission.activity_uuid,'reminder_to_submit')
+                send_emails.delay(submission.activity_uuid,EmailType.SubmissionReminder.value)
         elif submission.activity_status == ActivityStatus.Started.value and submission.activity_start_time+submission.activity_duration < datetime.now():
             submission.activity_status=ActivityStatus.Expired.value
             submission.save()
-            send_emails.delay(submission.activity_uuid,'activity_expired')
+            send_emails.delay(submission.activity_uuid,EmailType.ActivityExpired.value)
 
     return "pending tasks executed"

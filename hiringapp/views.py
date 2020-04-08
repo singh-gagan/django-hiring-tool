@@ -25,6 +25,8 @@ from django.views.generic import TemplateView
 from datetime import datetime,date
 from django.utils import timezone
 from .tasks import send_emails
+from hiringapp.utils import ActivityStatus
+from .utils import EmailType
 # Create your views here.
 
 class Gmail_Authenticate(View):
@@ -74,7 +76,7 @@ class SubmissionInvite(View):
     #This will only arise when the candidate clicks on start button
     def post(self, request,activity_uuid):
         submission=get_object_or_404(Submission,activity_uuid=activity_uuid)
-        submission.activity_status="started"
+        submission.activity_status=ActivityStatus.Started.value
         submission.activity_start_time=datetime.now()
         submission.save()
         return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
@@ -83,10 +85,12 @@ class SubmitSolution(View):
 
     def post(self,request,activity_uuid):
         submission=get_object_or_404(Submission,activity_uuid=activity_uuid)
-        submission.activity_status="submitted"
+        if submission.activity_status == ActivityStatus.Submitted.value:
+            return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))    
+        submission.activity_status=ActivityStatus.Submitted.value
         submission.activity_solution_link=request.POST['solution_link']
         submission.save()
-        send_emails.delay(submission.activity_uuid,'activity_solution')
+        send_emails.delay(submission.activity_uuid,EmailType.ActivitySolution.value)
         return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
 
         

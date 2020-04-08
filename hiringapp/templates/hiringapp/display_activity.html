@@ -41,7 +41,6 @@
             document.getElementById("timer").style.fontSize = "large"; 
             document.getElementById("timer").innerHTML = "Time Left :     "+days + "d " + hours + "h "
             + minutes + "m " + seconds + "s ";
-            // If the count down is over, write some text 
             if (distance < 0) {
                 clearInterval(x);
                 document.getElementById("timer").innerHTML = "This activity is expired.You can contact the recruiter for any communication";
@@ -49,7 +48,7 @@
             }
             }, 1000);
             </script>            
-            <iframe src="{{submission.activity_drive_link}}" width="1300"height="400"></iframe>
+            <iframe src="{{submission.activity_drive_link}}" width="1300"height="500"></iframe>
         {% endifequal %}
         
         
