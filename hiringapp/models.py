@@ -18,7 +18,7 @@ class Submission(models.Model):
     #Activity Realted Info
     activity_duration=models.DurationField(default=datetime.timedelta(days=2, hours=0))
     activity_start_time=models.DateTimeField(blank=True,null=True,editable=False)
-    activity_drive_link= models.URLField(max_length = 500)
+    activity_drive_link= models.URLField(max_length = 500,blank=False)
     activity_uuid= models.UUIDField(primary_key = True, default = uuid.uuid4)
     activity_solution_link= models.URLField(max_length = 500,blank=True,null=True,editable=False)
     activity_status=models.CharField(
@@ -42,7 +42,7 @@ class Submission(models.Model):
         super(Submission, self).save(*args, **kwargs) 
 
     def __str__(self):
-        str="Invitation to {}".format(self.candidate_name)
+        str="Invitation {}".format(self.candidate_name)
         return str
 
 class CredentialsModel(models.Model): 

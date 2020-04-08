@@ -16,7 +16,7 @@ from oauth2client import service_account
 from django.contrib import messages
 from django.views.generic.edit import FormView
 from mysite import settings
-from .utils import FLOW
+from .utils import FLOW,EmailType
 
 def send_message(service, user_id, message):
     try:
@@ -48,6 +48,7 @@ def create_messages(submission,email_type):
     #logic to create message from submission details and email_type 
     mail=models.MailModel.objects.get(mail_type=email_type)
     message=mail.mail_content
+    mail_body=""
     mail_body=create_mail_body(submission,email_type,message)
     message=MIMEText(mail_body,'html')
     if email_type=='activity_expired' or email_type=='activity_solution':
