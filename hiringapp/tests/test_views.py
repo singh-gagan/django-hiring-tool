@@ -3,6 +3,7 @@ from hiringapp.views import*
 import uuid
 from hiringapp.models import Submission
 from unittest.mock import patch
+from django.contrib.auth.models import User
 
 
 class TestViews(TestCase):
@@ -12,10 +13,8 @@ class TestViews(TestCase):
         self.submission_invite_url_with_random_uuid = reverse(
             'submission_invite', args=(uuid.uuid4(),))
         self.submission_solution_url_with_random_uuid = reverse(
-            'submission_invite', args=(uuid.uuid4(),))
-
-    # In the get method of submission_invite view we are only rendering to the display_activity template
-    # whether a valid uuid is passed to it or not
+            'submission_solution', args=(uuid.uuid4(),))
+        self.gmail_authenticate_url=reverse('gmail_authenticate')
 
     def test_submission_invite_GET(self):
         response = self.client.get(self.submission_invite_url_with_random_uuid)
@@ -30,7 +29,7 @@ class TestViews(TestCase):
 
     @patch('hiringapp.tasks.send_emails.delay')
     def test_submission_invite_with_valid_uuid_POST(self, mocked_send_emails):
-        submission = Submission.objects.create(activity_uuid=uuid.uuid4())
+        submission = Submission.objects.create()
         submission_invite_url_with_valid_uuid = reverse(
             'submission_invite', args=(submission.activity_uuid,))
         response = self.client.post(submission_invite_url_with_valid_uuid)
@@ -42,4 +41,16 @@ class TestViews(TestCase):
     def test_submission_solution_with_random_uuid_POST(self):
         response = self.client.post(
             self.submission_solution_url_with_random_uuid)
-            
+        self.assertEquals(response.status_code, 404)
+
+    @patch('hiringapp.tasks.send_emails.delay')
+    def test_submission_solution_with_valid_uuid_POST(self, mocked_send_emails):
+        submission = Submission.objects.create()
+        submission_solution_url_with_valid_uuid = reverse(
+            'submission_solution', args=(submission.activity_uuid,))
+        response = self.client.post(submission_solution_url_with_valid_uuid, {
+                                    'solution_link': 'link'})
+        self.assertEquals(response.status_code, 302)
+        submission = Submission.objects.get(
+            activity_uuid=submission.activity_uuid)
+        self.assertEquals(submission.activity_status, "submitted")
