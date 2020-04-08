@@ -33,7 +33,7 @@ class Submission(models.Model):
 
     #Invitation realted Info who and when
     invitation_host=models.ForeignKey(User,on_delete=models.CASCADE,editable=False,blank=True,null=True)
-    invitation_creation_dateandtime=models.DateTimeField(blank=True,null=True)
+    invitation_creation_dateandtime=models.DateTimeField(editable=False,blank=True,null=True)
     
 
     def save(self, *args, **kwargs): 
