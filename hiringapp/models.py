@@ -61,10 +61,6 @@ class Submission(models.Model):
     def end_time(self):
         return self.activity_start_time+self.activity_duration
 
-    def get_admin_url(self):
-        content_type = ContentType.objects.get_for_model(self.__class__)
-        return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
-    
 
 class CredentialsModel(models.Model): 
     id = models.OneToOneField(User, primary_key = True, on_delete = models.CASCADE) 

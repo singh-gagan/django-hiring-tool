@@ -49,7 +49,7 @@ class GmailAuthReturnView(View):
         credential = FLOW.step2_exchange(request.GET.get('code'))
         storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
         storage.put(credential)
-        print("access_token: %s" % credential.access_token)
+        #print("access_token: %s" % credential.access_token)
         return HttpResponseRedirect("../admin/hiringapp/submission/")
 
 
