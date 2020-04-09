@@ -9,6 +9,9 @@ from .tasks import send_emails
 import datetime
 from django.core.exceptions import ValidationError
 from .utils import EmailType
+from django.contrib.contenttypes.models import ContentType
+from django.urls import reverse
+
 
 class Submission(models.Model):
 
@@ -57,6 +60,10 @@ class Submission(models.Model):
     @property
     def end_time(self):
         return self.activity_start_time+self.activity_duration
+
+    def get_admin_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
     
 
 class CredentialsModel(models.Model): 

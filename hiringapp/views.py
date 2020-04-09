@@ -42,8 +42,8 @@ class GmailAuthenticateView(View):
 
 class GmailAuthReturnView(View):
     def get(self,request):
-        get_state = bytes(request.GET.get('state'), 'utf8')
-        if not xsrfutil.validate_token(settings.SECRET_KEY, get_state,
+        state = bytes(request.GET.get('state'), 'utf8')
+        if not xsrfutil.validate_token(settings.SECRET_KEY, state,
                                       request.user):
             return HttpResponseBadRequest()
         credential = FLOW.step2_exchange(request.GET.get('code'))
