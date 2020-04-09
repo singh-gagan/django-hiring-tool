@@ -46,9 +46,23 @@ class Submission(models.Model):
         str="Invitation {}".format(self.candidate_name)
         return str
 
+    @classmethod
+    def get_submission(cls,activity_uuid):
+        try:
+            submission = Submission.objects.get(activity_uuid=activity_uuid)
+        except Submission.DoesNotExist:
+            submission=None
+        return submission
+
+    @property
+    def endtime(self):
+        return self.activity_start_time+self.activity_duration
+    
+
 class CredentialsModel(models.Model): 
     id = models.OneToOneField(User, primary_key = True, on_delete = models.CASCADE) 
     credential = CredentialsField() 
+
 
 class CredentialsAdmin(admin.ModelAdmin): 
     pass

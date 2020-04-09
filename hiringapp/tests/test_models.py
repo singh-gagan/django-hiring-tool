@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from hiringapp.models import Submission
 from unittest.mock import patch
+import uuid
 
 class TestModels(TestCase):
 
@@ -13,4 +14,12 @@ class TestModels(TestCase):
             activity_drive_link="https://example-url.com/",
         )
         self.assertEqual(mocked_send_emails.call_count,1)
+
+    @patch('hiringapp.tasks.send_emails.delay')
+    def test_get_submission(self,mocked_send_emails):
+        submission=Submission.get_submission(uuid.uuid4())
+        self.assertEquals(submission,None)
+        submission=Submission.objects.create()
+        self.assertIsNotNone(submission)
+        
 
