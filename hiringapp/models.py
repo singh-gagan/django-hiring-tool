@@ -64,10 +64,6 @@ class CredentialsModel(models.Model):
     credential = CredentialsField() 
 
 
-class CredentialsAdmin(admin.ModelAdmin): 
-    pass
-
-
 class MailModel(models.Model):
     mail_type=models.CharField(
         max_length=100,

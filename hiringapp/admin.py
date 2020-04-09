@@ -67,7 +67,6 @@ class SubmissionAdmin(admin.ModelAdmin):
     cancel_flow.short_description='Cancel process flow'
 
 
-
 @admin.register(MailModel)
 class MailAdmin(SummernoteModelAdmin):
     summernote_fields=('mail_content',)
@@ -76,3 +75,7 @@ class MailAdmin(SummernoteModelAdmin):
 @admin.register(MailSummary)
 class MailSummary(admin.ModelAdmin):
     list_display = ('candidate_name','mail_type','date_of_mail')
+
+
+class CredentialsAdmin(admin.ModelAdmin): 
+    pass
