@@ -62,6 +62,7 @@ class GmailLogOutView(View):
 class SubmissionInviteView(View):
     
     #This will run every time whenever the invite link is loaded whether the status is started,not_started,expired,finished
+    """
     def get(self,request,activity_uuid):
         if not Submission.objects.filter(activity_uuid=activity_uuid).exists():
             return render(request,'hiringapp/display_activity.html',{'invalid':True})    
@@ -71,7 +72,17 @@ class SubmissionInviteView(View):
         if submission.activity_start_time is not None:
             end_time=submission.activity_start_time+submission.activity_duration
             return render(request,'hiringapp/display_activity.html',{'submission':submission,'end_time':end_time,})
-    
+    """
+    def get(self,request,activity_uuid):
+        submission=Submission.get_submission(activity_uuid)
+        if submission is None:
+            return render(request,'hiringapp/display_activity.html',{'invalid':True})    
+        if submission.activity_start_time is None:
+            return render(request,'hiringapp/display_activity.html',{'submission':submission,})
+        else:
+            return render(request,'hiringapp/display_activity.html',{'submission':submission,'end_time':submission.end_time,})
+
+
     #This will only arise when the candidate clicks on start button
     def post(self, request,activity_uuid):
         submission=get_object_or_404(Submission,activity_uuid=activity_uuid)

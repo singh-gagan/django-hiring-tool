@@ -55,7 +55,7 @@ class Submission(models.Model):
         return submission
 
     @property
-    def endtime(self):
+    def end_time(self):
         return self.activity_start_time+self.activity_duration
     
 
