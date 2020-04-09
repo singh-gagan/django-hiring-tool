@@ -29,7 +29,7 @@ from hiringapp.utils import ActivityStatus
 from .utils import EmailType
 # Create your views here.
 
-class Gmail_Authenticate(View):
+class GmailAuthenticateView(View):
     def post(self,request):
         storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
         credential = storage.get()
@@ -39,7 +39,7 @@ class Gmail_Authenticate(View):
         return HttpResponseRedirect(authorize_url)
 
 
-class Auth_Return(View):
+class GmailAuthReturnView(View):
     def get(self,request):
         get_state = bytes(request.GET.get('state'), 'utf8')
         if not xsrfutil.validate_token(settings.SECRET_KEY, get_state,
@@ -52,14 +52,14 @@ class Auth_Return(View):
         return HttpResponseRedirect("../admin/hiringapp/submission/")
 
 
-class Log_Out(View):
+class GmailLogOutView(View):
     def post(self,request):
         instance = CredentialsModel.objects.get(id=request.user)
         instance.delete()
         return HttpResponseRedirect("../admin/hiringapp/submission/")    
 
 
-class SubmissionInvite(View):
+class SubmissionInviteView(View):
     
     #This will run every time whenever the invite link is loaded whether the status is started,not_started,expired,finished
     def get(self,request,activity_uuid):
@@ -81,7 +81,7 @@ class SubmissionInvite(View):
         submission.save()
         return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
 
-class SubmitSolution(View):
+class SubmitSolutionView(View):
 
     def post(self,request,activity_uuid):
         submission=get_object_or_404(Submission,activity_uuid=activity_uuid)
@@ -92,6 +92,3 @@ class SubmitSolution(View):
         submission.save()
         send_emails.delay(submission.activity_uuid,EmailType.ActivitySolution.value)
         return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
-
-
-        
