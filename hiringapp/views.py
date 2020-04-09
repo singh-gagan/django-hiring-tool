@@ -27,6 +27,7 @@ from django.utils import timezone
 from .tasks import send_emails
 from hiringapp.utils import ActivityStatus
 from .utils import EmailType
+from django.contrib import messages
 # Create your views here.
 
 class GmailAuthenticateView(View):
@@ -78,6 +79,7 @@ class SubmissionInviteView(View):
         if submission is None:
             return render(request,'hiringapp/display_activity.html',{'invalid':True})
         if submission.activity_status==ActivityStatus.Started.value:
+            messages.error(request,"Your activity is already started")
             return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
         submission.activity_status=ActivityStatus.Started.value
         submission.activity_start_time=timezone.now()
@@ -93,6 +95,7 @@ class SubmitSolutionView(View):
         if submission is None:
             return render(request,'hiringapp/display_activity.html',{'invalid':True})
         if submission.activity_status == ActivityStatus.Submitted.value:
+            messages.error(request, 'You can submit solution only once.')
             return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))    
         submission.activity_status=ActivityStatus.Submitted.value
         submission.activity_solution_link=solution_link_input

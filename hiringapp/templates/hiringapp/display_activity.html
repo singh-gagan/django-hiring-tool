@@ -5,8 +5,12 @@
         {% if invalid %}
             <h3>This is not a valid link.You may contact the recruiter for any communication</h3>
         {% endif %}    
-
-
+        {% if messages %}
+            {% for message in messages %}
+                <p style="font-size:20px" >{{ message }}</p>
+            {% endfor %}
+            <hr>            
+        {% endif %}
         {% ifequal submission.activity_status "not_yet_started" %}
             <form action={% url 'submission_invite' activity_uuid=submission.activity_uuid %} method="POST">
             {% csrf_token %}
