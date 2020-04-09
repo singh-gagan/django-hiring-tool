@@ -38,7 +38,7 @@ class TestViews(TestCase):
         submission = Submission.objects.get(
             activity_uuid=submission.activity_uuid)
         self.assertEquals(submission.activity_status,
-                          ActivityStatus.Started.value)
+                          ActivityStatus.STARTED.value)
 
     def test_submission_solution_with_random_uuid_POST(self):
         response = self.client.post(
@@ -57,4 +57,4 @@ class TestViews(TestCase):
         submission = Submission.objects.get(
             activity_uuid=submission.activity_uuid)
         self.assertEquals(submission.activity_status,
-                          ActivityStatus.Submitted.value)
+                          ActivityStatus.SUBMITTED.value)

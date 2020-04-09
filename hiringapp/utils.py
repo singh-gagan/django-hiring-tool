@@ -8,18 +8,18 @@ import base64
 from django.utils.dateparse import parse_duration
 
 class ActivityStatus(Enum):
-        Not_Yet_Started='not_yet_started'
-        Started='started'
-        Submitted='submitted'
-        Expired='expired'
+        NOTYETSTARTED='not_yet_started'
+        STARTED='started'
+        SUBMITTED='submitted'
+        EXPIRED='expired'
 
 
 class EmailType(Enum):
-        Invitation='invitation'
-        Reminder='reminder'
-        ActivityExpired='activity_expired'
-        ActivitySolution='activity_solution'
-        SubmissionReminder='reminder_to_submit'
+        INVITATION='invitation'
+        REMINDER='reminder'
+        ACTIVITYEXPIRED='activity_expired'
+        ACTIVITYSOLUTION='activity_solution'
+        SUBMISSIONREMINDER='reminder_to_submit'
 
 
 FLOW = flow_from_clientsecrets(

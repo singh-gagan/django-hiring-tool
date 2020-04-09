@@ -27,7 +27,7 @@ class TestMailUtils(TestCase):
         submission=Submission.objects.create(invitation_creation_dateandtime=timezone.now()-datetime.timedelta(days=1,hours=22))
         MailSummary.objects.create(activity_uuid=submission.activity_uuid,date_of_mail=submission.invitation_creation_dateandtime)
         submission.activity_start_time=submission.invitation_creation_dateandtime
-        submission.activity_status=ActivityStatus.Started.value
+        submission.activity_status=ActivityStatus.STARTED.value
         submission.save()
         checkout_pending_tasks.apply()
         self.assertEqual(mocked_send_emails.call_count,2)
@@ -38,9 +38,9 @@ class TestMailUtils(TestCase):
         submission=Submission.objects.create(invitation_creation_dateandtime=timezone.now()-datetime.timedelta(days=2))
         MailSummary.objects.create(activity_uuid=submission.activity_uuid,date_of_mail=submission.invitation_creation_dateandtime)
         submission.activity_start_time=submission.invitation_creation_dateandtime
-        submission.activity_status=ActivityStatus.Started.value
+        submission.activity_status=ActivityStatus.STARTED.value
         submission.save()
         checkout_pending_tasks.apply()
         submission=Submission.objects.get(activity_uuid=submission.activity_uuid)
         self.assertEqual(mocked_send_emails.call_count,2)
-        self.assertEqual(submission.activity_status,ActivityStatus.Expired.value)
+        self.assertEqual(submission.activity_status,ActivityStatus.EXPIRED.value)

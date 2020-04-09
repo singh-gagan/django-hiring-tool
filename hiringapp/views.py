@@ -78,10 +78,10 @@ class SubmissionInviteView(View):
         submission=Submission.get_submission(activity_uuid)
         if submission is None:
             return render(request,'hiringapp/display_activity.html',{'invalid':True})
-        if submission.activity_status==ActivityStatus.Started.value:
+        if submission.activity_status==ActivityStatus.STARTED.value:
             messages.error(request,"Your activity is already started")
             return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
-        submission.activity_status=ActivityStatus.Started.value
+        submission.activity_status=ActivityStatus.STARTED.value
         submission.activity_start_time=timezone.now()
         submission.save(update_fields=["activity_status","activity_start_time",]) 
         return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
@@ -94,11 +94,11 @@ class SubmitSolutionView(View):
         submission=Submission.get_submission(activity_uuid)
         if submission is None:
             return render(request,'hiringapp/display_activity.html',{'invalid':True})
-        if submission.activity_status == ActivityStatus.Submitted.value:
+        if submission.activity_status == ActivityStatus.SUBMITTED.value:
             messages.error(request, 'You can submit solution only once.')
             return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))    
-        submission.activity_status=ActivityStatus.Submitted.value
+        submission.activity_status=ActivityStatus.SUBMITTED.value
         submission.activity_solution_link=input_solution_link
         submission.save(update_fields=["activity_status","activity_solution_link",])
-        send_emails.delay(submission.activity_uuid,EmailType.ActivitySolution.value)
+        send_emails.delay(submission.activity_uuid,EmailType.ACTIVITYSOLUTION.value)
         return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))

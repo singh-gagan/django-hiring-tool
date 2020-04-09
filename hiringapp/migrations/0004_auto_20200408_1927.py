@@ -14,11 +14,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='mailmodel',
             name='mail_type',
-            field=models.CharField(choices=[('invitation', 'Invitation'), ('reminder', 'Reminder'), ('activity_expired', 'ActivityExpired'), ('activity_solution', 'ActivitySolution'), ('reminder_to_submit', 'SubmissionReminder')], default=hiringapp.utils.EmailType('invitation'), max_length=100, unique=True),
+            field=models.CharField(choices=[('invitation', 'INVITATION'), ('reminder', 'REMINDER'), ('activity_expired', 'ACTIVITYEXPIRED'), ('activity_solution', 'ACTIVITYSOLUTION'), ('reminder_to_submit', 'SUBMISSIONREMINDER')], default=hiringapp.utils.EmailType('invitation'), max_length=100, unique=True),
         ),
         migrations.AlterField(
             model_name='submission',
             name='activity_status',
-            field=models.CharField(choices=[('not_yet_started', 'Not_Yet_Started'), ('started', 'Started'), ('submitted', 'Submitted'), ('expired', 'Expired')], default='not_yet_started', max_length=500),
+            field=models.CharField(choices=[('not_yet_started', 'NOTYETSTARTED'), ('started', 'STARTED'), ('submitted', 'SUBMITTED'), ('expired', 'EXPIRED')], default='not_yet_started', max_length=500),
         ),
     ]

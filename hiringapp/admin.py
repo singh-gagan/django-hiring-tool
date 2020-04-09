@@ -62,7 +62,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         
     def cancel_flow(self,request,queryset):
         for submission in queryset:
-            submission.activity_status=ActivityStatus.Expired.value
+            submission.activity_status=ActivityStatus.EXPIRED.value
             submission.save()
     cancel_flow.short_description='Cancel process flow'
 

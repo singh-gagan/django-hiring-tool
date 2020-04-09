@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
             name='MailModel',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('mail_type', models.CharField(choices=[('invitation', 'Invitation'), ('reminder', 'Reminder'), ('activity_expired', 'ActivityExpired'), ('activity_solution', 'ActivitySolution'), ('reminder_to_submit', 'SubmissionReminder')], default=hiringapp.utils.EmailType('invitation'), max_length=100, unique=True)),
+                ('mail_type', models.CharField(choices=[('invitation', 'INVITATION'), ('reminder', 'REMINDER'), ('activity_expired', 'ACTIVITYEXPIRED'), ('activity_solution', 'ACTIVITYSOLUTION'), ('reminder_to_submit', 'SUBMISSIONREMINDER')], default=hiringapp.utils.EmailType('invitation'), max_length=100, unique=True)),
                 ('mail_subject', models.CharField(max_length=100)),
                 ('mail_content', models.CharField(max_length=1000)),
             ],
@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
             name='MailSummary',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('mail_type', models.CharField(choices=[('invitation', 'Invitation'), ('reminder', 'Reminder'), ('activity_expired', 'ActivityExpired'), ('activity_solution', 'ActivitySolution'), ('reminder_to_submit', 'SubmissionReminder')], default=hiringapp.utils.EmailType('invitation'), max_length=100)),
+                ('mail_type', models.CharField(choices=[('invitation', 'INVITATION'), ('reminder', 'REMINDER'), ('activity_expired', 'ACTIVITYEXPIRED'), ('activity_solution', 'ACTIVITYSOLUTION'), ('reminder_to_submit', 'SUBMISSIONREMINDER')], default=hiringapp.utils.EmailType('invitation'), max_length=100)),
                 ('activity_uuid', models.UUIDField(null=True)),
                 ('candidate_name', models.CharField(max_length=200)),
                 ('date_of_mail', models.DateTimeField(blank=True, null=True)),
@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
                 ('activity_drive_link', models.URLField(max_length=500)),
                 ('activity_uuid', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
                 ('activity_solution_link', models.URLField(blank=True, editable=False, max_length=500, null=True)),
-                ('activity_status', models.CharField(choices=[('started', 'Started'), ('submitted', 'Submitted'), ('not_yet_started', 'Not_Yet_Started'), ('expired', 'Expired')], default=hiringapp.utils.ActivityStatus('not_yet_started'), max_length=500)),
+                ('activity_status', models.CharField(choices=[('started', 'STARTED'), ('submitted', 'SUBMITTED'), ('not_yet_started', 'NOTYETSTARTED'), ('expired', 'EXPIRED')], default=hiringapp.utils.ActivityStatus('not_yet_started'), max_length=500)),
                 ('reminder_for_submission_time', models.DurationField(default=datetime.timedelta(seconds=7200))),
                 ('invitation_creation_dateandtime', models.DateTimeField(blank=True, editable=False, null=True)),
                 ('invitation_host', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),

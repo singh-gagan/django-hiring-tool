@@ -28,7 +28,7 @@ class Submission(models.Model):
     activity_status=models.CharField(
         max_length = 500,
         choices=[(key.value, key.name) for key in ActivityStatus],
-        default=ActivityStatus.Not_Yet_Started.value,
+        default=ActivityStatus.NOTYETSTARTED.value,
     )
 
     #remainder mails related Info
@@ -42,7 +42,7 @@ class Submission(models.Model):
     def save(self, *args, **kwargs): 
         if self._state.adding is True:
             id=self.activity_uuid
-            send_emails.delay(id,EmailType.Invitation.value)
+            send_emails.delay(id,EmailType.INVITATION.value)
         super(Submission, self).save(*args, **kwargs) 
 
     def __str__(self):
@@ -72,7 +72,7 @@ class MailModel(models.Model):
         max_length=100,
         choices=[(key.value, key.name) for key in EmailType],
         unique=True,
-        default=EmailType.Invitation,
+        default=EmailType.INVITATION,
     )
     mail_subject=models.CharField(max_length=100)
     mail_content=models.CharField(max_length=1000)
@@ -85,7 +85,7 @@ class MailSummary(models.Model):
     mail_type=models.CharField(
         max_length=100,
         choices=[(key.value, key.name) for key in EmailType],
-        default=EmailType.Invitation,
+        default=EmailType.INVITATION,
     )
     activity_uuid=models.UUIDField(null=True)
     candidate_name=models.CharField(max_length=200)

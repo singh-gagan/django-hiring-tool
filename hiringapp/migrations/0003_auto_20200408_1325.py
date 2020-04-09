@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='mailmodel',
             name='mail_type',
-            field=models.CharField(choices=[('Invitation', 'invitation'), ('Reminder', 'reminder'), ('ActivityExpired', 'activity_expired'), ('ActivitySolution', 'activity_solution'), ('SubmissionReminder', 'reminder_to_submit')], default=hiringapp.utils.EmailType('invitation'), max_length=100, unique=True),
+            field=models.CharField(choices=[('INVITATION', 'invitation'), ('REMINDER', 'reminder'), ('ACTIVITYEXPIRED', 'activity_expired'), ('ACTIVITYSOLUTION', 'activity_solution'), ('SUBMISSIONREMINDER', 'reminder_to_submit')], default=hiringapp.utils.EmailType('invitation'), max_length=100, unique=True),
         ),
     ]

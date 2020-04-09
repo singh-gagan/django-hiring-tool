@@ -21,6 +21,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='submission',
             name='activity_status',
-            field=models.CharField(choices=[('not_yet_started', 'Not_Yet_Started'), ('started', 'Started'), ('submitted', 'Submitted'), ('expired', 'Expired')], default=hiringapp.utils.ActivityStatus('not_yet_started'), max_length=500),
+            field=models.CharField(choices=[('not_yet_started', 'NOTYETSTARTED'), ('started', 'STARTED'), ('submitted', 'SUBMITTED'), ('expired', 'EXPIRED')], default=hiringapp.utils.ActivityStatus('not_yet_started'), max_length=500),
         ),
     ]
