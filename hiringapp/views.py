@@ -64,8 +64,7 @@ class SubmissionInviteView(View):
     #This will run every time whenever the invite link is loaded whether the status is started,not_started,expired,finished
     def get(self,request,activity_uuid):
         if not Submission.objects.filter(activity_uuid=activity_uuid).exists():
-            invalid=True
-            return render(request,'hiringapp/display_activity.html',{'invalid':invalid})    
+            return render(request,'hiringapp/display_activity.html',{'invalid':True})    
         submission=get_object_or_404(Submission,activity_uuid=activity_uuid)
         if submission.activity_start_time is None:
             return render(request,'hiringapp/display_activity.html',{'submission':submission,})
@@ -76,6 +75,8 @@ class SubmissionInviteView(View):
     #This will only arise when the candidate clicks on start button
     def post(self, request,activity_uuid):
         submission=get_object_or_404(Submission,activity_uuid=activity_uuid)
+        if submission.activity_status==ActivityStatus.Started.value:
+            return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
         submission.activity_status=ActivityStatus.Started.value
         submission.activity_start_time=timezone.now()
         submission.save()
