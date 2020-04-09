@@ -77,7 +77,7 @@ class SubmissionInvite(View):
     def post(self, request,activity_uuid):
         submission=get_object_or_404(Submission,activity_uuid=activity_uuid)
         submission.activity_status=ActivityStatus.Started.value
-        submission.activity_start_time=datetime.now()
+        submission.activity_start_time=timezone.now()
         submission.save()
         return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
 
@@ -92,5 +92,6 @@ class SubmitSolution(View):
         submission.save()
         send_emails.delay(submission.activity_uuid,EmailType.ActivitySolution.value)
         return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
+
 
         
