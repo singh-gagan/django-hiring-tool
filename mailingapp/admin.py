@@ -16,4 +16,3 @@ class MailSummary(admin.ModelAdmin):
 @admin.register(CredentialsModel)
 class CredentialsAdmin(admin.ModelAdmin): 
     pass
-

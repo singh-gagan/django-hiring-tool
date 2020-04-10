@@ -32,6 +32,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         extra_context = extra_context or {}
         extra_context['status'] = status
         return super(SubmissionAdmin, self).changelist_view(request, extra_context=extra_context)
+
    
     def save_model(self, request, obj, form, change):
         if not change:
@@ -39,9 +40,11 @@ class SubmissionAdmin(admin.ModelAdmin):
             obj.invitation_creation_dateandtime=timezone.now()
         return super().save_model(request, obj, form, change)
 
+
     def has_add_permission(self, request):
         return CredentialsModel.objects.filter(id=request.user).exists()
-        
+
+
     def cancel_flow(self,request,queryset):
         for submission in queryset:
             submission.activity_status=ActivityStatus.EXPIRED.value

@@ -28,7 +28,6 @@ def get_flow():
     return FLOW
 
 
-
 def send_message(service, user_id, message):
     try:
         message = (service.users().messages().send(userId=user_id, body=message)
@@ -50,6 +49,7 @@ def get_mail_service(user):
     service = build('gmail', 'v1', credentials=credential,cache_discovery=False)
     return service
 
+
 def get_invitation_host_email(invitation_host):
     service=get_mail_service(invitation_host)
     profile = service.users().getProfile(userId='me').execute()
@@ -70,6 +70,7 @@ def create_messages(submission,email_type):
     message['subject']=mail.mail_subject
     return {'raw': base64.urlsafe_b64encode(message.as_string().encode()).decode()}
 
+
 def create_mail_body(submission,email_type,message):
     mail_body=""
     activity_invite_url="127.0.0.1:8000"+reverse('submission_invite',args=(submission.activity_uuid,))
@@ -84,4 +85,3 @@ def create_mail_body(submission,email_type,message):
     elif email_type==EmailType.ACTIVITYSOLUTION.value:
         mail_body=message.format(candidate_name=submission.candidate_name,candidate_email=submission.candidate_email,activity_solution=submission.activity_solution_link)    
     return mail_body
-        

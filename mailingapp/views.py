@@ -32,4 +32,4 @@ class GmailAuthReturnView(View):
         storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
         storage.put(credential)
         #print("access_token: %s" % credential.access_token)
-        return HttpResponseRedirect("../admin/hiringapp/submission/")    
+        return HttpResponseRedirect("../admin/hiringapp/submission/")

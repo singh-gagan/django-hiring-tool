@@ -5,4 +5,3 @@ class ActivityStatus(Enum):
         STARTED='started'
         SUBMITTED='submitted'
         EXPIRED='expired'
-
