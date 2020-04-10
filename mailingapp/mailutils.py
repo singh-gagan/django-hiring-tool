@@ -77,7 +77,7 @@ def create_messages(submission,email_type):
 def create_mail_body(submission,email_type,message):
     mail_body=""
     activity_invite_url="127.0.0.1:8000"+reverse('submission_invite',args=(submission.activity_uuid,))
-    if email_type==EmailType.REMINDER.value:
+    if email_type==EmailType.STARTREMINDER.value:
         mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_url=activity_invite_url)
     elif email_type==EmailType.INVITATION.value:
         mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_url=activity_invite_url)

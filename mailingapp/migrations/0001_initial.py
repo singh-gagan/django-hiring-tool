@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
             name='MailModel',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('mail_type', models.CharField(choices=[('invitation', 'INVITATION'), ('reminder', 'REMINDER'), ('activity_expired', 'ACTIVITYEXPIRED'), ('activity_solution', 'ACTIVITYSOLUTION'), ('reminder_to_submit', 'SUBMISSIONREMINDER')], default=mailingapp.constants.EmailType('invitation'), max_length=100, unique=True)),
+                ('mail_type', models.CharField(choices=[('invitation', 'INVITATION'), ('reminder', 'STARTREMINDER'), ('activity_expired', 'ACTIVITYEXPIRED'), ('activity_solution', 'ACTIVITYSOLUTION'), ('reminder_to_submit', 'SUBMISSIONREMINDER')], default=mailingapp.constants.EmailType('invitation'), max_length=100, unique=True)),
                 ('mail_subject', models.CharField(max_length=100)),
                 ('mail_content', models.CharField(max_length=1000)),
             ],
@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
             name='MailSummary',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('mail_type', models.CharField(choices=[('invitation', 'INVITATION'), ('reminder', 'REMINDER'), ('activity_expired', 'ACTIVITYEXPIRED'), ('activity_solution', 'ACTIVITYSOLUTION'), ('reminder_to_submit', 'SUBMISSIONREMINDER')], default=mailingapp.constants.EmailType('invitation'), max_length=100)),
+                ('mail_type', models.CharField(choices=[('invitation', 'INVITATION'), ('reminder', 'STARTREMINDER'), ('activity_expired', 'ACTIVITYEXPIRED'), ('activity_solution', 'ACTIVITYSOLUTION'), ('reminder_to_submit', 'SUBMISSIONREMINDER')], default=mailingapp.constants.EmailType('invitation'), max_length=100)),
                 ('activity_uuid', models.UUIDField(null=True)),
                 ('candidate_name', models.CharField(max_length=200)),
                 ('date_of_mail', models.DateTimeField(blank=True, null=True)),

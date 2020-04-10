@@ -15,7 +15,6 @@ from email.mime.text import MIMEText
 import base64
 from oauth2client import service_account
 from django.contrib import messages
-from .utils import FLOW
 from mysite import settings
 from django.conf.urls import url
 from mailingapp.models import CredentialsModel
@@ -23,9 +22,9 @@ from django.views import View
 from django.views.generic import TemplateView
 from datetime import datetime,date
 from django.utils import timezone
-from .tasks import send_emails
+from mailingapp.tasks import send_emails
 from hiringapp.utils import ActivityStatus
-from .utils import EmailType
+from mailingapp.constants import EmailType
 from django.contrib import messages
 # Create your views here.
 

@@ -1,14 +1,14 @@
 from django.db import models
 from django.contrib import admin
-from .utils import ActivityStatus,EmailType
+from .utils import ActivityStatus
+from mailingapp.constants import EmailType
 import uuid
 from django.contrib.auth.models import User 
 from oauth2client.contrib.django_util.models import CredentialsField 
 from django.utils import timezone
-from .tasks import send_emails
+from mailingapp.tasks import send_emails
 import datetime
 from django.core.exceptions import ValidationError
-from .utils import EmailType
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 

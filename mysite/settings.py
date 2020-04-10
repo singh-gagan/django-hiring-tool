@@ -131,7 +131,9 @@ GOOGLE_OAUTH2_CLIENT_SECRETS_JSON = 'client_secrets.json'
 CELERY_BROKER_URL = 'amqp://localhost'
 CELERY_BEAT_SCHEDULE = {
  'send_pending_mails': {
-       'task': 'hiringapp.tasks.checkout_pending_tasks', 
+       'task': 'mailingapp.tasks.checkout_pending_tasks', 
        'schedule': 120,
     },
 }
+
+
