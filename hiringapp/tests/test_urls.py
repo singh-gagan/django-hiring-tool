@@ -20,7 +20,3 @@ class TestUrls(TestCase):
     def test_oauth2callback_url_resolved(self):
         url = reverse('oauth2callback')
         self.assertEqual(resolve(url).func.view_class, GmailAuthReturnView)
-
-    def test_log_out_url_resolved(self):
-        url = reverse('log_out')
-        self.assertEqual(resolve(url).func.view_class, GmailLogOutView)

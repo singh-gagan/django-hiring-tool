@@ -50,13 +50,6 @@ class GmailAuthReturnView(View):
         storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
         storage.put(credential)
         #print("access_token: %s" % credential.access_token)
-        return HttpResponseRedirect("../admin/hiringapp/submission/")
-
-
-class GmailLogOutView(View):
-    def post(self,request):
-        instance = CredentialsModel.objects.get(id=request.user)
-        instance.delete()
         return HttpResponseRedirect("../admin/hiringapp/submission/")    
 
 
