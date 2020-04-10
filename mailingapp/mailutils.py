@@ -1,4 +1,3 @@
-import httplib2
 from googleapiclient.discovery import build
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
@@ -7,14 +6,11 @@ from django.urls import reverse
 from oauth2client.contrib import xsrfutil
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.contrib.django_util.storage import DjangoORMStorage
-from django.shortcuts import render,redirect
-from httplib2 import Http
+from django.shortcuts import redirect
 from apiclient import errors
 from email.mime.text import MIMEText
 import base64
-from oauth2client import service_account
 from django.contrib import messages
-from django.views.generic.edit import FormView
 from mysite import settings
 from .constants import EmailType
 

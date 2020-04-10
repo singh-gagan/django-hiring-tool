@@ -1,29 +1,15 @@
-from django.shortcuts import render,get_object_or_404,reverse
-from django.contrib import admin
+from django.shortcuts import render,reverse
 from .models import Submission
-from django.urls import path
-import httplib2
-from googleapiclient.discovery import build
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
-from oauth2client.contrib import xsrfutil
-from oauth2client.contrib.django_util.storage import DjangoORMStorage
-from django.shortcuts import render,redirect
-from httplib2 import Http
-from apiclient import errors
-from email.mime.text import MIMEText
-import base64
-from oauth2client import service_account
+from django.shortcuts import render
 from django.contrib import messages
-from mysite import settings
-from django.conf.urls import url
-from mailingapp.models import CredentialsModel
 from django.views import View
 from django.views.generic import TemplateView
 from datetime import datetime,date
 from django.utils import timezone
 from mailingapp.tasks import send_emails
-from hiringapp.utils import ActivityStatus
+from hiringapp.constants import ActivityStatus
 from mailingapp.constants import EmailType
 from django.contrib import messages
 # Create your views here.

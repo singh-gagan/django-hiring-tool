@@ -1,24 +1,12 @@
 from django.contrib import admin
 from .models import Submission
-from django.urls import path
 import httplib2
-from googleapiclient.discovery import build
-from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
-from oauth2client.contrib import xsrfutil
 from oauth2client.contrib.django_util.storage import DjangoORMStorage
-from django.shortcuts import render,redirect
 from httplib2 import Http
-from apiclient import errors
-from email.mime.text import MIMEText
-import base64
-from oauth2client import service_account
-from django.contrib import messages
-from mysite import settings
-from django.conf.urls import url
 from mailingapp.models import CredentialsModel,MailModel,MailSummary
 from django.utils import timezone
-from .utils import ActivityStatus
+from .constants import ActivityStatus
 
 
 #admin.site.register(MailModel)
@@ -59,18 +47,3 @@ class SubmissionAdmin(admin.ModelAdmin):
             submission.activity_status=ActivityStatus.EXPIRED.value
             submission.save()
     cancel_flow.short_description='Cancel process flow'
-
-"""
-@admin.register(MailModel)
-class MailAdmin(SummernoteModelAdmin):
-    summernote_fields=('mail_content',)
-
-
-@admin.register(MailSummary)
-class MailSummary(admin.ModelAdmin):
-    list_display = ('candidate_name','mail_type','date_of_mail')
-
-
-class CredentialsAdmin(admin.ModelAdmin): 
-    pass
-"""

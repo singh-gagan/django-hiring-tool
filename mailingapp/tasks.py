@@ -1,15 +1,14 @@
-import string
 from .mailutils import create_messages
-from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from .mailutils import get_mail_service,send_message
 from celery import shared_task
-from hiringapp.utils import ActivityStatus
+from hiringapp.constants import ActivityStatus
 from .constants import EmailType
 from django.utils import timezone
 from datetime import datetime,timedelta
 from .models import MailSummary
 import hiringapp
+
 @shared_task
 def send_emails(id,email_type):
     submission=hiringapp.models.Submission.objects.get(activity_uuid=id)
