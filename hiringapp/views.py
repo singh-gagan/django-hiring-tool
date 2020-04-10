@@ -6,7 +6,6 @@ import httplib2
 from googleapiclient.discovery import build
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
-from .models import CredentialsModel
 from oauth2client.contrib import xsrfutil
 from oauth2client.contrib.django_util.storage import DjangoORMStorage
 from django.shortcuts import render,redirect
@@ -19,7 +18,7 @@ from django.contrib import messages
 from .utils import FLOW
 from mysite import settings
 from django.conf.urls import url
-from .models import CredentialsModel
+from mailingapp.models import CredentialsModel
 from django.views import View
 from django.views.generic import TemplateView
 from datetime import datetime,date
@@ -29,29 +28,6 @@ from hiringapp.utils import ActivityStatus
 from .utils import EmailType
 from django.contrib import messages
 # Create your views here.
-
-class GmailAuthenticateView(View):
-    def post(self,request):
-        storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
-        credential = storage.get()
-        FLOW.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,
-                                                       request.user)
-        authorize_url = FLOW.step1_get_authorize_url()
-        return HttpResponseRedirect(authorize_url)
-
-
-class GmailAuthReturnView(View):
-    def get(self,request):
-        state = bytes(request.GET.get('state'), 'utf8')
-        if not xsrfutil.validate_token(settings.SECRET_KEY, state,
-                                      request.user):
-            return HttpResponseBadRequest()
-        credential = FLOW.step2_exchange(request.GET.get('code'))
-        storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
-        storage.put(credential)
-        #print("access_token: %s" % credential.access_token)
-        return HttpResponseRedirect("../admin/hiringapp/submission/")    
-
 
 class SubmissionInviteView(View):
     

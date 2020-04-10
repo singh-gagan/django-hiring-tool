@@ -5,7 +5,6 @@ import httplib2
 from googleapiclient.discovery import build
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
-from .models import CredentialsModel
 from oauth2client.contrib import xsrfutil
 from oauth2client.contrib.django_util.storage import DjangoORMStorage
 from django.shortcuts import render,redirect
@@ -15,18 +14,13 @@ from email.mime.text import MIMEText
 import base64
 from oauth2client import service_account
 from django.contrib import messages
-from .utils import FLOW
 from mysite import settings
 from django.conf.urls import url
-from .models import CredentialsModel,MailModel
-from django_summernote.admin import SummernoteModelAdmin
-from .models import MailModel,MailSummary
+from mailingapp.models import CredentialsModel,MailModel,MailSummary
 from django.utils import timezone
-from logging import CRITICAL
 from .utils import ActivityStatus
 
 
-admin.site.register(CredentialsModel)
 #admin.site.register(MailModel)
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
@@ -66,7 +60,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             submission.save()
     cancel_flow.short_description='Cancel process flow'
 
-
+"""
 @admin.register(MailModel)
 class MailAdmin(SummernoteModelAdmin):
     summernote_fields=('mail_content',)
@@ -79,3 +73,4 @@ class MailSummary(admin.ModelAdmin):
 
 class CredentialsAdmin(admin.ModelAdmin): 
     pass
+"""

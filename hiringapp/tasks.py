@@ -9,6 +9,7 @@ from .utils import EmailType
 from django.utils import timezone
 from datetime import datetime,timedelta
 from .utils import ActivityStatus
+from mailingapp.models import MailSummary
 
 @shared_task
 def send_emails(id,email_type):
@@ -17,7 +18,7 @@ def send_emails(id,email_type):
         message=create_messages(submission,email_type)
         service=get_mail_service(submission.invitation_host)
         sent = send_message(service,'me', message)
-        models.MailSummary.objects.create(mail_type=email_type,activity_uuid=id,candidate_name=submission.candidate_name,date_of_mail=timezone.now()) 
+        MailSummary.objects.create(mail_type=email_type,activity_uuid=id,candidate_name=submission.candidate_name,date_of_mail=timezone.now()) 
         if email_type==EmailType.ACTIVITYEXPIRED.value or email_type==EmailType.ACTIVITYSOLUTION.value:
             print('{} mail sent successfully to {} activity_uuid {}'.format(email_type,submission.invitation_host.get_username(),submission.activity_uuid))
         else:            
@@ -36,7 +37,7 @@ def checkout_pending_tasks():
     all_submissions=models.Submission.objects.all()
     for submission in all_submissions:
         if submission.activity_status == ActivityStatus.NOTYETSTARTED.value:
-            latest_mail_summary=models.MailSummary.objects.filter(activity_uuid=submission.activity_uuid).latest('date_of_mail')
+            latest_mail_summary=MailSummary.objects.filter(activity_uuid=submission.activity_uuid).latest('date_of_mail')
             latest_mail_sent_date=latest_mail_summary.date_of_mail.date()
             if current_date==latest_mail_sent_date:
                 continue
@@ -44,7 +45,7 @@ def checkout_pending_tasks():
             if gap.days in reminders_gap_list:
                 send_emails.delay(submission.activity_uuid,EmailType.REMINDER.value)
         elif submission.activity_status == ActivityStatus.STARTED.value and submission.activity_start_time+submission.activity_duration >= timezone.now():
-            latest_mail_summary=models.MailSummary.objects.filter(activity_uuid=submission.activity_uuid).latest('date_of_mail')
+            latest_mail_summary=MailSummary.objects.filter(activity_uuid=submission.activity_uuid).latest('date_of_mail')
             if latest_mail_summary.mail_type==EmailType.SUBMISSIONREMINDER.value: 
                 continue
             activity_end_time=submission.activity_start_time+submission.activity_duration

@@ -61,7 +61,7 @@ class Submission(models.Model):
     def end_time(self):
         return self.activity_start_time+self.activity_duration
 
-
+"""
 class CredentialsModel(models.Model): 
     id = models.OneToOneField(User, primary_key = True, on_delete = models.CASCADE) 
     credential = CredentialsField() 
@@ -93,3 +93,4 @@ class MailSummary(models.Model):
     activity_uuid=models.UUIDField(null=True)
     candidate_name=models.CharField(max_length=200)
     date_of_mail=models.DateTimeField(blank=True,null=True)
+"""

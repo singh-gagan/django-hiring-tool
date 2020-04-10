@@ -1,6 +1,5 @@
 from django.shortcuts import render,get_object_or_404,reverse
 from django.contrib import admin
-from .models import Submission
 from django.urls import path
 import httplib2
 from googleapiclient.discovery import build

@@ -2,7 +2,6 @@ import httplib2
 from googleapiclient.discovery import build
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
-from . import models
 from django.urls import reverse
 from oauth2client.contrib import xsrfutil
 from oauth2client.client import flow_from_clientsecrets
@@ -16,7 +15,9 @@ from oauth2client import service_account
 from django.contrib import messages
 from django.views.generic.edit import FormView
 from mysite import settings
-from .utils import FLOW,EmailType
+from mailingapp.constants import EmailType
+from mailingapp.mailutils import get_flow
+from mailingapp.models import CredentialsModel,MailModel,MailSummary
 
 def send_message(service, user_id, message):
     try:
@@ -29,9 +30,10 @@ def send_message(service, user_id, message):
 
 
 def get_mail_service(user):
-    storage = DjangoORMStorage(models.CredentialsModel, 'id', user, 'credential')
+    storage = DjangoORMStorage(CredentialsModel, 'id', user, 'credential')
     credential = storage.get()
     if credential is None or credential.invalid:
+        FLOW=get_flow()
         FLOW.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,user)
         authorize_url = FLOW.step1_get_authorize_url()
         return HttpResponseRedirect(authorize_url)
@@ -46,7 +48,7 @@ def get_user_emailaddress(submission):
 
 def create_messages(submission,email_type):
     #logic to create message from submission details and email_type 
-    mail=models.MailModel.objects.get(mail_type=email_type)
+    mail=MailModel.objects.get(mail_type=email_type)
     message=mail.mail_content
     mail_body=""
     mail_body=create_mail_body(submission,email_type,message)

@@ -17,7 +17,6 @@ from django.contrib import messages
 from django.views.generic.edit import FormView
 from mysite import settings
 from .constants import EmailType
-from .mailutils import get_flow
 
 
 def get_flow():
