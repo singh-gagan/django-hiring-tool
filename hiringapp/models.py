@@ -66,6 +66,9 @@ class CredentialsModel(models.Model):
     id = models.OneToOneField(User, primary_key = True, on_delete = models.CASCADE) 
     credential = CredentialsField() 
 
+    def __str__(self):
+        return self.id.get_username()
+
 
 class MailModel(models.Model):
     mail_type=models.CharField(
