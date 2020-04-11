@@ -8,6 +8,7 @@ from mailingapp.models import CredentialsModel,MailModel,MailSummary
 from django.utils import timezone
 from .constants import ActivityStatus
 import requests
+from mailingapp.mailutils import authenticate
 
 
 #admin.site.register(MailModel)
@@ -17,22 +18,11 @@ class SubmissionAdmin(admin.ModelAdmin):
     actions = ['cancel_flow',]
     list_display = ('candidate_name','activity_status','invitation_creation_dateandtime','activity_start_time')
     def changelist_view(self, request, extra_context=None):
-        status = True
         if not request.user.is_authenticated:
             return HttpResponseRedirect('admin')
-        storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
-        credential = storage.get()
-        try:
-            access_token = credential.access_token
-            #This is to re-authenticate the user to check if his access_token is still valid
-            requests.get("https://www.googleapis.com/auth/gmail.readonly",
-                                    headers={'Host': 'www.googleapis.com',
-                                            'Authorization': access_token}) 
-            print('in change list')                                   
-        except:
-            status = False
+        authorized=authenticate(request.user)
         extra_context = extra_context or {}
-        extra_context['status'] = status
+        extra_context['authorized'] = authorized
         return super(SubmissionAdmin, self).changelist_view(request, extra_context=extra_context)
 
    

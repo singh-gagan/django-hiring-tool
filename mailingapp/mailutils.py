@@ -13,19 +13,33 @@ import base64
 from django.contrib import messages
 from mysite import settings
 from .constants import EmailType
+from .constants import SCOPES
+from .models import CredentialsModel
+import requests
 
 
 def get_flow():
     FLOW = flow_from_clientsecrets(
         settings.GOOGLE_OAUTH2_CLIENT_SECRETS_JSON,
-        scope=['https://www.googleapis.com/auth/gmail.readonly',
-        'https://www.googleapis.com/auth/userinfo.email',
-        'https://www.googleapis.com/auth/userinfo.profile',
-        'https://www.googleapis.com/auth/gmail.send',
-        'https://www.googleapis.com/auth/gmail.compose'],
+        scope=SCOPES,
         redirect_uri='http://127.0.0.1:8000/oauth2callback',
         prompt='consent')
     return FLOW
+
+
+#This is to re-authenticate the user to check if his access_token is still valid
+def authenticate(user):
+    storage = DjangoORMStorage(CredentialsModel, 'id', user, 'credential')
+    credential = storage.get()
+    authorized = False
+    try:
+        access_token = credential.access_token
+        READ_ONLY_SCOPE=SCOPES[0]
+        requests.get(READ_ONLY_SCOPE,headers={'Host': 'www.googleapis.com','Authorization': access_token})
+        authorized=True                                    
+    except:    
+        authorized = False
+    return authorized
 
 
 def send_message(service, user_id, message):
