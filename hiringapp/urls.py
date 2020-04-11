@@ -10,6 +10,6 @@ urlpatterns = [
     url(r'^oauth2callback/$', mailingapp_views.GmailAuthReturnView.as_view(), name='oauth2callback'),
     url(r'^invite-acivity/(?P<activity_uuid>[0-9a-f-]+)/$',
             views.SubmissionInviteView.as_view(), name='submission_invite'),
-    url(r'^solution-activity/(?P<activity_uuid>[0-9a-f-]+)/$',
+    url(r'^candidate-solution-activity/(?P<activity_uuid>[0-9a-f-]+)/$',
             views.SubmitSolutionView.as_view(), name='submission_solution'),
 ]

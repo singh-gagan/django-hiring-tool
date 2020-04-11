@@ -10,13 +10,13 @@ from .models import MailSummary
 import hiringapp
 
 @shared_task
-def send_emails(id,email_type):
-    submission=hiringapp.models.Submission.objects.get(activity_uuid=id)
+def send_emails(activity_uuid,email_type):
+    submission=hiringapp.models.Submission.objects.get(activity_uuid=activity_uuid)
     try:
         message=create_messages(submission,email_type)
         service=get_mail_service(submission.invitation_host)
         sent = send_message(service,'me', message)
-        MailSummary.objects.create(mail_type=email_type,activity_uuid=id,candidate_name=submission.candidate_name,date_of_mail=timezone.now()) 
+        MailSummary.objects.create(mail_type=email_type,activity_uuid=activity_uuid,candidate_name=submission.candidate_name,date_of_mail=timezone.now()) 
         if email_type==EmailType.ACTIVITYEXPIRED.value or email_type==EmailType.ACTIVITYSOLUTION.value:
             print('{} mail sent successfully to {} activity_uuid {}'.format(email_type,submission.invitation_host.get_username(),submission.activity_uuid))
         else:            

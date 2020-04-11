@@ -47,7 +47,8 @@ class TestViews(TestCase):
 
     @patch('mailingapp.tasks.send_emails.delay')
     def test_submission_solution_with_valid_uuid_POST(self, mocked_send_emails):
-        submission = Submission.objects.create()
+        submission = Submission.objects.create(invitation_creation_dateandtime=timezone.now(),activity_start_time=timezone.now())
+        submission.activity_status=ActivityStatus.STARTED.value
         submission_solution_url_with_valid_uuid = reverse(
             'submission_solution', args=(submission.activity_uuid,))
         response = self.client.post(submission_solution_url_with_valid_uuid, {
