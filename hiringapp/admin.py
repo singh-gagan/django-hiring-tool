@@ -7,6 +7,7 @@ from httplib2 import Http
 from mailingapp.models import CredentialsModel,MailModel,MailSummary
 from django.utils import timezone
 from .constants import ActivityStatus
+import requests
 
 
 #admin.site.register(MailModel)
@@ -24,9 +25,10 @@ class SubmissionAdmin(admin.ModelAdmin):
         try:
             access_token = credential.access_token
             #This is to re-authenticate the user to check if his access_token is still valid
-            resp, cont = Http().request("https://www.googleapis.com/auth/gmail.readonly",
+            requests.get("https://www.googleapis.com/auth/gmail.readonly",
                                     headers={'Host': 'www.googleapis.com',
-                                            'Authorization': access_token})                                    
+                                            'Authorization': access_token}) 
+            print('in change list')                                   
         except:
             status = False
         extra_context = extra_context or {}
