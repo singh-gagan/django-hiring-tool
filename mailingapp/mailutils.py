@@ -13,7 +13,7 @@ import base64
 from django.contrib import messages
 from mysite import settings
 from .constants import EmailType
-from .constants import SCOPES,GOOGLE_SIGN_IN_REDIRECTURI,GOOGLEAUTHENTICATIONHOST
+from .constants import SCOPES,GOOGLE_SIGN_IN_REDIRECTURI,GOOGLE_AUTHENTICATION_HOST
 from .models import CredentialsModel
 import requests
 
@@ -34,7 +34,7 @@ def authenticate(user):
     access_token=CredentialsModel.get_access_token(credential)
     if access_token is not None:
         READ_ONLY_SCOPE=SCOPES[0]
-        requests.get(READ_ONLY_SCOPE,headers={'Host': GOOGLEAUTHENTICATIONHOST,'Authorization': access_token})
+        requests.get(READ_ONLY_SCOPE,headers={'Host': GOOGLE_AUTHENTICATION_HOST,'Authorization': access_token})
         authorized=True                                    
     return authorized
 

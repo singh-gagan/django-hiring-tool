@@ -33,7 +33,7 @@ class SubmissionInviteView(View):
         if submission is None:
             return render(request,'hiringapp/display_activity.html',{'invalid':True})
         # condition to avoid misuse
-        if submission.activity_start_time is not None:
+        elif submission.activity_start_time is not None:
             messages.error(request, 'Activity already started.')
             return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
         submission.activity_status=ActivityStatus.STARTED.value
