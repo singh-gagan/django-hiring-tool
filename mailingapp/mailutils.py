@@ -13,7 +13,7 @@ import base64
 from django.contrib import messages
 from mysite import settings
 from .constants import EmailType
-from .constants import SCOPES
+from .constants import SCOPES,GOOGLE_SIGN_IN_REDIRECTURI
 from .models import CredentialsModel
 import requests
 
@@ -22,7 +22,7 @@ def get_flow():
     FLOW = flow_from_clientsecrets(
         settings.GOOGLE_OAUTH2_CLIENT_SECRETS_JSON,
         scope=SCOPES,
-        redirect_uri='http://127.0.0.1:8000/oauth2callback',
+        redirect_uri=GOOGLE_SIGN_IN_REDIRECTURI,
         prompt='consent')
     return FLOW
 
