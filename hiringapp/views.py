@@ -32,8 +32,9 @@ class SubmissionInviteView(View):
         submission=Submission.get_submission(activity_uuid)
         if submission is None:
             return render(request,'hiringapp/display_activity.html',{'invalid':True})
-        if submission.activity_status==ActivityStatus.STARTED.value:
-            messages.error(request,"Your activity is already started")
+        # condition to avoid misuse
+        if submission.activity_start_time is not None:
+            messages.error(request, 'Activity already started.')
             return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
         submission.activity_status=ActivityStatus.STARTED.value
         submission.activity_start_time=timezone.now()
@@ -48,6 +49,7 @@ class SubmitSolutionView(View):
         submission=Submission.get_submission(activity_uuid)
         if submission is None:
             return render(request,'hiringapp/display_activity.html',{'invalid':True})
+        # condition to avoid misuse
         elif timezone.now()>=submission.end_time:
              messages.error(request, 'Solution not submitted.')
              return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
