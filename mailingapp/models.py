@@ -13,16 +13,21 @@ class CredentialsModel(models.Model):
     def __str__(self):
         return self.id.get_username()
 
+
     @classmethod
-    def get_access_token(cls,user):
+    def get_access_token(cls,credential):
+      try:
+        access_token=credential.access_token
+        return access_token
+      except:
+        return None
+
+
+    @classmethod
+    def get_credentials(cls,user):
         storage = DjangoORMStorage(CredentialsModel, 'id', user, 'credential')
         credential = storage.get()
-        try:
-            access_token=credential.access_token
-            return access_token
-        except:
-            return None
-        
+        return credential        
 
 
 class MailModel(models.Model):

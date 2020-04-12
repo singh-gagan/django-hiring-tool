@@ -15,7 +15,8 @@ def send_emails(activity_uuid,email_type):
     try:
         message=create_messages(submission,email_type)
         service=get_mail_service(submission.invitation_host)
-        sent = send_message(service,'me', message)
+        sent = send_message(service,submission.invitation_host, message)
+        print('mail sent')
         MailSummary.objects.create(mail_type=email_type,activity_uuid=activity_uuid,candidate_name=submission.candidate_name,date_of_mail=timezone.now()) 
         if email_type==EmailType.ACTIVITYEXPIRED.value or email_type==EmailType.ACTIVITYSOLUTION.value:
             print('{} mail sent successfully to {} activity_uuid {}'.format(email_type,submission.invitation_host.get_username(),submission.activity_uuid))

@@ -13,7 +13,7 @@ import base64
 from django.contrib import messages
 from mysite import settings
 from .constants import EmailType
-from .constants import SCOPES,GOOGLE_SIGN_IN_REDIRECTURI
+from .constants import SCOPES,GOOGLE_SIGN_IN_REDIRECTURI,GOOGLEAUTHENTICATIONHOST
 from .models import CredentialsModel
 import requests
 
@@ -30,10 +30,11 @@ def get_flow():
 #This is to re-authenticate the user to check if his access_token is still valid
 def authenticate(user):
     authorized = False
-    access_token=CredentialsModel.get_access_token(user)
+    credential=CredentialsModel.get_credentials(user)
+    access_token=CredentialsModel.get_access_token(credential)
     if access_token is not None:
         READ_ONLY_SCOPE=SCOPES[0]
-        requests.get(READ_ONLY_SCOPE,headers={'Host': 'www.googleapis.com','Authorization': access_token})
+        requests.get(READ_ONLY_SCOPE,headers={'Host': GOOGLEAUTHENTICATIONHOST,'Authorization': access_token})
         authorized=True                                    
     return authorized
 
@@ -49,8 +50,7 @@ def send_message(service, user_id, message):
 
 
 def get_mail_service(user):
-    storage = DjangoORMStorage(models.CredentialsModel, 'id', user, 'credential')
-    credential = storage.get()
+    credential=CredentialsModel.get_credentials(user)
     if credential is None or credential.invalid:
         FLOW=get_flow()
         FLOW.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,user)

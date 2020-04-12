@@ -15,3 +15,6 @@ SCOPES=['https://www.googleapis.com/auth/gmail.readonly',
 
 GOOGLE_SIGN_IN_REDIRECTURI='http://127.0.0.1:8000/oauth2callback'
 
+
+GOOGLEAUTHENTICATIONHOST='www.googleapis.com'
+
