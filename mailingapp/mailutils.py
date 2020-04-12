@@ -29,16 +29,12 @@ def get_flow():
 
 #This is to re-authenticate the user to check if his access_token is still valid
 def authenticate(user):
-    storage = DjangoORMStorage(CredentialsModel, 'id', user, 'credential')
-    credential = storage.get()
     authorized = False
-    try:
-        access_token = credential.access_token
+    access_token=CredentialsModel.get_access_token(user)
+    if access_token is not None:
         READ_ONLY_SCOPE=SCOPES[0]
         requests.get(READ_ONLY_SCOPE,headers={'Host': 'www.googleapis.com','Authorization': access_token})
         authorized=True                                    
-    except:    
-        authorized = False
     return authorized
 
 

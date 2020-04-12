@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from oauth2client.contrib.django_util.models import CredentialsField
 from .constants import EmailType
+from oauth2client.contrib.django_util.storage import DjangoORMStorage
 
 # Create your models here.
 
@@ -11,6 +12,17 @@ class CredentialsModel(models.Model):
 
     def __str__(self):
         return self.id.get_username()
+
+    @classmethod
+    def get_access_token(cls,user):
+        storage = DjangoORMStorage(CredentialsModel, 'id', user, 'credential')
+        credential = storage.get()
+        try:
+            access_token=credential.access_token
+            return access_token
+        except:
+            return None
+        
 
 
 class MailModel(models.Model):
