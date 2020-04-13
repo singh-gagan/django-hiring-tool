@@ -27,7 +27,12 @@ class CredentialsModel(models.Model):
     def get_credentials(cls,user):
         storage = DjangoORMStorage(CredentialsModel, 'id', user, 'credential')
         credential = storage.get()
-        return credential        
+        return credential    
+
+    @classmethod
+    def add_credentials(cls,user,credential):
+        storage = DjangoORMStorage(CredentialsModel, 'id', user, 'credential')
+        storage.put(credential)    
 
 
 class MailModel(models.Model):

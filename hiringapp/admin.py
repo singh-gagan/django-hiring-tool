@@ -14,9 +14,12 @@ from mailingapp.mailutils import authenticate
 #admin.site.register(MailModel)
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
+    
     change_list_template="change_list.html"
     actions = ['cancel_flow',]
     list_display = ('candidate_name','activity_status','invitation_creation_dateandtime','activity_start_time')
+    
+    
     def changelist_view(self, request, extra_context=None):
         if not request.user.is_authenticated:
             return HttpResponseRedirect('admin')

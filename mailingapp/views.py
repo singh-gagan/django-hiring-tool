@@ -8,12 +8,11 @@ from mysite import settings
 from .models import CredentialsModel
 from django.views import View
 from .mailutils import get_flow
+from hiringapp.models import Submission
 
 
 class GmailAuthenticateView(View):
     def post(self,request):
-        storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
-        credential = storage.get()
         FLOW=get_flow()
         FLOW.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,
                                                        request.user)
@@ -29,6 +28,5 @@ class GmailAuthReturnView(View):
             return HttpResponseBadRequest()
         FLOW=get_flow()
         credential = FLOW.step2_exchange(request.GET.get('code'))
-        storage = DjangoORMStorage(CredentialsModel, 'id', request.user, 'credential')
-        storage.put(credential)
-        return HttpResponseRedirect("../admin/hiringapp/submission/")
+        CredentialsModel.add_credentials(request.user,credential)
+        return HttpResponseRedirect(Submission.get_admin_change_list_url())

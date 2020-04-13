@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from oauth2client.contrib.django_util.models import CredentialsField 
 from mailingapp.tasks import send_emails
 import datetime
+from django.urls import reverse
+from django.contrib.contenttypes.models import ContentType
 
 
 class Submission(models.Model):
@@ -40,9 +42,11 @@ class Submission(models.Model):
             send_emails.delay(self.activity_uuid,EmailType.INVITATION.value)
         super(Submission, self).save(*args, **kwargs) 
 
+
     def __str__(self):
         str="Invitation {}".format(self.candidate_name)
         return str
+
 
     @classmethod
     def get_submission(cls,activity_uuid):
@@ -52,6 +56,12 @@ class Submission(models.Model):
             submission=None
         return submission
 
+
     @property
     def end_time(self):
         return self.activity_start_time+self.activity_duration
+
+        
+    @classmethod
+    def get_admin_change_list_url(cls):
+        return reverse('admin:hiringapp_submission_changelist')
