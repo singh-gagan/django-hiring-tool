@@ -27,8 +27,20 @@ def get_flow():
         prompt='consent')
     return FLOW
 
+def get_authorize_url(user):
+    FLOW=get_flow()
+    FLOW.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,user)
+    authorize_url = FLOW.step1_get_authorize_url()
+    return authorize_url
 
-#This is to re-authenticate the user to check if his access_token is still valid
+def get_auth_return_credentials(state,authorization_code,user):
+    if not xsrfutil.validate_token(settings.SECRET_KEY, state,user):
+        return None
+    FLOW=get_flow()
+    credential = FLOW.step2_exchange(authorization_code)
+    return credential
+
+
 def authenticate(user):
     authorized = False
     credential=CredentialsModel.get_credentials(user)
