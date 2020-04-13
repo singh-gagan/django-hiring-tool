@@ -10,7 +10,7 @@ class MailAdmin(SummernoteModelAdmin):
 
 @admin.register(MailSummary)
 class MailSummary(admin.ModelAdmin):
-    list_display = ('candidate_name','mail_type','date_of_mail')
+    list_display = ('candidate_name','mail_type','date_of_mail','mail_status')
 
 
 @admin.register(CredentialsModel)

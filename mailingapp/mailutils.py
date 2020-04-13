@@ -44,9 +44,10 @@ def send_message(service, user_id, message):
         message = (service.users().messages().send(userId=user_id, body=message)
                .execute())
         logging.info('Message Id: %s' % message['id'])
-        return message
+        return True
     except errors.HttpError as error:
-        logging.error(error)    
+        logging.error(error)
+        return False    
 
 
 def get_mail_service(user):
