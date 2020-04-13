@@ -17,6 +17,7 @@ from .constants import SCOPES,GOOGLE_SIGN_IN_REDIRECTURI,GOOGLE_AUTHENTICATION_H
 from .models import CredentialsModel
 import requests
 import logging
+import pytz
 
 def get_flow():
     FLOW = flow_from_clientsecrets(
@@ -83,16 +84,26 @@ def create_messages(submission,email_type):
 
 
 def create_mail_body(submission,email_type,message):
+    time_zone=pytz.timezone(settings.TIME_ZONE)
+    if submission.activity_start_time is not None:
+        activity_start_time=submission.activity_start_time.astimezone(time_zone).strftime("%Y-%m-%d %H:%M:%S")
+
     mail_body=""
     activity_invite_url="127.0.0.1:8000"+reverse('submission_invite',args=(submission.activity_uuid,))
+    
     if email_type==EmailType.STARTREMINDER.value:
         mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_url=activity_invite_url)
+    
     elif email_type==EmailType.INVITATION.value:
         mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_url=activity_invite_url)
+    
     elif email_type==EmailType.SUBMISSIONREMINDER.value:
         mail_body=message.format(candidate_name=submission.candidate_name,time_left=submission.reminder_for_submission_time,activity_url=activity_invite_url)
+    
     elif email_type==EmailType.ACTIVITYEXPIRED.value:
-        mail_body=message.format(candidate_name=submission.candidate_name,candidate_email=submission.candidate_email,activity_start_time=submission.activity_start_time)
+        mail_body=message.format(candidate_name=submission.candidate_name,candidate_email=submission.candidate_email,activity_start_time=activity_start_time)
+    
     elif email_type==EmailType.ACTIVITYSOLUTION.value:
         mail_body=message.format(candidate_name=submission.candidate_name,candidate_email=submission.candidate_email,activity_solution=submission.activity_solution_link)    
+    
     return mail_body
