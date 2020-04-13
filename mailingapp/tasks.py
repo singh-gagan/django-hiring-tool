@@ -9,6 +9,14 @@ from datetime import datetime,timedelta
 from .models import MailSummary
 import logging
 
+log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logger = logging.getLogger(__name__)
+file_handler = logging.FileHandler("mails.log")
+formatter = logging.Formatter(log_format)
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+
+
 @shared_task
 def send_emails(activity_uuid,email_type):
     from hiringapp.models import Submission
@@ -18,9 +26,10 @@ def send_emails(activity_uuid,email_type):
     sent = send_message(service,'me', message)
     if sent:
         MailSummary.add_new_mail_summary(email_type,activity_uuid,submission.candidate_name,'SENT')
+        logger.info("{} mail sent. Activity ID - {}".format(email_type,activity_uuid))
     else:
         MailSummary.add_new_mail_summary(email_type,activity_uuid,submission.candidate_name,'NOTSENT')    
-    
+        logger.error("{} mail not sent. Activity Id - {}".format(email_type,activity_uuid))
 
 @shared_task
 def checkout_pending_tasks():

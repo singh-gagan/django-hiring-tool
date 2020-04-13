@@ -19,6 +19,10 @@ import requests
 import logging
 import pytz
 
+log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logger = logging.getLogger(__name__)
+logger.setLevel('DEBUG')
+
 def get_flow():
     FLOW = flow_from_clientsecrets(
         local_settings.GOOGLE_OAUTH2_CLIENT_SECRETS_JSON,
@@ -56,7 +60,6 @@ def send_message(service, user_id, message):
     try:
         message = (service.users().messages().send(userId=user_id, body=message)
                .execute())
-        logging.info('Message Id: %s' % message['id'])
         return True
     except errors.HttpError as error:
         logging.error(error)
