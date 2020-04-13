@@ -12,8 +12,22 @@ class CredentialsModel(models.Model):
     id = models.OneToOneField(User, primary_key = True, on_delete = models.CASCADE) 
     credential = CredentialsField() 
 
+
     def __str__(self):
         return self.id.get_username()
+
+
+    @classmethod
+    def has_credentials(cls,user):
+        return CredentialsModel.objects.filter(id=user).exists()
+    
+    
+    
+    @classmethod
+    def get_credentials(cls,user):
+        storage = DjangoORMStorage(CredentialsModel, 'id', user, 'credential')
+        credential = storage.get()
+        return credential    
 
 
     @classmethod
@@ -24,12 +38,6 @@ class CredentialsModel(models.Model):
       except:
         return None
 
-
-    @classmethod
-    def get_credentials(cls,user):
-        storage = DjangoORMStorage(CredentialsModel, 'id', user, 'credential')
-        credential = storage.get()
-        return credential    
 
     @classmethod
     def add_credentials(cls,user,credential):

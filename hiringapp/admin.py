@@ -37,7 +37,7 @@ class SubmissionAdmin(admin.ModelAdmin):
 
 
     def has_add_permission(self, request):
-        return CredentialsModel.objects.filter(id=request.user).exists()
+        return CredentialsModel.has_credentials(request.user)
 
 
     def cancel_flow(self,request,queryset):

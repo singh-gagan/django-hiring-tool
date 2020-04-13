@@ -34,7 +34,7 @@ class TestViews(TestCase):
             'submission_invite', args=(submission.activity_uuid,))
         response = self.client.post(submission_invite_url_with_valid_uuid)
         self.assertEquals(response.status_code, 302)
-        submission = Submission.objects.get(
+        submission = Submission.get_submission(
             activity_uuid=submission.activity_uuid)
         self.assertEquals(submission.activity_status,
                           ActivityStatus.STARTED.value)
@@ -54,7 +54,7 @@ class TestViews(TestCase):
         response = self.client.post(submission_solution_url_with_valid_uuid, {
                                     'solution_link': 'link'})
         self.assertEquals(response.status_code, 302)
-        submission = Submission.objects.get(
+        submission = Submission.get_submission(
             activity_uuid=submission.activity_uuid)
         self.assertEquals(submission.activity_status,
                           ActivityStatus.SUBMITTED.value)
