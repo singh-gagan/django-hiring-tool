@@ -66,8 +66,8 @@ class MailModel(models.Model):
 class MailSummary(models.Model):
 
     MAIL_STATUS = (
-        ('SENT', 'Sent'),
-        ('NOTSENT', 'NotSent'),
+        ('SENT', 'sent'),
+        ('NOTSENT', 'notsent'),
     )
 
     mail_type=models.CharField(
@@ -82,8 +82,8 @@ class MailSummary(models.Model):
 
     @classmethod
     def add_new_mail_summary(cls,email_type,activity_uuid,candidate_name,mail_status):
-        MailSummary.objects.create(mail_type=email_type,activity_uuid=activity_uuid,candidate_name=candidate_name,date_of_mail=timezone.now(),mail_status=mail_status)
-    
+        mail_summary=MailSummary.objects.create(mail_type=email_type,activity_uuid=activity_uuid,candidate_name=candidate_name,date_of_mail=timezone.now(),mail_status=mail_status)
+        return mail_summary
 
     @classmethod
     def get_latest_mail_sent_date(cls,submission):

@@ -21,14 +21,16 @@ logger.addHandler(file_handler)
 def send_emails(activity_uuid,email_type):
     from hiringapp.models import Submission
     submission=Submission.get_submission(activity_uuid)
-    message=create_messages(submission,email_type)
-    service=get_mail_service(submission.invitation_host)
-    sent = send_message(service,'me', message)
-    if sent:
-        MailSummary.add_new_mail_summary(email_type,activity_uuid,submission.candidate_name,'SENT')
+    mail_summary=MailSummary.add_new_mail_summary(email_type,activity_uuid,submission.candidate_name,'NOTSENT')
+    try:
+        message=create_messages(submission,email_type)
+        service=get_mail_service(submission.invitation_host)
+        sent = send_message(service,'me', message)
+        mail_summary.mail_status='SENT'
+        MailSummary.save(update_fields=["mail_status",])
         logger.info("{} mail sent. Activity ID - {}".format(email_type,activity_uuid))
-    else:
-        MailSummary.add_new_mail_summary(email_type,activity_uuid,submission.candidate_name,'NOTSENT')    
+    except Exception as e:
+        logging.error('Error while sending {} mail'.format(email_type),exc_info=e)    
         logger.error("{} mail not sent. Activity Id - {}".format(email_type,activity_uuid))
 
 @shared_task
