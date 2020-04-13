@@ -7,11 +7,11 @@ from .constants import EmailType
 from django.utils import timezone
 from datetime import datetime,timedelta
 from .models import MailSummary
-import hiringapp
 
 @shared_task
 def send_emails(activity_uuid,email_type):
-    submission=hiringapp.models.Submission.objects.get(activity_uuid=activity_uuid)
+    from hiringapp.models import Submission
+    submission=Submission.objects.get(activity_uuid=activity_uuid)
     try:
         message=create_messages(submission,email_type)
         service=get_mail_service(submission.invitation_host)
@@ -31,9 +31,10 @@ def send_emails(activity_uuid,email_type):
 def checkout_pending_tasks():
     # This schedulded method will iterate for every submission objects and check for pending tasks of sending emails
     # All reminders mail will be sent in accordance with the pattern given in reminders_gap_list[]
+    from hiringapp.models import Submission
     current_date=timezone.now().date()
     reminders_gap_list=[1,3,6]
-    all_submissions=hiringapp.models.Submission.objects.all()
+    all_submissions=Submission.objects.all()
     for submission in all_submissions:
         if submission.activity_status == ActivityStatus.NOTYETSTARTED.value:
             latest_mail_summary=MailSummary.objects.filter(activity_uuid=submission.activity_uuid).latest('date_of_mail')
