@@ -16,7 +16,7 @@ from .constants import EmailType
 from .constants import SCOPES,GOOGLE_SIGN_IN_REDIRECTURI,GOOGLE_AUTHENTICATION_HOST
 from .models import CredentialsModel
 import requests
-
+import logging
 
 def get_flow():
     FLOW = flow_from_clientsecrets(
@@ -43,10 +43,10 @@ def send_message(service, user_id, message):
     try:
         message = (service.users().messages().send(userId=user_id, body=message)
                .execute())
-        print('Message Id: %s' % message['id'])
+        logging.info('Message Id: %s' % message['id'])
         return message
     except errors.HttpError as error:
-        print('An error occurred: %s' % error)    
+        logging.error(error)    
 
 
 def get_mail_service(user):

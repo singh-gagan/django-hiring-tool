@@ -7,6 +7,7 @@ from .constants import EmailType
 from django.utils import timezone
 from datetime import datetime,timedelta
 from .models import MailSummary
+import logging
 
 @shared_task
 def send_emails(activity_uuid,email_type):
@@ -16,15 +17,10 @@ def send_emails(activity_uuid,email_type):
         message=create_messages(submission,email_type)
         service=get_mail_service(submission.invitation_host)
         sent = send_message(service,'me', message)
-        print('mail sent')
         MailSummary.objects.create(mail_type=email_type,activity_uuid=activity_uuid,candidate_name=submission.candidate_name,date_of_mail=timezone.now()) 
-        if email_type==EmailType.ACTIVITYEXPIRED.value or email_type==EmailType.ACTIVITYSOLUTION.value:
-            print('{} mail sent successfully to {} activity_uuid {}'.format(email_type,submission.invitation_host.get_username(),submission.activity_uuid))
-        else:            
-            print('{} mail sent successfully to {} activity_uuid {}'.format(email_type,submission.candidate_name,submission.activity_uuid))
+        logging.info('{} mail sent for activity uuid {}'.format(email_type,activity_uuid))    
     except:
-        print('Mail not sent')
-    return "celery_task_executed"
+        logging.error('Mail not sent')
 
 
 @shared_task
@@ -57,4 +53,3 @@ def checkout_pending_tasks():
             submission.save()
             send_emails.delay(submission.activity_uuid,EmailType.ACTIVITYEXPIRED.value)
 
-    return "pending tasks executed"
