@@ -11,7 +11,7 @@ from apiclient import errors
 from email.mime.text import MIMEText
 import base64
 from django.contrib import messages
-from mysite import settings
+from mysite.settings import local_settings
 from .constants import EmailType
 from .constants import SCOPES,GOOGLE_SIGN_IN_REDIRECTURI,GOOGLE_AUTHENTICATION_HOST
 from .models import CredentialsModel,MailModel
@@ -21,7 +21,7 @@ import pytz
 
 def get_flow():
     FLOW = flow_from_clientsecrets(
-        settings.GOOGLE_OAUTH2_CLIENT_SECRETS_JSON,
+        local_settings.GOOGLE_OAUTH2_CLIENT_SECRETS_JSON,
         scope=SCOPES,
         redirect_uri=GOOGLE_SIGN_IN_REDIRECTURI,
         prompt='consent')
@@ -29,12 +29,12 @@ def get_flow():
 
 def get_authorize_url(user):
     FLOW=get_flow()
-    FLOW.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,user)
+    FLOW.params['state'] = xsrfutil.generate_token(local_settings.SECRET_KEY,user)
     authorize_url = FLOW.step1_get_authorize_url()
     return authorize_url
 
 def get_auth_return_credentials(state,authorization_code,user):
-    if not xsrfutil.validate_token(settings.SECRET_KEY, state,user):
+    if not xsrfutil.validate_token(local_settings.SECRET_KEY, state,user):
         return None
     FLOW=get_flow()
     credential = FLOW.step2_exchange(authorization_code)
@@ -67,7 +67,7 @@ def get_mail_service(user):
     credential=CredentialsModel.get_credentials(user)
     if credential is None or credential.invalid:
         FLOW=get_flow()
-        FLOW.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,user)
+        FLOW.params['state'] = xsrfutil.generate_token(local_settings.SECRET_KEY,user)
         authorize_url = FLOW.step1_get_authorize_url()
         return HttpResponseRedirect(authorize_url)
     service = build('gmail', 'v1', credentials=credential,cache_discovery=False)
@@ -96,7 +96,7 @@ def create_messages(submission,email_type):
 
 
 def create_mail_body(submission,email_type,message):
-    time_zone=pytz.timezone(settings.TIME_ZONE)
+    time_zone=pytz.timezone(local_settings.TIME_ZONE)
     if submission.activity_start_time is not None:
         activity_start_time=submission.activity_start_time.astimezone(time_zone).strftime("%Y-%m-%d %H:%M:%S")
 

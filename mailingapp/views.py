@@ -3,7 +3,6 @@ from django.http import HttpResponseRedirect
 from .models import CredentialsModel
 from oauth2client.contrib.django_util.storage import DjangoORMStorage
 from django.contrib import messages
-from mysite import settings
 from .models import CredentialsModel
 from django.views import View
 from .mailutils import get_flow,get_authorize_url,get_auth_return_credentials
