@@ -16,7 +16,7 @@ class GmailAuthenticateView(View):
         return HttpResponseRedirect(authorize_url)
 
 
-class GmailAuthReturnView(View):
+class GmailAuthCallbackView(View):
     def get(self,request):
         state = bytes(request.GET.get('state'), 'utf8')
         authorization_code=request.GET.get('code')
