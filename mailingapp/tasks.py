@@ -27,7 +27,7 @@ def checkout_pending_tasks():
     from hiringapp.models import Submission
     current_date=timezone.now().date()
     reminders_gap_list=[1,3,6]
-    all_submissions=Submission.objects.all()
+    all_submissions=Submission.get_all_submission()
     for submission in all_submissions:
         if submission.activity_status == ActivityStatus.NOTYETSTARTED.value:
            check_for_reminder_to_start_mails(submission,reminders_gap_list)

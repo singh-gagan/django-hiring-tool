@@ -65,3 +65,8 @@ class Submission(models.Model):
     @classmethod
     def get_admin_change_list_url(cls):
         return reverse('admin:hiringapp_submission_changelist')
+
+    
+    @classmethod
+    def get_all_submission(cls):
+        return Submission.objects.all()

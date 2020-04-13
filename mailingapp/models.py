@@ -58,6 +58,10 @@ class MailModel(models.Model):
     def __str__(self):
         return self.mail_type
 
+    @classmethod
+    def get_mail(cls,email_type):
+        return MailModel.objects.get(mail_type=email_type)
+
 
 class MailSummary(models.Model):
 

@@ -43,6 +43,6 @@ class TestMailUtils(TestCase):
         submission.activity_status=ActivityStatus.STARTED.value
         submission.save()
         checkout_pending_tasks.apply()
-        submission=Submission.objects.get(activity_uuid=submission.activity_uuid)
+        submission=Submission.get_submission(activity_uuid=submission.activity_uuid)
         self.assertEqual(mocked_send_emails.call_count,2)
         self.assertEqual(submission.activity_status,ActivityStatus.EXPIRED.value)

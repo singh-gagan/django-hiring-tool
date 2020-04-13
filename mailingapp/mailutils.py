@@ -14,7 +14,7 @@ from django.contrib import messages
 from mysite import settings
 from .constants import EmailType
 from .constants import SCOPES,GOOGLE_SIGN_IN_REDIRECTURI,GOOGLE_AUTHENTICATION_HOST
-from .models import CredentialsModel
+from .models import CredentialsModel,MailModel
 import requests
 import logging
 import pytz
@@ -70,7 +70,7 @@ def get_invitation_host_email(invitation_host):
 
 def create_messages(submission,email_type):
     #logic to create message from submission details and email_type 
-    mail=models.MailModel.objects.get(mail_type=email_type)
+    mail=MailModel.get_mail(email_type)
     message=mail.mail_content
     mail_body=""
     mail_body=create_mail_body(submission,email_type,message)
