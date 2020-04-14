@@ -108,7 +108,7 @@ def create_mail_body(submission,email_type,message):
         activity_start_time=submission.activity_start_time.astimezone(time_zone).strftime("%Y-%m-%d %H:%M:%S")
 
     mail_body=""
-    activity_invite_url="127.0.0.1:8000"+reverse('submission_invite',args=(submission.activity_uuid,))
+    activity_invite_url=local_settings.HOST+reverse('submission_invite',args=(submission.activity_uuid,))
     
     if email_type==EmailType.START_REMINDER.value:
         mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_url=activity_invite_url)
