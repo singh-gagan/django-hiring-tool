@@ -94,7 +94,7 @@ def create_messages(submission,email_type):
     mail_body=""
     mail_body=create_mail_body(submission,email_type,message)
     message=MIMEText(mail_body,'html')
-    if email_type==EmailType.ACTIVITYEXPIRED.value or email_type==EmailType.ACTIVITYSOLUTION.value:
+    if email_type==EmailType.ACTIVITY_EXPIRED.value or email_type==EmailType.ACTIVITY_SOLUTION.value:
         message['to']=get_invitation_host_email(submission.invitation_host)
     else:    
         message['to']=submission.candidate_email
@@ -110,19 +110,19 @@ def create_mail_body(submission,email_type,message):
     mail_body=""
     activity_invite_url="127.0.0.1:8000"+reverse('submission_invite',args=(submission.activity_uuid,))
     
-    if email_type==EmailType.STARTREMINDER.value:
+    if email_type==EmailType.START_REMINDER.value:
         mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_url=activity_invite_url)
     
     elif email_type==EmailType.INVITATION.value:
         mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_url=activity_invite_url)
     
-    elif email_type==EmailType.SUBMISSIONREMINDER.value:
+    elif email_type==EmailType.SUBMISSION_REMINDER.value:
         mail_body=message.format(candidate_name=submission.candidate_name,time_left=submission.reminder_for_submission_time,activity_url=activity_invite_url)
     
-    elif email_type==EmailType.ACTIVITYEXPIRED.value:
+    elif email_type==EmailType.ACTIVITY_EXPIRED.value:
         mail_body=message.format(candidate_name=submission.candidate_name,candidate_email=submission.candidate_email,activity_start_time=activity_start_time)
     
-    elif email_type==EmailType.ACTIVITYSOLUTION.value:
+    elif email_type==EmailType.ACTIVITY_SOLUTION.value:
         mail_body=message.format(candidate_name=submission.candidate_name,candidate_email=submission.candidate_email,activity_solution=submission.activity_solution_link)    
     
     return mail_body

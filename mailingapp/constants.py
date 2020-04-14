@@ -3,10 +3,10 @@ from enum import Enum
 
 class EmailType(Enum):
         INVITATION='invitation'
-        STARTREMINDER='reminder'
-        ACTIVITYEXPIRED='activity_expired'
-        ACTIVITYSOLUTION='activity_solution'
-        SUBMISSIONREMINDER='reminder_to_submit'
+        START_REMINDER='reminder_to_start'
+        ACTIVITY_EXPIRED='activity_expired'
+        ACTIVITY_SOLUTION='activity_solution'
+        SUBMISSION_REMINDER='reminder_to_submit'
 
 SCOPES=['https://www.googleapis.com/auth/gmail.readonly',
         'https://www.googleapis.com/auth/userinfo.email',

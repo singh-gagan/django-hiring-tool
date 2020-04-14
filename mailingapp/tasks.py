@@ -54,18 +54,18 @@ def check_for_reminder_to_start_mails(submission,reminders_gap_list):
         return
     gap=current_date-submission.invitation_creation_dateandtime.date()
     if gap.days in reminders_gap_list:
-        send_emails.delay(submission.activity_uuid,EmailType.STARTREMINDER.value)
+        send_emails.delay(submission.activity_uuid,EmailType.START_REMINDER.value)
 
 
 def check_for_reminder_to_submit_or_expiry_mails(submission):
     if timezone.now()<=submission.end_time:
         latest_mail_sent_type=MailSummary.get_latest_mail_sent_type(submission)
-        if latest_mail_sent_type==EmailType.SUBMISSIONREMINDER.value: 
+        if latest_mail_sent_type==EmailType.SUBMISSION_REMINDER.value: 
             return
         activity_reminder_time=submission.end_time-submission.reminder_for_submission_time
         if timezone.now()>=activity_reminder_time:
-            send_emails.delay(submission.activity_uuid,EmailType.SUBMISSIONREMINDER.value)
+            send_emails.delay(submission.activity_uuid,EmailType.SUBMISSION_REMINDER.value)
     else:
         submission.activity_status=ActivityStatus.EXPIRED.value
         submission.save(update_fields=["activity_status"])
-        send_emails.delay(submission.activity_uuid,EmailType.ACTIVITYEXPIRED.value)
+        send_emails.delay(submission.activity_uuid,EmailType.ACTIVITY_EXPIRED.value)

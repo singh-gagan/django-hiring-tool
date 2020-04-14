@@ -60,5 +60,5 @@ class SubmitSolutionView(View):
         submission.activity_status=ActivityStatus.SUBMITTED.value
         submission.activity_solution_link=input_solution_link
         submission.save(update_fields=["activity_status","activity_solution_link",])
-        send_emails.delay(submission.activity_uuid,EmailType.ACTIVITYSOLUTION.value)
+        send_emails.delay(submission.activity_uuid,EmailType.ACTIVITY_SOLUTION.value)
         return HttpResponseRedirect(reverse('submission_invite',args=(submission.activity_uuid,)))
