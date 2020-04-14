@@ -6,7 +6,7 @@ from oauth2client.contrib.django_util.storage import DjangoORMStorage
 from hiringapp.models import Submission
 
 from .mailutils import get_gmail_callback_credential, get_gmail_authorize_url, get_flow
-from .models import CredentialsModel
+from .models import GmailCredential
 
 
 class GmailAuthenticateView(View):
@@ -20,5 +20,5 @@ class GmailAuthCallbackView(View):
         state = bytes(request.GET.get('state'), 'utf8')
         authorization_code=request.GET.get('code')
         credential = get_gmail_callback_credential(state,authorization_code,request.user)
-        CredentialsModel.add_credentials(request.user,credential)
+        GmailCredential.add_credentials(request.user,credential)
         return HttpResponseRedirect(Submission.get_admin_change_list_url())

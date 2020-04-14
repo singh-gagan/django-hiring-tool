@@ -7,13 +7,12 @@ from httplib2 import Http
 from oauth2client.contrib.django_util.storage import DjangoORMStorage
 
 from mailingapp.mailutils import is_authenticated
-from mailingapp.models import CredentialsModel, MailModel, MailSummary
+from mailingapp.models import GmailCredential
 
 from .constants import ActivityStatus
 from .models import Submission
 
 
-#admin.site.register(MailModel)
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
     
@@ -40,7 +39,7 @@ class SubmissionAdmin(admin.ModelAdmin):
 
 
     def has_add_permission(self, request):
-        return CredentialsModel.has_credentials(request.user)
+        return GmailCredential.has_credentials(request.user)
 
 
     def cancel_flow(self,request,queryset):

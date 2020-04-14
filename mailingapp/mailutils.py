@@ -18,10 +18,9 @@ from oauth2client.contrib.django_util.storage import DjangoORMStorage
 from hiringapp.constants import ActivityStatus
 from mysite.settings import local_settings
 
-from . import models
 from .constants import (
     GOOGLE_AUTHENTICATION_HOST, GOOGLE_SIGN_IN_REDIRECTURI, SCOPES, EmailType)
-from .models import CredentialsModel, MailModel
+from .models import EmailTemplate, GmailCredential
 
 log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logger = logging.getLogger(__name__)
@@ -40,7 +39,7 @@ def get_flow():
 
 
 def is_authenticated(user):
-    credential=CredentialsModel.get_credentials(user)
+    credential=GmailCredential.get_credentials(user)
     try:
         access_token = credential.access_token
         READ_ONLY_SCOPE=SCOPES[0]
@@ -66,7 +65,7 @@ def get_gmail_callback_credential(state,authorization_code,user):
 
 
 def get_mail_service(user):
-    credential=CredentialsModel.get_credentials(user)
+    credential=GmailCredential.get_credentials(user)
     if credential is None or credential.invalid:
         flow=get_flow()
         flow.params['state'] = xsrfutil.generate_token(local_settings.SECRET_KEY,user)
@@ -95,7 +94,7 @@ def get_invitation_host_email(invitation_host):
 
 def create_messages(submission,email_type):
     #logic to create message from submission details and email_type 
-    mail=MailModel.get_mail(email_type)
+    mail=EmailTemplate.get_mail(email_type)
     message=mail.mail_content
     mail_body=""
     mail_body=create_mail_body(submission,email_type,message)

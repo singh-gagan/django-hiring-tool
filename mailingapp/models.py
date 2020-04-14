@@ -8,7 +8,7 @@ from .constants import EmailType
 
 # Create your models here.
 
-class CredentialsModel(models.Model): 
+class GmailCredential(models.Model): 
     id = models.OneToOneField(User, primary_key = True, on_delete = models.CASCADE) 
     credential = CredentialsField() 
 
@@ -17,21 +17,21 @@ class CredentialsModel(models.Model):
 
     @classmethod
     def has_credentials(cls,user):
-        return CredentialsModel.objects.filter(id=user).exists()
+        return GmailCredential.objects.filter(id=user).exists()
     
     @classmethod
     def get_credentials(cls,user):
-        storage = DjangoORMStorage(CredentialsModel, 'id', user, 'credential')
+        storage = DjangoORMStorage(GmailCredential, 'id', user, 'credential')
         credential = storage.get()
         return credential    
 
     @classmethod
     def add_credentials(cls,user,credential):
-        storage = DjangoORMStorage(CredentialsModel, 'id', user, 'credential')
+        storage = DjangoORMStorage(GmailCredential, 'id', user, 'credential')
         storage.put(credential)    
 
 
-class MailModel(models.Model):
+class EmailTemplate(models.Model):
     mail_type=models.CharField(
         max_length=100,
         choices=[(key.value, key.name) for key in EmailType],
@@ -46,7 +46,7 @@ class MailModel(models.Model):
 
     @classmethod
     def get_mail(cls,email_type):
-        return MailModel.objects.get(mail_type=email_type)
+        return EmailTemplate.objects.get(mail_type=email_type)
 
 
 class MailSummary(models.Model):
