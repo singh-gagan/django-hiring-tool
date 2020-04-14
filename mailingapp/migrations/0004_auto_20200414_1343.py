@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='mailsummary',
             name='mail_status',
-            field=models.CharField(choices=[('SENT', 'sent'), ('NOTSENT', 'notsent')], default='NOTSENT', max_length=7),
+            field=models.CharField(choices=[('SENT', 'sent'), ('NOTSENT', 'not_sent')], default='NOTSENT', max_length=7),
         ),
     ]

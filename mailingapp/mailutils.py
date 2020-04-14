@@ -125,6 +125,7 @@ def create_mail_body(submission,email_type,message):
         "activity_start_time":activity_start_time,
         "activity_solution":submission.activity_solution_link,
         "candidate_email":submission.candidate_email,
+        "time_left":time_left,
     }
 
     mail_body=message.format( **mail_body_keywords )
