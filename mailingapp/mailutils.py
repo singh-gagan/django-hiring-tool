@@ -26,26 +26,27 @@ logger = logging.getLogger(__name__)
 logger.setLevel('DEBUG')
 
 def get_flow():
-    FLOW = flow_from_clientsecrets(
+    flow = flow_from_clientsecrets(
         local_settings.GOOGLE_OAUTH2_CLIENT_SECRETS_JSON,
         scope=SCOPES,
         redirect_uri=GOOGLE_SIGN_IN_REDIRECTURI,
         prompt='consent'
     ) 
           
-    return FLOW
+    return flow
 
 def get_authorize_url(user):
-    FLOW=get_flow()
-    FLOW.params['state'] = xsrfutil.generate_token(local_settings.SECRET_KEY,user)
-    authorize_url = FLOW.step1_get_authorize_url()
-    return authorize_url
+    flow=get_flow()
+    flow.params['state'] = xsrfutil.generate_token(local_settings.SECRET_KEY,user)
+    return flow.step1_get_authorize_url()
 
-def get_auth_return_credentials(state,authorization_code,user):
+
+def get_gmail_callback_credential(state,authorization_code,user):
     if not xsrfutil.validate_token(local_settings.SECRET_KEY, state,user):
         return None
-    FLOW=get_flow()
-    credential = FLOW.step2_exchange(authorization_code)
+    
+    flow=get_flow()
+    credential = flow.step2_exchange(authorization_code)
     return credential
 
 
@@ -73,9 +74,9 @@ def send_message(service, user_id, message):
 def get_mail_service(user):
     credential=CredentialsModel.get_credentials(user)
     if credential is None or credential.invalid:
-        FLOW=get_flow()
-        FLOW.params['state'] = xsrfutil.generate_token(local_settings.SECRET_KEY,user)
-        authorize_url = FLOW.step1_get_authorize_url()
+        flow=get_flow()
+        flow.params['state'] = xsrfutil.generate_token(local_settings.SECRET_KEY,user)
+        authorize_url = flow.step1_get_authorize_url()
         return HttpResponseRedirect(authorize_url)
     service = build('gmail', 'v1', credentials=credential,cache_discovery=False)
     return service
