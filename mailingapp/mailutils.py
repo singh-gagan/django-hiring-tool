@@ -25,6 +25,7 @@ log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logger = logging.getLogger(__name__)
 logger.setLevel('DEBUG')
 
+
 def get_flow():
     flow = flow_from_clientsecrets(
         local_settings.GOOGLE_OAUTH2_CLIENT_SECRETS_JSON,
@@ -35,7 +36,19 @@ def get_flow():
           
     return flow
 
-def get_authorize_url(user):
+
+def is_authenticated(user):
+    credential=CredentialsModel.get_credentials(user)
+    try:
+        access_token = credential.access_token
+        READ_ONLY_SCOPE=SCOPES[0]
+        requests.get(READ_ONLY_SCOPE,headers={'Host': GOOGLE_AUTHENTICATION_HOST,'Authorization': access_token})
+        return True                                   
+    except:
+        return False
+
+
+def get_gmail_authorize_url(user):
     flow=get_flow()
     flow.params['state'] = xsrfutil.generate_token(local_settings.SECRET_KEY,user)
     return flow.step1_get_authorize_url()
@@ -50,27 +63,6 @@ def get_gmail_callback_credential(state,authorization_code,user):
     return credential
 
 
-def is_authenticated(user):
-    credential=CredentialsModel.get_credentials(user)
-    try:
-        access_token = credential.access_token
-        READ_ONLY_SCOPE=SCOPES[0]
-        requests.get(READ_ONLY_SCOPE,headers={'Host': GOOGLE_AUTHENTICATION_HOST,'Authorization': access_token})
-        return True                                   
-    except:
-        return False
-
-
-def send_message(service, user_id, message):
-    try:
-        message = (service.users().messages().send(userId=user_id, body=message)
-               .execute())
-        return True
-    except errors.HttpError as error:
-        logging.error(error)
-        return False    
-
-
 def get_mail_service(user):
     credential=CredentialsModel.get_credentials(user)
     if credential is None or credential.invalid:
@@ -80,6 +72,17 @@ def get_mail_service(user):
         return HttpResponseRedirect(authorize_url)
     service = build('gmail', 'v1', credentials=credential,cache_discovery=False)
     return service
+
+
+def send_message(submission_invitation_host, user_id, message):
+    service=get_mail_service(submission_invitation_host)
+    try:
+        message = (service.users().messages().send(userId=user_id, body=message)
+               .execute())
+        return True
+    except errors.HttpError as error:
+        logging.error(error)
+        return False    
 
 
 def get_invitation_host_email(invitation_host):

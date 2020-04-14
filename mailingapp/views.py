@@ -5,14 +5,14 @@ from oauth2client.contrib.django_util.storage import DjangoORMStorage
 
 from hiringapp.models import Submission
 
-from .mailutils import get_gmail_callback_credential, get_authorize_url, get_flow
+from .mailutils import get_gmail_callback_credential, get_gmail_authorize_url, get_flow
 from .models import CredentialsModel
 
 
 class GmailAuthenticateView(View):
     def post(self,request):
-        authorize_url=get_authorize_url(request.user)
-        return HttpResponseRedirect(authorize_url)
+        gmail_authorize_url=get_gmail_authorize_url(request.user)
+        return HttpResponseRedirect(gmail_authorize_url)
 
 
 class GmailAuthCallbackView(View):
