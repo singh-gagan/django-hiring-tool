@@ -116,7 +116,7 @@ def create_mail_body(submission,email_type,message):
     
     if submission.activity_start_time is not None:
         activity_start_time=submission.activity_start_time.astimezone(current_time_zone).strftime("%Y-%m-%d %H:%M:%S")
-        time_left=submission.end_time-timezone.now()
+        time_left=(submission.end_time-timezone.now()).strftime("%Y-%m-%d %H:%M:%S")
     
     mail_body_keywords={
         "candidate_name":submission.candidate_name,

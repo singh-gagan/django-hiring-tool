@@ -22,8 +22,8 @@
         {% ifequal submission.activity_status "started"  %}
             <form action={% url 'submission_solution' activity_uuid=submission.activity_uuid %} method="post">
             {% csrf_token %}
-            <input type="text" name="solution_link" size="50" placeholder="Solution link"/>
-            <button id="btn" type="submit" class="button button2" required>Submit Solution</button>
+            <input type="text" name="solution_link" size="50" placeholder="Solution link" required>
+            <button id="btn" type="submit" class="button button2">Submit Solution</button>
             </form>
             <p id="timer"></p>
             <script>
