@@ -1,5 +1,7 @@
-from mailingapp.views import*
-from django.urls import reverse,resolve
+from django.urls import resolve, reverse
+
+from mailingapp.views import *
+
 
 def test_authenticate_url_resolved(self):
         url = reverse('gmail_authenticate')

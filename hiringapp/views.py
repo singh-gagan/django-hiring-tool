@@ -1,17 +1,18 @@
-from django.shortcuts import render,reverse
-from .models import Submission
-from django.http import HttpResponseBadRequest
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from datetime import date, datetime
+
 from django.contrib import messages
+from django.http import HttpResponseBadRequest, HttpResponseRedirect
+from django.shortcuts import render, reverse
+from django.utils import timezone
 from django.views import View
 from django.views.generic import TemplateView
-from datetime import datetime,date
-from django.utils import timezone
-from mailingapp.tasks import send_emails
+
 from hiringapp.constants import ActivityStatus
 from mailingapp.constants import EmailType
-from django.contrib import messages
+from mailingapp.tasks import send_emails
+
+from .models import Submission
+
 # Create your views here.
 
 class SubmissionInviteView(View):

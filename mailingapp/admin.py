@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
-from .models import MailModel,CredentialsModel,MailSummary
+
+from .models import CredentialsModel, MailModel, MailSummary
+
 # Register your models here.
 
 @admin.register(MailModel)

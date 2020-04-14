@@ -1,10 +1,12 @@
-from django.db import models
+from datetime import datetime, timedelta
+
 from django.contrib.auth.models import User
-from oauth2client.contrib.django_util.models import CredentialsField
-from .constants import EmailType
-from oauth2client.contrib.django_util.storage import DjangoORMStorage
+from django.db import models
 from django.utils import timezone
-from datetime import datetime,timedelta
+from oauth2client.contrib.django_util.models import CredentialsField
+from oauth2client.contrib.django_util.storage import DjangoORMStorage
+
+from .constants import EmailType
 
 # Create your models here.
 

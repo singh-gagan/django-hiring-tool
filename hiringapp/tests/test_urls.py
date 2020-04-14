@@ -1,7 +1,9 @@
-from django.test import TestCase
-from django.urls import reverse, resolve
 import uuid
-from hiringapp.views import*
+
+from django.test import TestCase
+from django.urls import resolve, reverse
+
+from hiringapp.views import *
 
 
 class TestUrls(TestCase):

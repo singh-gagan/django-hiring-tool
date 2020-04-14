@@ -1,14 +1,16 @@
-from django.contrib import admin
-from .models import Submission
 import httplib2
-from django.http import HttpResponseRedirect
-from oauth2client.contrib.django_util.storage import DjangoORMStorage
-from httplib2 import Http
-from mailingapp.models import CredentialsModel,MailModel,MailSummary
-from django.utils import timezone
-from .constants import ActivityStatus
 import requests
+from django.contrib import admin
+from django.http import HttpResponseRedirect
+from django.utils import timezone
+from httplib2 import Http
+from oauth2client.contrib.django_util.storage import DjangoORMStorage
+
 from mailingapp.mailutils import authenticate
+from mailingapp.models import CredentialsModel, MailModel, MailSummary
+
+from .constants import ActivityStatus
+from .models import Submission
 
 
 #admin.site.register(MailModel)

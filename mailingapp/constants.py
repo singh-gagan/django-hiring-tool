@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class EmailType(Enum):
         INVITATION='invitation'
         STARTREMINDER='reminder'
@@ -17,4 +18,3 @@ GOOGLE_SIGN_IN_REDIRECTURI='http://127.0.0.1:8000/oauth2callback'
 
 
 GOOGLE_AUTHENTICATION_HOST='www.googleapis.com'
-

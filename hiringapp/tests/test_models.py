@@ -1,7 +1,10 @@
-from django.test import TestCase, Client
-from hiringapp.models import Submission
-from unittest.mock import patch
 import uuid
+from unittest.mock import patch
+
+from django.test import Client, TestCase
+
+from hiringapp.models import Submission
+
 
 class TestModels(TestCase):
 

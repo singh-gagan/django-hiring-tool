@@ -1,13 +1,17 @@
-from django.test import TestCase, Client
-from hiringapp.models import Submission
-import uuid
-from mailingapp.models import*
-from mailingapp.mailutils import*
 import datetime
+import uuid
 from unittest.mock import patch
-from mailingapp.tasks import checkout_pending_tasks
-from hiringapp.constants import ActivityStatus
+
+from django.test import Client, TestCase
 from django.utils import timezone
+
+from hiringapp.constants import ActivityStatus
+from hiringapp.models import Submission
+from mailingapp.mailutils import *
+from mailingapp.models import *
+from mailingapp.tasks import checkout_pending_tasks
+
+
 class TestMailUtils(TestCase):
 
     @patch('mailingapp.tasks.send_emails.delay')

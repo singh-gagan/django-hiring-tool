@@ -1,23 +1,25 @@
-from googleapiclient.discovery import build
-from django.http import HttpResponseBadRequest
-from django.http import HttpResponseRedirect
-from . import models
-from django.urls import reverse
-from oauth2client.contrib import xsrfutil
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.contrib.django_util.storage import DjangoORMStorage
-from django.shortcuts import redirect
-from apiclient import errors
-from email.mime.text import MIMEText
 import base64
-from django.contrib import messages
-from mysite.settings import local_settings
-from .constants import EmailType
-from .constants import SCOPES,GOOGLE_SIGN_IN_REDIRECTURI,GOOGLE_AUTHENTICATION_HOST
-from .models import CredentialsModel,MailModel
-import requests
 import logging
+from email.mime.text import MIMEText
+
 import pytz
+import requests
+from apiclient import errors
+from django.contrib import messages
+from django.http import HttpResponseBadRequest, HttpResponseRedirect
+from django.shortcuts import redirect
+from django.urls import reverse
+from googleapiclient.discovery import build
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.contrib import xsrfutil
+from oauth2client.contrib.django_util.storage import DjangoORMStorage
+
+from mysite.settings import local_settings
+
+from . import models
+from .constants import (
+    GOOGLE_AUTHENTICATION_HOST, GOOGLE_SIGN_IN_REDIRECTURI, SCOPES, EmailType)
+from .models import CredentialsModel, MailModel
 
 log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logger = logging.getLogger(__name__)

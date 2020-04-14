@@ -1,13 +1,15 @@
-from .mailutils import create_messages
-from django.utils.crypto import get_random_string
-from .mailutils import get_mail_service,send_message
-from celery import shared_task
-from hiringapp.constants import ActivityStatus
-from .constants import EmailType
-from django.utils import timezone
-from datetime import datetime,timedelta
-from .models import MailSummary
 import logging
+from datetime import datetime, timedelta
+
+from celery import shared_task
+from django.utils import timezone
+from django.utils.crypto import get_random_string
+
+from hiringapp.constants import ActivityStatus
+
+from .constants import EmailType
+from .mailutils import create_messages, get_mail_service, send_message
+from .models import MailSummary
 
 log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logger = logging.getLogger(__name__)
@@ -40,7 +42,7 @@ def checkout_pending_tasks():
     reminders_gap_list=[1,3,6]
     all_submissions=Submission.get_all_submission()
     for submission in all_submissions:
-        if submission.activity_status == ActivityStatus.NOTYETSTARTED.value:
+        if submission.activity_status == ActivityStatus.NOT_YET_STARTED.value:
            check_for_reminder_to_start_mails(submission,reminders_gap_list)
         elif submission.activity_status == ActivityStatus.STARTED.value:
             check_for_reminder_to_submit_or_expiry_mails(submission)

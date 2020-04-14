@@ -1,10 +1,12 @@
-from django.test import TestCase, Client
-from hiringapp.views import*
 import uuid
-from hiringapp.models import Submission
 from unittest.mock import patch
+
 from django.contrib.auth.models import User
+from django.test import Client, TestCase
+
 from hiringapp.constants import ActivityStatus
+from hiringapp.models import Submission
+from hiringapp.views import *
 
 
 class TestViews(TestCase):

@@ -1,8 +1,10 @@
-from django.contrib import admin
 from django.conf.urls import url
-from django.urls import path, include, re_path
-from . import views
+from django.contrib import admin
+from django.urls import include, path, re_path
+
 from mailingapp import views as mailingapp_views
+
+from . import views
 
 urlpatterns = [
     url(r'^authenticate/$', mailingapp_views.GmailAuthenticateView.as_view(),

@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('activity_drive_link', models.URLField(max_length=500)),
                 ('activity_uuid', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
                 ('activity_solution_link', models.URLField(blank=True, editable=False, max_length=500, null=True)),
-                ('activity_status', models.CharField(choices=[('not_yet_started', 'NOTYETSTARTED'), ('started', 'STARTED'), ('submitted', 'SUBMITTED'), ('expired', 'EXPIRED')], default='not_yet_started', max_length=500)),
+                ('activity_status', models.CharField(choices=[('not_yet_started', 'NOT_YET_STARTED'), ('started', 'STARTED'), ('submitted', 'SUBMITTED'), ('expired', 'EXPIRED')], default='not_yet_started', max_length=500)),
                 ('reminder_for_submission_time', models.DurationField(default=datetime.timedelta(seconds=7200))),
                 ('invitation_creation_dateandtime', models.DateTimeField(blank=True, editable=False, null=True)),
                 ('invitation_host', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
