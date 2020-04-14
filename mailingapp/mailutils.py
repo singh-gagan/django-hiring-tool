@@ -9,11 +9,13 @@ from django.contrib import messages
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils import timezone
 from googleapiclient.discovery import build
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.contrib import xsrfutil
 from oauth2client.contrib.django_util.storage import DjangoORMStorage
 
+from hiringapp.constants import ActivityStatus
 from mysite.settings import local_settings
 
 from . import models
@@ -107,26 +109,24 @@ def create_messages(submission,email_type):
 
 
 def create_mail_body(submission,email_type,message):
-    time_zone=pytz.timezone(local_settings.TIME_ZONE)
-    if submission.activity_start_time is not None:
-        activity_start_time=submission.activity_start_time.astimezone(time_zone).strftime("%Y-%m-%d %H:%M:%S")
+    current_time_zone=pytz.timezone(local_settings.TIME_ZONE)
 
-    mail_body=""
-    activity_invite_url=local_settings.HOST+reverse('submission_invite',args=(submission.activity_uuid,))
+    activity_start_time=None
+    time_left=None
     
-    if email_type==EmailType.START_REMINDER.value:
-        mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_url=activity_invite_url)
+    if submission.activity_start_time is not None:
+        activity_start_time=submission.activity_start_time.astimezone(current_time_zone).strftime("%Y-%m-%d %H:%M:%S")
+        time_left=submission.end_time-timezone.now()
     
-    elif email_type==EmailType.INVITATION.value:
-        mail_body=message.format(candidate_name=submission.candidate_name,activity_duration=submission.activity_duration,activity_url=activity_invite_url)
-    
-    elif email_type==EmailType.SUBMISSION_REMINDER.value:
-        mail_body=message.format(candidate_name=submission.candidate_name,time_left=submission.reminder_for_submission_time,activity_url=activity_invite_url)
-    
-    elif email_type==EmailType.ACTIVITY_EXPIRED.value:
-        mail_body=message.format(candidate_name=submission.candidate_name,candidate_email=submission.candidate_email,activity_start_time=activity_start_time)
-    
-    elif email_type==EmailType.ACTIVITY_SOLUTION.value:
-        mail_body=message.format(candidate_name=submission.candidate_name,candidate_email=submission.candidate_email,activity_solution=submission.activity_solution_link)    
+    mail_body_keywords={
+        "candidate_name":submission.candidate_name,
+        "activity_duration":submission.activity_duration,
+        "activity_url":local_settings.HOST+reverse('submission_invite',args=(submission.activity_uuid,)),
+        "activity_start_time":activity_start_time,
+        "activity_solution":submission.activity_solution_link,
+        "candidate_email":submission.candidate_email,
+    }
+
+    mail_body=message.format( **mail_body_keywords )
     
     return mail_body

@@ -25,7 +25,7 @@ def send_emails(activity_uuid,email_type):
     mail_summary=MailSummary.add_new_mail_summary(email_type,activity_uuid,submission.candidate_name,'NOTSENT')
     try:
         message=create_messages(submission,email_type)
-        sent = send_message(submission.invitaion_host,'me', message)
+        sent = send_message(submission.invitation_host,'me', message)
         mail_summary.mail_status='SENT'
         mail_summary.save(update_fields=["mail_status",])
         logger.info("{} mail sent. Activity ID - {}".format(email_type,activity_uuid))

@@ -53,7 +53,7 @@ class MailSummary(models.Model):
 
     MAIL_STATUS = (
         ('SENT', 'sent'),
-        ('NOTSENT', 'notsent'),
+        ('NOTSENT', 'not_sent'),
     )
 
     mail_type=models.CharField(
