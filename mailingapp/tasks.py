@@ -27,11 +27,11 @@ def send_emails(activity_uuid,email_type):
         service=get_mail_service(submission.invitation_host)
         sent = send_message(service,'me', message)
         mail_summary.mail_status='SENT'
-        MailSummary.save(update_fields=["mail_status",])
+        mail_summary.save(update_fields=["mail_status",])
         logger.info("{} mail sent. Activity ID - {}".format(email_type,activity_uuid))
     except Exception as e:
-        logging.error('Error while sending {} mail'.format(email_type),exc_info=e)    
         logger.error("{} mail not sent. Activity Id - {}".format(email_type,activity_uuid))
+        logger.error('Error while sending {} mail'.format(email_type),exc_info=e)    
 
 @shared_task
 def checkout_pending_tasks():
