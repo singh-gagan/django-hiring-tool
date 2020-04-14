@@ -49,7 +49,7 @@ class EmailTemplate(models.Model):
         return EmailTemplate.objects.get(mail_type=email_type)
 
 
-class MailSummary(models.Model):
+class EmailLog(models.Model):
 
     MAIL_STATUS = (
         ('SENT', 'sent'),
@@ -68,17 +68,17 @@ class MailSummary(models.Model):
 
     @classmethod
     def add_new_mail_summary(cls,email_type,activity_uuid,candidate_name,mail_status):
-        mail_summary=MailSummary.objects.create(mail_type=email_type,activity_uuid=activity_uuid,candidate_name=candidate_name,date_of_mail=timezone.now(),mail_status=mail_status)
+        mail_summary=EmailLog.objects.create(mail_type=email_type,activity_uuid=activity_uuid,candidate_name=candidate_name,date_of_mail=timezone.now(),mail_status=mail_status)
         return mail_summary
 
     @classmethod
     def get_latest_mail_sent_date(cls,submission):
-        latest_mail_summary=MailSummary.objects.filter(activity_uuid=submission.activity_uuid,mail_status='SENT').latest('date_of_mail')
+        latest_mail_summary=EmailLog.objects.filter(activity_uuid=submission.activity_uuid,mail_status='SENT').latest('date_of_mail')
         latest_mail_sent_date=latest_mail_summary.date_of_mail.date()
         return latest_mail_sent_date
     
     @classmethod
     def get_latest_mail_sent_type(cls,submission):
-        latest_mail_summary=MailSummary.objects.filter(activity_uuid=submission.activity_uuid,mail_status='SENT').latest('date_of_mail')
+        latest_mail_summary=EmailLog.objects.filter(activity_uuid=submission.activity_uuid,mail_status='SENT').latest('date_of_mail')
         latest_mail_sent_type=latest_mail_summary.mail_type
         return latest_mail_sent_type

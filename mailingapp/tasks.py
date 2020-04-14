@@ -8,7 +8,7 @@ from hiringapp.constants import ActivityStatus
 
 from .constants import EmailType
 from .mailutils import create_messages, get_mail_service, send_message
-from .models import MailSummary
+from .models import EmailLog
 
 log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logger = logging.getLogger(__name__)
@@ -22,7 +22,7 @@ logger.addHandler(file_handler)
 def send_emails(activity_uuid,email_type):
     from hiringapp.models import Submission
     submission=Submission.get_submission(activity_uuid)
-    mail_summary=MailSummary.add_new_mail_summary(email_type,activity_uuid,submission.candidate_name,'NOTSENT')
+    mail_summary=EmailLog.add_new_mail_summary(email_type,activity_uuid,submission.candidate_name,'NOTSENT')
     try:
         message=create_messages(submission,email_type)
         sent = send_message(submission.invitation_host,'me', message)
@@ -48,7 +48,7 @@ def checkout_pending_tasks():
 
 def check_for_reminder_to_start_mails(submission,reminders_gap_list):
     current_date=timezone.now().date()
-    latest_mail_sent_date=MailSummary.get_latest_mail_sent_date(submission)
+    latest_mail_sent_date=EmailLog.get_latest_mail_sent_date(submission)
     if current_date==latest_mail_sent_date:
         return
     gap=current_date-submission.invitation_creation_dateandtime.date()
@@ -58,7 +58,7 @@ def check_for_reminder_to_start_mails(submission,reminders_gap_list):
 
 def check_for_reminder_to_submit_or_expiry_mails(submission):
     if timezone.now()<=submission.end_time:
-        latest_mail_sent_type=MailSummary.get_latest_mail_sent_type(submission)
+        latest_mail_sent_type=EmailLog.get_latest_mail_sent_type(submission)
         if latest_mail_sent_type==EmailType.SUBMISSION_REMINDER.value: 
             return
         activity_reminder_time=submission.end_time-submission.reminder_for_submission_time

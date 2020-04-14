@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
 
-from .models import GmailCredential, EmailTemplate, MailSummary
+from .models import GmailCredential, EmailTemplate, EmailLog
 
 # Register your models here.
 
@@ -10,8 +10,8 @@ class EmailAdmin(SummernoteModelAdmin):
     summernote_fields=('mail_content',)
 
 
-@admin.register(MailSummary)
-class MailSummary(admin.ModelAdmin):
+@admin.register(EmailLog)
+class EmailLog(admin.ModelAdmin):
     list_display = ('candidate_name','mail_type','date_of_mail','mail_status')
 
 
