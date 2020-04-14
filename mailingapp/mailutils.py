@@ -30,7 +30,9 @@ def get_flow():
         local_settings.GOOGLE_OAUTH2_CLIENT_SECRETS_JSON,
         scope=SCOPES,
         redirect_uri=GOOGLE_SIGN_IN_REDIRECTURI,
-        prompt='consent')
+        prompt='consent'
+    ) 
+          
     return FLOW
 
 def get_authorize_url(user):
@@ -47,15 +49,15 @@ def get_auth_return_credentials(state,authorization_code,user):
     return credential
 
 
-def authenticate(user):
-    authorized = False
+def is_authenticated(user):
     credential=CredentialsModel.get_credentials(user)
-    access_token=CredentialsModel.get_access_token(credential)
-    if access_token is not None:
+    try:
+        access_token = credential.access_token
         READ_ONLY_SCOPE=SCOPES[0]
         requests.get(READ_ONLY_SCOPE,headers={'Host': GOOGLE_AUTHENTICATION_HOST,'Authorization': access_token})
-        authorized=True                                    
-    return authorized
+        return True                                   
+    except:
+        return False
 
 
 def send_message(service, user_id, message):
