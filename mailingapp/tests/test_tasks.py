@@ -12,7 +12,7 @@ from mailingapp.models import *
 from mailingapp.tasks import checkout_pending_tasks
 
 
-class TestMailUtils(TestCase):
+class TestTasks(TestCase):
 
     @patch('mailingapp.tasks.send_emails.delay')
     def test_checkout_pending_tas_to_send_reminders_to_start_mails(self,mocked_send_emails):
