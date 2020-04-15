@@ -65,20 +65,28 @@ class EmailLog(models.Model):
     candidate_name=models.CharField(max_length=200)
     date_of_mail=models.DateTimeField(blank=True,null=True)
     mail_status=models.CharField(max_length=7,choices=MAIL_STATUS,default='NOTSENT')
+    message_id=models.CharField(max_length=200,null=True)
 
     @classmethod
-    def add_new_mail_summary(cls,email_type,activity_uuid,candidate_name,mail_status):
-        mail_summary=EmailLog.objects.create(mail_type=email_type,activity_uuid=activity_uuid,candidate_name=candidate_name,date_of_mail=timezone.now(),mail_status=mail_status)
-        return mail_summary
+    def add_new_email_log(cls,email_type,activity_uuid,candidate_name,mail_status):
+        email_log=EmailLog.objects.create(mail_type=email_type,activity_uuid=activity_uuid,candidate_name=candidate_name,date_of_mail=timezone.now(),mail_status=mail_status)
+        return email_log
 
     @classmethod
     def get_latest_mail_sent_date(cls,submission):
-        latest_mail_summary=EmailLog.objects.filter(activity_uuid=submission.activity_uuid,mail_status='SENT').latest('date_of_mail')
-        latest_mail_sent_date=latest_mail_summary.date_of_mail.date()
-        return latest_mail_sent_date
-    
+        try:
+            latest_email_log=EmailLog.objects.filter(activity_uuid=submission.activity_uuid,mail_status='SENT').latest('date_of_mail')
+            latest_mail_sent_date=latest_email_log.date_of_mail.date()
+            return latest_mail_sent_date
+        except EmailLog.DoesNotExist:
+            return None
+
     @classmethod
     def get_latest_mail_sent_type(cls,submission):
-        latest_mail_summary=EmailLog.objects.filter(activity_uuid=submission.activity_uuid,mail_status='SENT').latest('date_of_mail')
-        latest_mail_sent_type=latest_mail_summary.mail_type
-        return latest_mail_sent_type
+        try:
+            latest_email_log=EmailLog.objects.filter(activity_uuid=submission.activity_uuid,mail_status='SENT').latest('date_of_mail')
+            latest_mail_sent_type=latest_email_log.mail_type
+            return latest_mail_sent_type
+        except EmailLog.DoesNotExist:
+            return None
+

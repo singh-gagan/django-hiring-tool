@@ -12,7 +12,7 @@ class EmailAdmin(SummernoteModelAdmin):
 
 @admin.register(EmailLog)
 class EmailLog(admin.ModelAdmin):
-    list_display = ('candidate_name','mail_type','date_of_mail','mail_status')
+    list_display = ('candidate_name','mail_type','date_of_mail','mail_status','message_id')
 
 
 @admin.register(GmailCredential)

@@ -24,7 +24,11 @@ from .models import EmailTemplate, GmailCredential
 
 log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
+file_handler = logging.FileHandler("mails.log")
+formatter = logging.Formatter(log_format)
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+
 
 
 def get_flow():
@@ -74,16 +78,16 @@ def get_mail_service(user):
     service = build('gmail', 'v1', credentials=credential,cache_discovery=False)
     return service
 
-
-def send_message(submission_invitation_host, user_id, message):
+   
+def send_message(submission_invitation_host,message):
     service=get_mail_service(submission_invitation_host)
     try:
-        message = (service.users().messages().send(userId=user_id, body=message)
+        message = (service.users().messages().send(userId='me', body=message)
                .execute())
-        return True
+        return message
     except errors.HttpError as error:
-        logging.error(error)
-        return False    
+        logger.error("error while sending mails"+error)
+        return None
 
 
 def get_invitation_host_email(invitation_host):
@@ -109,22 +113,15 @@ def create_messages(submission,email_type):
 
 def create_mail_body(submission,email_type,message):
     current_time_zone=pytz.timezone(local_settings.TIME_ZONE)
-
-    activity_start_time=None
-    time_left=None
-    
-    if submission.activity_start_time is not None:
-        activity_start_time=submission.activity_start_time.astimezone(current_time_zone).strftime("%Y-%m-%d %H:%M:%S")
-        time_left=(submission.end_time-timezone.now()).strftime("%Y-%m-%d %H:%M:%S")
-    
+        
     mail_body_keywords={
         "candidate_name":submission.candidate_name,
         "activity_duration":submission.activity_duration,
         "activity_url":local_settings.HOST+reverse('submission_invite',args=(submission.activity_uuid,)),
-        "activity_start_time":activity_start_time,
-        "activity_solution":submission.activity_solution_link,
+        "activity_start_time":"" if submission.activity_start_time is None else submission.activity_start_time.astimezone(current_time_zone).strftime("%Y-%m-%d %H:%M:%S"),
+        "activity_solution_link":submission.activity_solution_link,
         "candidate_email":submission.candidate_email,
-        "time_left":time_left,
+        "time_left":"" if submission.time_left is None else (str(submission.time_left.days)+" days "+str(submission.time_left.seconds//3600)+" hours "+str((submission.time_left.seconds//60)%60)+" minutes ")
     }
 
     mail_body=message.format( **mail_body_keywords )

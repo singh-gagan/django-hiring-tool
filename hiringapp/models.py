@@ -9,6 +9,7 @@ from mailingapp.tasks import send_emails
 import datetime
 from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
+from django.utils import timezone
 
 
 class Submission(models.Model):
@@ -59,8 +60,12 @@ class Submission(models.Model):
 
     @property
     def end_time(self):
-        return self.activity_start_time+self.activity_duration
+        return None if self.activity_start_time is None else (self.activity_start_time+self.activity_duration)
 
+
+    @property
+    def time_left(self):
+        return None if self.end_time is None else (self.end_time-timezone.now())
         
     @classmethod
     def get_admin_change_list_url(cls):
