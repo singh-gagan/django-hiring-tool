@@ -10,12 +10,8 @@ from .mailservices import GmailServices
 from .mailutils import GmailUtils
 from .models import EmailLog
 
-log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
 logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler("mails.log")
-formatter = logging.Formatter(log_format)
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
 
 
 @shared_task

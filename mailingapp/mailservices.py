@@ -14,12 +14,8 @@ from .constants import (
     GOOGLE_AUTHENTICATION_HOST, GOOGLE_SIGN_IN_REDIRECTURI, SCOPES)
 from .models import GmailCredential
 
-log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
 logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler("mails.log")
-formatter = logging.Formatter(log_format)
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
 
 
 class GmailServices:
