@@ -7,7 +7,8 @@ from django.utils.crypto import get_random_string
 from hiringapp.constants import ActivityStatus
 
 from .constants import EmailType
-from .mailutils import GmailUtils, GmailServices
+from .mailutils import GmailUtils
+from .mailservices import GmailServices
 from .models import EmailLog
 
 log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'

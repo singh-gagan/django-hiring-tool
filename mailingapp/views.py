@@ -5,7 +5,7 @@ from oauth2client.contrib.django_util.storage import DjangoORMStorage
 
 from hiringapp.models import Submission
 
-from .mailutils import GmailServices
+from .mailservices import GmailServices
 from .models import GmailCredential
 
 

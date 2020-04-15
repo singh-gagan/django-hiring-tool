@@ -6,7 +6,7 @@ from django.utils import timezone
 from httplib2 import Http
 from oauth2client.contrib.django_util.storage import DjangoORMStorage
 
-from mailingapp.mailutils import GmailServices
+from mailingapp.mailservices import GmailServices
 from mailingapp.models import GmailCredential
 
 from .constants import ActivityStatus
