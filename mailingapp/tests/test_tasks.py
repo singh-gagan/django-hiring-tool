@@ -1,14 +1,12 @@
 import datetime
-import uuid
 from unittest.mock import patch
 
-from django.test import Client, TestCase
+from django.test import TestCase
 from django.utils import timezone
 
 from hiringapp.constants import ActivityStatus
 from hiringapp.models import Submission
-from mailingapp.mailutils import *
-from mailingapp.models import *
+from mailingapp.models import EmailLog, EmailTemplate, EmailType
 from mailingapp.tasks import checkout_pending_tasks
 
 

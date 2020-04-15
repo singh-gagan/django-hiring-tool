@@ -1,10 +1,6 @@
-import httplib2
-import requests
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.utils import timezone
-from httplib2 import Http
-from oauth2client.contrib.django_util.storage import DjangoORMStorage
 
 from mailingapp.mailservices import GmailServices
 from mailingapp.models import GmailCredential

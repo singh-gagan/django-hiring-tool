@@ -1,15 +1,15 @@
-from django.db import models
-from django.contrib import admin
-from .constants import ActivityStatus
-from mailingapp.constants import EmailType
-import uuid
-from django.contrib.auth.models import User 
-from oauth2client.contrib.django_util.models import CredentialsField 
-from mailingapp.tasks import send_emails
 import datetime
+import uuid
+
+from django.contrib.auth.models import User
+from django.db import models
 from django.urls import reverse
-from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
+
+from mailingapp.constants import EmailType
+from mailingapp.tasks import send_emails
+
+from .constants import ActivityStatus
 
 
 class Submission(models.Model):

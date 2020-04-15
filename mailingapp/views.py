@@ -1,7 +1,5 @@
-from django.contrib import messages
-from django.http import HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.views import View
-from oauth2client.contrib.django_util.storage import DjangoORMStorage
 
 from hiringapp.models import Submission
 

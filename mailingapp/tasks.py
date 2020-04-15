@@ -2,13 +2,12 @@ import logging
 
 from celery import shared_task
 from django.utils import timezone
-from django.utils.crypto import get_random_string
 
 from hiringapp.constants import ActivityStatus
 
 from .constants import EmailType
-from .mailutils import GmailUtils
 from .mailservices import GmailServices
+from .mailutils import GmailUtils
 from .models import EmailLog
 
 log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'

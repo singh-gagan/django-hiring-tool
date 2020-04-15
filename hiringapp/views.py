@@ -1,11 +1,8 @@
-from datetime import date, datetime
-
 from django.contrib import messages
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render, reverse
 from django.utils import timezone
 from django.views import View
-from django.views.generic import TemplateView
 
 from hiringapp.constants import ActivityStatus
 from mailingapp.constants import EmailType

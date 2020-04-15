@@ -3,26 +3,14 @@ import logging
 from email.mime.text import MIMEText
 
 import pytz
-import requests
-from apiclient import errors
-from django.contrib import messages
-from django.http import HttpResponseBadRequest, HttpResponseRedirect
-from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import timezone
-from googleapiclient.discovery import build
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.contrib import xsrfutil
-from oauth2client.contrib.django_util.storage import DjangoORMStorage
 
-from hiringapp.constants import ActivityStatus
 from mysite.settings import local_settings
 
-from .constants import (
-    GOOGLE_AUTHENTICATION_HOST, GOOGLE_SIGN_IN_REDIRECTURI, SCOPES, EmailType)
-from .models import EmailTemplate, GmailCredential
+from .constants import EmailType
 from .mailservices import GmailServices
-
+from .models import EmailTemplate
 
 log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logger = logging.getLogger(__name__)

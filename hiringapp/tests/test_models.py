@@ -1,7 +1,7 @@
 import uuid
 from unittest.mock import patch
 
-from django.test import Client, TestCase
+from django.test import TestCase
 
 from hiringapp.models import Submission
 

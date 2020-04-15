@@ -89,4 +89,3 @@ class EmailLog(models.Model):
             return latest_mail_sent_type
         except EmailLog.DoesNotExist:
             return None
-

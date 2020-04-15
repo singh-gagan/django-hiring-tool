@@ -1,8 +1,4 @@
 from django.conf.urls import url
-from django.contrib import admin
-from django.urls import include, path, re_path
-
-from mailingapp import views as mailingapp_views
 
 from . import views
 

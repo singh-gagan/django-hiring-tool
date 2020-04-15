@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
 
-from .models import GmailCredential, EmailTemplate, EmailLog
+from .models import EmailLog, EmailTemplate, GmailCredential
 
 # Register your models here.
 
