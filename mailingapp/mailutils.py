@@ -59,7 +59,7 @@ def get_gmail_authorize_url(user):
     return flow.step1_get_authorize_url()
 
 
-def get_gmail_callback_credential(state,authorization_code,user):
+def get_gmail_auth_callback_credential(state,authorization_code,user):
     if not xsrfutil.validate_token(local_settings.SECRET_KEY, state,user):
         return None
     
