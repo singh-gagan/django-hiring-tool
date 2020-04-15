@@ -6,7 +6,7 @@ from django.utils import timezone
 from httplib2 import Http
 from oauth2client.contrib.django_util.storage import DjangoORMStorage
 
-from mailingapp.mailutils import is_authenticated
+from mailingapp.mailutils import GmailServices
 from mailingapp.models import GmailCredential
 
 from .constants import ActivityStatus
@@ -25,9 +25,9 @@ class SubmissionAdmin(admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         if not request.user.is_authenticated:
             return HttpResponseRedirect('admin')
-        authenticated=is_authenticated(request.user)
+        gmail_authenticated=GmailServices.is_gmail_authenticated(request.user)
         extra_context = extra_context or {}
-        extra_context['authenticated'] = authenticated
+        extra_context['gmail_authenticated'] = gmail_authenticated
         return super(SubmissionAdmin, self).changelist_view(request, extra_context=extra_context)
 
    

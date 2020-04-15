@@ -7,7 +7,7 @@ from django.utils.crypto import get_random_string
 from hiringapp.constants import ActivityStatus
 
 from .constants import EmailType
-from .mailutils import create_messages, get_mail_service, send_message
+from .mailutils import GmailUtils, GmailServices
 from .models import EmailLog
 
 log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -27,12 +27,12 @@ def send_emails(activity_uuid,email_type):
     email_log=EmailLog.add_new_email_log(email_type,activity_uuid,submission.candidate_name,'NOTSENT')
 
     try:
-        message=create_messages(submission,email_type)
+        message=GmailUtils.create_messages(submission,email_type)
     except Exception as e:
         logger.error('{} email not sent. Activity UUID - {}'.format(email_type,activity_uuid),exc_info=e)
         return
 
-    sent_message = send_message(submission.invitation_host,message)
+    sent_message = GmailServices.send_message(submission.invitation_host,message)
     if sent_message is not None:
         email_log.mail_status='SENT'
         email_log.message_id=sent_message['id']
