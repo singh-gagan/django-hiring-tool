@@ -63,7 +63,7 @@ class GmailServices:
     @classmethod
     def get_gmail_service(cls, user):
         credential = GmailCredential.get_credentials(user)
-        
+
         if credential is None or credential.invalid:
             flow = cls.get_flow()
             flow.params['state'] = xsrfutil.generate_token(
