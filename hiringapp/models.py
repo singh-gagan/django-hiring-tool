@@ -27,7 +27,7 @@ class Submission(models.Model):
     activity_status=models.CharField(
         max_length = 500,
         choices=[(key.value, key.name) for key in ActivityStatus],
-        default=ActivityStatus.NOT_YET_STARTED.value,
+        default=ActivityStatus.NOT_YET_STARTED.value ,
     )
 
     #remainder mails related Info

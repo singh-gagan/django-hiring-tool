@@ -13,3 +13,5 @@ celerybeat-schedule.dir
 celerybeat.pid
 local_settings.py
 mails.log
+.editorconfig
+.editorconfig.
