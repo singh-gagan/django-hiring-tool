@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from mysite.settings import local_settings
 
-from .constants import EmailType
+from .constants import EmailTemplatePlaceholder, EmailType
 from .mailservices import GmailServices
 from .models import EmailTemplate
 
@@ -39,6 +39,7 @@ class MailUtils:
     def create_mail_body(cls, submission, email_type, message):
         user_time_zone = pytz.timezone(local_settings.TIME_ZONE)
 
+        """
         mail_body_keywords = {
             "candidate_name": submission.candidate_name,
             "activity_duration": submission.activity_duration,
@@ -46,7 +47,18 @@ class MailUtils:
             "activity_start_time": "" if submission.activity_start_time is None else submission.activity_start_time.astimezone(user_time_zone).strftime("%Y-%m-%d %H:%M:%S"),
             "activity_solution_link": submission.activity_solution_link,
             "candidate_email": submission.candidate_email,
-            "left_time": "" if submission.left_time is None else (str(submission.left_time.days)+" days "+str(submission.left_time.seconds//3600)+" hours "+str((submission.left_time.seconds//60) % 60)+" minutes ")
+            "activity_left_time": "" if submission.activity_left_time is None else (str(submission.activity_left_time.days)+" days "+str(submission.activity_left_time.seconds//3600)+" hours "+str((submission.activity_left_time.seconds//60) % 60)+" minutes ")
+        }
+        """
+
+        mail_body_keywords = {
+            EmailTemplatePlaceholder.CANDIDATE_NAME.value: submission.candidate_name,
+            EmailTemplatePlaceholder.ACTIVITY_DURATION.value: submission.activity_duration,
+            EmailTemplatePlaceholder.ACTIVITY_URL.value: local_settings.HOST+reverse('submission_invite', args=(submission.activity_uuid,)),
+            EmailTemplatePlaceholder.ACTIVITY_START_TIME.value: "" if submission.activity_start_time is None else submission.activity_start_time.astimezone(user_time_zone).strftime("%Y-%m-%d %H:%M:%S"),
+            EmailTemplatePlaceholder.ACTIVITY_SOLUTION_LINK.value: submission.activity_solution_link,
+            EmailTemplatePlaceholder.ACTIVITY_LEFT_TIME.value: "" if submission.activity_left_time is None else (str(submission.activity_left_time.days)+" days "+str(
+                submission.activity_left_time.seconds//3600)+" hours "+str((submission.activity_left_time.seconds//60) % 60)+" minutes ")
         }
 
         mail_body = message.format(**mail_body_keywords)

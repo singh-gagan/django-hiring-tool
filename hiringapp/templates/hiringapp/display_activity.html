@@ -11,7 +11,7 @@
 <p id="timer"></p>
 
 <script>
-var countDownDate = new Date("{{ end_time|date:'U' }}" * 1000).getTime();
+var countDownDate = new Date("{{ activity_end_time|date:'U' }}" * 1000).getTime();
 var x = setInterval(function() {
             var now = new Date().getTime();
             var distance = countDownDate - now; 

@@ -57,7 +57,7 @@ def checkout_pending_tasks():
         if submission.activity_status == ActivityStatus.NOT_YET_STARTED.value:
             send_reminder_to_start_email(submission, reminders_gap_list)
         elif submission.activity_status == ActivityStatus.STARTED.value:
-            if timezone.now() <= submission.end_time:
+            if timezone.now() <= submission.activity_end_time:
                 send_reminder_to_submit_email(submission)
             else:
                 send_activity_expired_email(submission)
@@ -84,7 +84,7 @@ def send_reminder_to_submit_email(submission):
     if latest_mail_sent_type == EmailType.SUBMISSION_REMINDER.value:
         return
 
-    activity_reminder_time = submission.end_time - \
+    activity_reminder_time = submission.activity_end_time - \
         submission.reminder_for_submission_time
     if timezone.now() >= activity_reminder_time:
         send_emails.delay(submission.activity_uuid,

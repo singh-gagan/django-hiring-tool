@@ -62,12 +62,12 @@ class Submission(models.Model):
         return submission
 
     @property
-    def end_time(self):
+    def activity_end_time(self):
         return None if self.activity_start_time is None else (self.activity_start_time+self.activity_duration)
 
     @property
-    def left_time(self):
-        return None if self.end_time is None else (self.end_time-timezone.now())
+    def activity_left_time(self):
+        return None if self.activity_end_time is None else (self.activity_end_time-timezone.now())
 
     @classmethod
     def get_admin_change_list_url(cls):

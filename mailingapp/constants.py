@@ -11,6 +11,15 @@ class EmailType(Enum):
     SUBMISSION_REMINDER = 'reminder_to_submit'
 
 
+class EmailTemplatePlaceholder(Enum):
+    CANDIDATE_NAME = 'candidate_name'
+    ACTIVITY_DURATION = 'activity_duration'
+    ACTIVITY_URL = 'activity_url'
+    ACTIVITY_START_TIME = 'activity_start_time'
+    ACTIVITY_SOLUTION_LINK = 'activity_solution_link'
+    ACTIVITY_LEFT_TIME = 'activity_left_time'
+
+
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly',
           'https://www.googleapis.com/auth/userinfo.email',
           'https://www.googleapis.com/auth/userinfo.profile',
