@@ -53,6 +53,7 @@ class MailUtils:
 
         mail_body_keywords = {
             EmailTemplatePlaceholder.CANDIDATE_NAME.value: submission.candidate_name,
+            EmailTemplatePlaceholder.CANDIDATE_EMAIL:submission.candidate_email,
             EmailTemplatePlaceholder.ACTIVITY_DURATION.value: submission.activity_duration,
             EmailTemplatePlaceholder.ACTIVITY_URL.value: local_settings.HOST+reverse('submission_invite', args=(submission.activity_uuid,)),
             EmailTemplatePlaceholder.ACTIVITY_START_TIME.value: "" if submission.activity_start_time is None else submission.activity_start_time.astimezone(user_time_zone).strftime("%Y-%m-%d %H:%M:%S"),

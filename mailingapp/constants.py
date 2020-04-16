@@ -13,6 +13,7 @@ class EmailType(Enum):
 
 class EmailTemplatePlaceholder(Enum):
     CANDIDATE_NAME = 'candidate_name'
+    CANDIDATE_EMAIL = 'candidate_email'
     ACTIVITY_DURATION = 'activity_duration'
     ACTIVITY_URL = 'activity_url'
     ACTIVITY_START_TIME = 'activity_start_time'
