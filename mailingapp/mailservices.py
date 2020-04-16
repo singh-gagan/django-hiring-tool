@@ -10,10 +10,9 @@ from oauth2client.contrib import xsrfutil
 
 from mysite.settings import local_settings
 
-from .constants import (
-    GOOGLE_AUTHENTICATION_HOST, GOOGLE_SIGN_IN_REDIRECTURI, SCOPES)
+from .constants import (GOOGLE_AUTHENTICATION_HOST, GOOGLE_SIGN_IN_REDIRECTURI,
+                        SCOPES)
 from .models import GmailCredential
-
 
 logger = logging.getLogger(__name__)
 

@@ -10,7 +10,6 @@ from .mailservices import GmailServices
 from .mailutils import MailUtils
 from .models import EmailLog
 
-
 logger = logging.getLogger(__name__)
 
 
