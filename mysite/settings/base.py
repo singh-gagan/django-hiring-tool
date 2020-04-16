@@ -103,7 +103,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
-GOOGLE_OAUTH2_CLIENT_SECRETS_JSON = 'client_secrets.json'
 
 
 CELERY_BROKER_URL = 'amqp://localhost'
