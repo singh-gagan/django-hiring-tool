@@ -66,7 +66,7 @@ class Submission(models.Model):
         return None if self.activity_start_time is None else (self.activity_start_time+self.activity_duration)
 
     @property
-    def time_left(self):
+    def left_time(self):
         return None if self.end_time is None else (self.end_time-timezone.now())
 
     @classmethod

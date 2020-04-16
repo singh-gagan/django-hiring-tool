@@ -46,7 +46,7 @@ class MailUtils:
             "activity_start_time": "" if submission.activity_start_time is None else submission.activity_start_time.astimezone(user_time_zone).strftime("%Y-%m-%d %H:%M:%S"),
             "activity_solution_link": submission.activity_solution_link,
             "candidate_email": submission.candidate_email,
-            "time_left": "" if submission.time_left is None else (str(submission.time_left.days)+" days "+str(submission.time_left.seconds//3600)+" hours "+str((submission.time_left.seconds//60) % 60)+" minutes ")
+            "left_time": "" if submission.left_time is None else (str(submission.left_time.days)+" days "+str(submission.left_time.seconds//3600)+" hours "+str((submission.left_time.seconds//60) % 60)+" minutes ")
         }
 
         mail_body = message.format(**mail_body_keywords)
