@@ -14,38 +14,41 @@ from .models import EmailTemplate
 
 logger = logging.getLogger(__name__)
 
-class GmailUtils:
 
+class MailUtils:
 
     @classmethod
-    def create_messages(cls,submission,email_type):
-        #logic to create message from submission details and email_type 
-        mail=EmailTemplate.get_mail(email_type)
-        message=mail.mail_content
-        mail_body=""
-        mail_body=cls.create_mail_body(submission,email_type,message)
-        message=MIMEText(mail_body,'html')
-        if email_type==EmailType.ACTIVITY_EXPIRED.value or email_type==EmailType.ACTIVITY_SOLUTION.value:
-            message['to']=GmailServices.get_invitation_host_email(submission.invitation_host)
-        else:    
-            message['to']=submission.candidate_email
-        message['subject']=mail.mail_subject
+    def create_messages(cls, submission, email_type):
+        mail = EmailTemplate.get_mail(email_type)
+
+        message = mail.mail_content
+        mail_body = cls.create_mail_body(submission, email_type, message)
+        message = MIMEText(mail_body, 'html')
+
+        if email_type == EmailType.ACTIVITY_EXPIRED.value or email_type == EmailType.ACTIVITY_SOLUTION.value:
+            message['to'] = GmailServices.get_invitation_host_email(
+                submission.invitation_host)
+        else:
+            message['to'] = submission.candidate_email
+
+        message['subject'] = mail.mail_subject
+
         return {'raw': base64.urlsafe_b64encode(message.as_string().encode()).decode()}
 
     @classmethod
-    def create_mail_body(cls,submission,email_type,message):
-        current_time_zone=pytz.timezone(local_settings.TIME_ZONE)
-            
-        mail_body_keywords={
-            "candidate_name":submission.candidate_name,
-            "activity_duration":submission.activity_duration,
-            "activity_url":local_settings.HOST+reverse('submission_invite',args=(submission.activity_uuid,)),
-            "activity_start_time":"" if submission.activity_start_time is None else submission.activity_start_time.astimezone(current_time_zone).strftime("%Y-%m-%d %H:%M:%S"),
-            "activity_solution_link":submission.activity_solution_link,
-            "candidate_email":submission.candidate_email,
-            "time_left":"" if submission.time_left is None else (str(submission.time_left.days)+" days "+str(submission.time_left.seconds//3600)+" hours "+str((submission.time_left.seconds//60)%60)+" minutes ")
+    def create_mail_body(cls, submission, email_type, message):
+        user_time_zone = pytz.timezone(local_settings.TIME_ZONE)
+
+        mail_body_keywords = {
+            "candidate_name": submission.candidate_name,
+            "activity_duration": submission.activity_duration,
+            "activity_url": local_settings.HOST+reverse('submission_invite', args=(submission.activity_uuid,)),
+            "activity_start_time": "" if submission.activity_start_time is None else submission.activity_start_time.astimezone(user_time_zone).strftime("%Y-%m-%d %H:%M:%S"),
+            "activity_solution_link": submission.activity_solution_link,
+            "candidate_email": submission.candidate_email,
+            "time_left": "" if submission.time_left is None else (str(submission.time_left.days)+" days "+str(submission.time_left.seconds//3600)+" hours "+str((submission.time_left.seconds//60) % 60)+" minutes ")
         }
 
-        mail_body=message.format( **mail_body_keywords )
-        
+        mail_body = message.format(**mail_body_keywords)
+
         return mail_body
