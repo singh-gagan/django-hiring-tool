@@ -21,5 +21,5 @@ urlpatterns = [
     url('admin/', admin.site.urls),
     url('summernote/', include('django_summernote.urls')),
     url('', include('hiringapp.urls')),
-    url('mail/',include('mailingapp.urls'))
+    url('gmail/',include('mailingapp.urls'))
 ]
