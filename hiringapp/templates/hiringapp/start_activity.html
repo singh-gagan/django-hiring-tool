@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <form action={% url 'submission_invite' activity_uuid=submission.activity_uuid %} method="POST">
+        {% csrf_token %}
+        <button type="submit" class="button button1">Start the Activity</button>
+    </form>
+</body>
+</html>

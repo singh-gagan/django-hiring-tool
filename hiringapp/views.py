@@ -17,17 +17,17 @@ class SubmissionInviteView(View):
     def get(self, request, activity_uuid):
         submission = Submission.get_submission(activity_uuid)
         if submission is None:
-            return render(request, 'hiringapp/display_activity.html', {'invalid': True})
+            return render(request, 'hiringapp/hiring_activity.html', {'invalid': True})
         if submission.activity_start_time is None:
-            return render(request, 'hiringapp/display_activity.html', {'submission': submission, })
+            return render(request, 'hiringapp/hiring_activity.html', {'submission': submission, })
         else:
-            return render(request, 'hiringapp/display_activity.html', {'submission': submission, 'end_time': submission.end_time, })
+            return render(request, 'hiringapp/hiring_activity.html', {'submission': submission, 'end_time': submission.end_time, })
 
     # This will only arise when the candidate clicks on start button
     def post(self, request, activity_uuid):
         submission = Submission.get_submission(activity_uuid)
         if submission is None:
-            return render(request, 'hiringapp/display_activity.html', {'invalid': True})
+            return render(request, 'hiringapp/hiring_activity.html', {'invalid': True})
         elif submission.activity_start_time is not None:
             messages.error(request, 'Activity is already started.')
             return HttpResponseRedirect(reverse('submission_invite', args=(submission.activity_uuid,)))
@@ -47,7 +47,7 @@ class SubmitSolutionView(View):
 
         submission = Submission.get_submission(activity_uuid)
         if submission is None:
-            return render(request, 'hiringapp/display_activity.html', {'invalid': True})
+            return render(request, 'hiringapp/hiring_activity.html', {'invalid': True})
         elif timezone.now() >= submission.end_time:
             messages.error(request, 'Solution not submitted.')
             return HttpResponseRedirect(reverse('submission_invite', args=(submission.activity_uuid,)))

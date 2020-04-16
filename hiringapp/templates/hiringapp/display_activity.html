@@ -1,34 +1,18 @@
-{% extends 'hiringapp/base.html' %}
-    {% block content %} 
-    
-    
-        {% if invalid %}
-            <h3>This is not a valid link.You may contact the recruiter for any communication</h3>
-        {% endif %}    
-        {% if messages %}
-            {% for message in messages %}
-                <p style="font-size:20px" >{{ message }}</p>
-            {% endfor %}
-            <hr>            
-        {% endif %}
-        {% ifequal submission.activity_status "not_yet_started" %}
-            <form action={% url 'submission_invite' activity_uuid=submission.activity_uuid %} method="POST">
-            {% csrf_token %}
-            <button type="submit" class="button button1">Start the Activity</button>
-            </form>
-        {% endifequal %}
+<!DOCTYPE html>
+<html>
+<body>
 
+<form action={% url 'submission_solution' activity_uuid=submission.activity_uuid %} method="post">
+    {% csrf_token %}
+    <input type="text" name="solution_link" size="50" placeholder="Solution link" required>
+    <button id="btn" type="submit" class="button button2">Submit Solution</button>
+</form>
 
-        {% ifequal submission.activity_status "started"  %}
-            <form action={% url 'submission_solution' activity_uuid=submission.activity_uuid %} method="post">
-            {% csrf_token %}
-            <input type="text" name="solution_link" size="50" placeholder="Solution link" required>
-            <button id="btn" type="submit" class="button button2">Submit Solution</button>
-            </form>
-            <p id="timer"></p>
-            <script>
-            var countDownDate = new Date("{{ end_time|date:'U' }}" * 1000).getTime();
-            var x = setInterval(function() {
+<p id="timer"></p>
+
+<script>
+var countDownDate = new Date("{{ end_time|date:'U' }}" * 1000).getTime();
+var x = setInterval(function() {
             var now = new Date().getTime();
             var distance = countDownDate - now; 
             var days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -44,20 +28,10 @@
                 document.getElementById("timer").innerHTML = "This activity is expired.You can contact the recruiter for any communication";
                 document.getElementById("btn").disabled = true;
             }
-            }, 1000);
-            </script>            
-            <iframe src="{{submission.activity_drive_link}}" width="1300"height="500"></iframe>
-        {% endifequal %}
-        
-        
-        {% ifequal submission.activity_status "submitted" %}
-            <h3>Thanks for the submission.We will revert back to you soon.</h3>
-        {% endifequal %}        
+        }, 1000);
+</script>
 
-        
-        {% ifequal submission.activity_status "expired" %}
-            <h3>This activity is expired.You can contact the recruiter for any communication</h3>
-        {% endifequal %}
-        
-        
-    {% endblock %}
+<iframe src="{{submission.activity_drive_link}}" width="1300"height="500"></iframe>
+
+</body>
+</html>
