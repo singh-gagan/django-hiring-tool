@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 @shared_task
 def send_emails(activity_uuid,email_type):
     from hiringapp.models import Submission
-    logger.info('Sending {email_type} email. Actiivty ID-{activity_uuid}'.format(email_type=email_type,activity_uuid=activity_uuid))
+    logger.info('Sending {email_type} email. Actiivty UUID-{activity_uuid}'.format(email_type=email_type,activity_uuid=activity_uuid))
     
     submission=Submission.get_submission(activity_uuid)
     email_log=EmailLog.add_new_email_log(email_type,activity_uuid,submission.candidate_name,'NOTSENT')
