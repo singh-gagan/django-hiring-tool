@@ -16,14 +16,19 @@ class Submission(models.Model):
 
     # Candidate's related Info
     candidate_name = models.CharField(max_length=50)
-    candidate_email = models.EmailField(max_length=50)
+    candidate_email = models.EmailField(max_length=70)
 
     # Activity Realted Info
     activity_duration = models.DurationField(
-        default=datetime.timedelta(days=2, hours=0)
+        default=datetime.timedelta(days=2, hours=0),
+        help_text="Use the following format DD HH:MM:SS ",
     )
     activity_start_time = models.DateTimeField(blank=True, null=True, editable=False)
-    activity_drive_link = models.URLField(max_length=500, blank=False)
+    activity_drive_link = models.URLField(
+        max_length=500,
+        blank=False,
+        help_text="Under the file menu in google doc click Publish to the web and copy the iframe link and paste here.",
+    )
     activity_uuid = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False
     )
@@ -34,11 +39,14 @@ class Submission(models.Model):
         max_length=500,
         choices=[(key.value, key.name) for key in ActivityStatus],
         default=ActivityStatus.NOT_YET_STARTED.value,
+        editable=False,
     )
 
     # remainder mails related Info
     reminder_for_submission_time = models.DurationField(
-        default=datetime.timedelta(days=0, hours=2)
+        default=datetime.timedelta(days=0, hours=2),
+        help_text="Candidate will be reminded to submit the solution when this much time is left."
+        + "Enter the time in HH:MM:SS format",
     )
 
     # Invitation realted Info who and when
