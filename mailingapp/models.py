@@ -3,7 +3,6 @@ from django.db import models
 from django.utils import timezone
 from oauth2client.contrib.django_util.models import CredentialsField
 from oauth2client.contrib.django_util.storage import DjangoORMStorage
-
 from .constants import EmailType
 
 
@@ -20,13 +19,13 @@ class GmailCredential(models.Model):
 
     @classmethod
     def get_credentials(cls, user):
-        storage = DjangoORMStorage(GmailCredential, 'id', user, 'credential')
+        storage = DjangoORMStorage(GmailCredential, "id", user, "credential")
         credential = storage.get()
         return credential
 
     @classmethod
     def add_credentials(cls, user, credential):
-        storage = DjangoORMStorage(GmailCredential, 'id', user, 'credential')
+        storage = DjangoORMStorage(GmailCredential, "id", user, "credential")
         storage.put(credential)
 
 
@@ -51,8 +50,8 @@ class EmailTemplate(models.Model):
 class EmailLog(models.Model):
 
     MAIL_STATUS = (
-        ('SENT', 'sent'),
-        ('NOTSENT', 'not_sent'),
+        ("SENT", "sent"),
+        ("NOTSENT", "not_sent"),
     )
 
     mail_type = models.CharField(
@@ -63,21 +62,26 @@ class EmailLog(models.Model):
     activity_uuid = models.UUIDField(null=True)
     candidate_name = models.CharField(max_length=200)
     date_of_mail = models.DateTimeField(blank=True, null=True)
-    mail_status = models.CharField(
-        max_length=7, choices=MAIL_STATUS, default='NOTSENT')
+    mail_status = models.CharField(max_length=7, choices=MAIL_STATUS, default="NOTSENT")
     message_id = models.CharField(max_length=200, null=True)
 
     @classmethod
     def add_new_email_log(cls, email_type, activity_uuid, candidate_name, mail_status):
-        email_log = EmailLog.objects.create(mail_type=email_type, activity_uuid=activity_uuid,
-                                            candidate_name=candidate_name, date_of_mail=timezone.now(), mail_status=mail_status)
+        email_log = EmailLog.objects.create(
+            mail_type=email_type,
+            activity_uuid=activity_uuid,
+            candidate_name=candidate_name,
+            date_of_mail=timezone.now(),
+            mail_status=mail_status,
+        )
         return email_log
 
     @classmethod
     def get_latest_mail_sent_date(cls, submission):
         try:
             latest_email_log = EmailLog.objects.filter(
-                activity_uuid=submission.activity_uuid, mail_status='SENT').latest('date_of_mail')
+                activity_uuid=submission.activity_uuid, mail_status="SENT"
+            ).latest("date_of_mail")
             latest_mail_sent_date = latest_email_log.date_of_mail.date()
             return latest_mail_sent_date
         except EmailLog.DoesNotExist:
@@ -87,7 +91,8 @@ class EmailLog(models.Model):
     def get_latest_mail_sent_type(cls, submission):
         try:
             latest_email_log = EmailLog.objects.filter(
-                activity_uuid=submission.activity_uuid, mail_status='SENT').latest('date_of_mail')
+                activity_uuid=submission.activity_uuid, mail_status="SENT"
+            ).latest("date_of_mail")
             latest_mail_sent_type = latest_email_log.mail_type
             return latest_mail_sent_type
         except EmailLog.DoesNotExist:
