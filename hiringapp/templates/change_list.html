@@ -5,8 +5,8 @@
             <form action="{% url 'gmail_authenticate' %}" method="POST">
                 {% csrf_token %}
                 <button type="submit" class=button>Sign In with Google</button>
-            </form>    
-        {% endif %}   
+            </form>
+        {% endif %}
     </div>
     <br />
     {{ block.super }}

@@ -1,19 +1,19 @@
 {% extends 'hiringapp/base.html' %}
 
-    {% block content %} 
-        
-    
+    {% block content %}
+
+
         {% if messages %}
             {% for message in messages %}
                 <p style="font-size:20px" >{{ message }}</p>
             {% endfor %}
-            <hr>            
+            <hr>
         {% endif %}
 
 
         {% if invalid %}
             {% include "hiringapp/invalid_activity.html" %}
-        {% endif %}    
+        {% endif %}
 
 
         {% ifequal submission.activity_status "not_yet_started" %}
@@ -24,16 +24,16 @@
         {% ifequal submission.activity_status "started"  %}
             {% include "hiringapp/display_activity.html" %}
         {% endifequal %}
-        
-        
-        {% ifequal submission.activity_status "submitted" %}
-            {% include "hiringapp/activity_submitted.html" %}    
-        {% endifequal %}        
 
-        
+
+        {% ifequal submission.activity_status "submitted" %}
+            {% include "hiringapp/activity_submitted.html" %}
+        {% endifequal %}
+
+
         {% ifequal submission.activity_status "expired" %}
             {% include "hiringapp/activity_expired.html" %}
         {% endifequal %}
-        
-        
+
+
     {% endblock %}
