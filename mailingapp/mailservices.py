@@ -37,7 +37,8 @@ class GmailServices:
             access_token = credential.access_token
             READ_ONLY_SCOPE = SCOPES[0]
             requests.get(READ_ONLY_SCOPE, headers={
-                         'Host': GOOGLE_AUTHENTICATION_HOST, 'Authorization': access_token})
+                         'Host': GOOGLE_AUTHENTICATION_HOST,
+                         'Authorization': access_token})
             return True
         except:
             return False
