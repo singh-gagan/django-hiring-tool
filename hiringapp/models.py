@@ -47,7 +47,7 @@ class Submission(models.Model):
     reminder_for_submission_time = models.DurationField(
         default=datetime.timedelta(days=0, hours=2),
         help_text=(
-            "Candidate will be reminded to submit the solution when this much time is left."
+            "Candidate will be reminded to submit when this much time is left."
             "Enter the time in HH:MM:SS format"
         ),
     )
