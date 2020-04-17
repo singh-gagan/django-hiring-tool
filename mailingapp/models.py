@@ -82,10 +82,10 @@ class EmailLog(models.Model):
             latest_email_log = EmailLog.objects.filter(
                 activity_uuid=submission.activity_uuid, mail_status="SENT"
             ).latest("date_of_mail")
-            latest_mail_sent_date = latest_email_log.date_of_mail.date()
-            return latest_mail_sent_date
         except EmailLog.DoesNotExist:
             return None
+        latest_mail_sent_date = latest_email_log.date_of_mail.date()
+        return latest_mail_sent_date
 
     @classmethod
     def get_latest_mail_sent_type(cls, submission):
