@@ -27,7 +27,9 @@ class SubmissionAdmin(admin.ModelAdmin):
         extra_context = extra_context or {}
         extra_context['gmail_authenticated'] = gmail_authenticated
 
-        return super(SubmissionAdmin, self).changelist_view(request, extra_context=extra_context)
+        return super(
+            SubmissionAdmin, self).changelist_view(
+            request, extra_context=extra_context)
 
     def save_model(self, request, obj, form, change):
         if not change:

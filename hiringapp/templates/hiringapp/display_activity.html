@@ -1,37 +1,39 @@
-<!DOCTYPE html>
-<html>
-<body>
+<!DOCTYPE html >
+<html >
+<body >
 
-<form action={% url 'submission_solution' activity_uuid=submission.activity_uuid %} method="post">
-    {% csrf_token %}
-    <input type="text" name="solution_link" size="50" placeholder="Solution link" required>
-    <button id="btn" type="submit" class="button button2">Submit Solution</button>
-</form>
+<form action = {% url 'submission_solution' activity_uuid = submission.activity_uuid % } method = "post" >
+    { % csrf_token % }
+    <input type = "text" name = "solution_link" size = "50" placeholder = "Solution link" required >
+    <button id = "btn" type = "submit" class = "button button2" > Submit Solution < /button >
+</form >
 
-<p id="timer"></p>
+<p id = "timer" > </p >
 
-<script>
-var countDownDate = new Date("{{ activity_end_time|date:'U' }}" * 1000).getTime();
+<script >
+var countDownDate = new Date("{{ activity_end_time|date:'U' }}" * 1000).getTime()
 var x = setInterval(function() {
-            var now = new Date().getTime();
-            var distance = countDownDate - now; 
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            document.getElementById("timer").style.textAlign = "right"; 
-            document.getElementById("timer").style.fontSize = "large"; 
-            document.getElementById("timer").innerHTML = "Time Left :     "+days + "d " + hours + "h "
-            + minutes + "m " + seconds + "s ";
-            if (distance < 0) {
-                clearInterval(x);
-                document.getElementById("timer").innerHTML = "This activity is expired.You can contact the recruiter for any communication";
-                document.getElementById("btn").disabled = true;
-            }
-        }, 1000);
-</script>
+    var now=new Date().getTime()
+    var distance=countDownDate - now
+    var days=Math.floor(distance / (1000 * 60 * 60 * 24))
+    var hours=Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    var minutes=Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+    var seconds=Math.floor((distance % (1000 * 60)) / 1000)
+    document.getElementById("timer").style.textAlign="right"
+    document.getElementById("timer").style.fontSize="large"
+    document.getElementById(
+        "timer").innerHTML="Time Left : "+days + "d " + hours + "h "
+    + minutes + "m " + seconds + "s "
+    if (distance < 0) {
+        clearInterval(x)
+        document.getElementById(
+            "timer").innerHTML="This activity has expired.Contact the recruiter for any communication"
+        document.getElementById("btn").disabled=true
+    }
+}, 1000)
+</script >
 
-<iframe src="{{submission.activity_drive_link}}" width="1300"height="500"></iframe>
+<iframe src = "{{submission.activity_drive_link}}" width = "1300"height = "500" > </iframe >
 
-</body>
-</html>
+</body >
+</html >
