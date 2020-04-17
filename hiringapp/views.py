@@ -72,10 +72,7 @@ class SubmitSolutionView(View):
             )
 
         elif submission.activity_status == ActivityStatus.SUBMITTED.value:
-            messages.error(
-                request,
-                "Solution not submitted.You have already submitted a solution before.",
-            )
+            messages.error(request, "Solution not submitted.")
             return HttpResponseRedirect(
                 reverse("submission_invite", args=(submission.activity_uuid,))
             )
