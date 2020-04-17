@@ -19,14 +19,14 @@ class SubmissionInviteView(View):
         submission = Submission.get_submission(activity_uuid)
 
         if submission is None:
-            return render(request, 'hiringapp/hiring_activity.html', {'invalid': True})
+            return render(request, 'hiringapp/activity_index.html', {'invalid': True})
 
         if submission.activity_start_time is None:
-            return render(request, 'hiringapp/hiring_activity.html',
+            return render(request, 'hiringapp/activity_index.html',
                           {'submission': submission, })
 
         else:
-            return render(request, 'hiringapp/hiring_activity.html',
+            return render(request, 'hiringapp/activity_index.html',
                           {'submission': submission,
                            'activity_end_time': submission.activity_end_time, })
 
@@ -35,7 +35,7 @@ class SubmissionInviteView(View):
         submission = Submission.get_submission(activity_uuid)
 
         if submission is None:
-            return render(request, 'hiringapp/hiring_activity.html', {'invalid': True})
+            return render(request, 'hiringapp/activity_index.html', {'invalid': True})
 
         elif submission.activity_start_time is not None:
             messages.error(request, 'Activity has already started.')
@@ -58,7 +58,7 @@ class SubmitSolutionView(View):
         submission = Submission.get_submission(activity_uuid)
 
         if submission is None:
-            return render(request, 'hiringapp/hiring_activity.html', {'invalid': True})
+            return render(request, 'hiringapp/activity_index.html', {'invalid': True})
 
         elif timezone.now() >= submission.activity_end_time:
             messages.error(request, 'Solution not submitted.')

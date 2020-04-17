@@ -32,7 +32,7 @@ class TestViews(TestCase):
         response = self.client.get(self.submission_invite_url_with_random_uuid)
 
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'hiringapp/hiring_activity.html')
+        self.assertTemplateUsed(response, 'hiringapp/activity_index.html')
 
     @patch('mailingapp.tasks.send_emails.delay')
     def test_submission_invite_with_radom_uuid_POST(self, mocked_send_emails):
