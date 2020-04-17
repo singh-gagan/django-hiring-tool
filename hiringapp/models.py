@@ -15,8 +15,8 @@ from .constants import ActivityStatus
 class Submission(models.Model):
 
     # Candidate's related Info
-    candidate_name = models.CharField(max_length=200)
-    candidate_email = models.EmailField(max_length=254)
+    candidate_name = models.CharField(max_length=50)
+    candidate_email = models.EmailField(max_length=50)
 
     # Activity Realted Info
     activity_duration = models.DurationField(

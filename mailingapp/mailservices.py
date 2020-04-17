@@ -33,6 +33,7 @@ class GmailServices:
             access_token = credential.access_token
         except AttributeError:
             return False
+
         READ_ONLY_SCOPE = SCOPES[0]
         requests.get(
             READ_ONLY_SCOPE,
@@ -41,6 +42,7 @@ class GmailServices:
                 "Authorization": access_token,
             },
         )
+        return True
 
     @classmethod
     def get_gmail_authorize_url(cls, user):
