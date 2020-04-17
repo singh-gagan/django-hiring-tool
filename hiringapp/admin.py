@@ -13,9 +13,7 @@ from .models import Submission
 class SubmissionAdmin(admin.ModelAdmin):
 
     change_list_template = "change_list.html"
-    actions = [
-        "cancel_flow",
-    ]
+    actions = ["cancel_flow"]
     list_display = (
         "candidate_name",
         "activity_status",
