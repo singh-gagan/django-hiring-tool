@@ -42,7 +42,7 @@ class MailUtils:
 
         mail_body_keywords = {
             EmailTemplatePlaceholder.CANDIDATE_NAME.value: submission.candidate_name,
-            EmailTemplatePlaceholder.CANDIDATE_EMAIL: submission.candidate_email,
+            EmailTemplatePlaceholder.CANDIDATE_EMAIL.value: submission.candidate_email,
             EmailTemplatePlaceholder.ACTIVITY_DURATION.value: submission.activity_duration,
             EmailTemplatePlaceholder.ACTIVITY_URL.value: (
                 local_settings.HOST
@@ -55,7 +55,9 @@ class MailUtils:
                     "%Y-%m-%d %H:%M:%S"
                 )
             ),
-            EmailTemplatePlaceholder.ACTIVITY_SOLUTION_LINK.value: submission.activity_solution_link,
+            EmailTemplatePlaceholder.ACTIVITY_SOLUTION_LINK.value: (
+                submission.activity_solution_link
+            ),
             EmailTemplatePlaceholder.ACTIVITY_LEFT_TIME.value: (
                 ""
                 if submission.activity_left_time is None
