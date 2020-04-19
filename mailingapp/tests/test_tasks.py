@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 from django.test import TestCase
 from django.utils import timezone
+from django.conf import settings
 
 from hiringapp.constants import ActivityStatus
 from hiringapp.models import Submission
@@ -11,6 +12,9 @@ from mailingapp.tasks import checkout_pending_tasks
 
 
 class TestTasks(TestCase):
+    def setUp(self):
+        settings.CELERY_TASK_ALWAYS_EAGER = True
+
     @patch("mailingapp.tasks.send_emails.delay")
     def test_checkout_pending_tas_to_send_reminders_to_start_mails(
         self, mocked_send_emails
