@@ -4,7 +4,7 @@ from django.utils import timezone
 from oauth2client.contrib.django_util.models import CredentialsField
 from oauth2client.contrib.django_util.storage import DjangoORMStorage
 
-from .constants import EmailType
+from .constants import EmailType, EmailStatus
 
 
 class GmailCredential(models.Model):
@@ -50,11 +50,11 @@ class EmailTemplate(models.Model):
 
 class EmailLog(models.Model):
 
-    MAIL_STATUS = (
-        ("SENT", "sent"),
-        ("NOTSENT", "not_sent"),
+    mail_status = models.CharField(
+        max_length=100,
+        choices=[(key.value, key.name) for key in EmailStatus],
+        default=EmailStatus.NOT_SENT,
     )
-
     mail_type = models.CharField(
         max_length=100,
         choices=[(key.value, key.name) for key in EmailType],
@@ -63,7 +63,6 @@ class EmailLog(models.Model):
     activity_uuid = models.UUIDField(null=True)
     candidate_name = models.CharField(max_length=200)
     date_of_mail = models.DateTimeField(blank=True, null=True)
-    mail_status = models.CharField(max_length=7, choices=MAIL_STATUS, default="NOTSENT")
     message_id = models.CharField(max_length=200, null=True)
 
     @classmethod
@@ -81,7 +80,8 @@ class EmailLog(models.Model):
     def get_latest_mail_sent_date(cls, submission):
         try:
             latest_email_log = EmailLog.objects.filter(
-                activity_uuid=submission.activity_uuid, mail_status="SENT"
+                activity_uuid=submission.activity_uuid,
+                mail_status=EmailStatus.SENT.value,
             ).latest("date_of_mail")
         except EmailLog.DoesNotExist:
             return None
@@ -92,7 +92,8 @@ class EmailLog(models.Model):
     def get_latest_mail_sent_type(cls, submission):
         try:
             latest_email_log = EmailLog.objects.filter(
-                activity_uuid=submission.activity_uuid, mail_status="SENT"
+                activity_uuid=submission.activity_uuid,
+                mail_status=EmailStatus.SENT.value,
             ).latest("date_of_mail")
             latest_mail_sent_type = latest_email_log.mail_type
             return latest_mail_sent_type

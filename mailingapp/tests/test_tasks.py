@@ -9,6 +9,7 @@ from hiringapp.constants import ActivityStatus
 from hiringapp.models import Submission
 from mailingapp.models import EmailLog
 from mailingapp.tasks import checkout_pending_tasks
+from mailingapp.constants import EmailStatus
 
 
 class TestTasks(TestCase):
@@ -30,7 +31,7 @@ class TestTasks(TestCase):
             EmailLog.objects.create(
                 activity_uuid=submission.activity_uuid,
                 date_of_mail=submission.invitation_creation_dateandtime,
-                mail_status="SENT",
+                mail_status=EmailStatus.SENT.value,
             )
 
         # 6 invitaion mails after creating submission objects
@@ -51,7 +52,7 @@ class TestTasks(TestCase):
         EmailLog.objects.create(
             activity_uuid=submission.activity_uuid,
             date_of_mail=submission.invitation_creation_dateandtime,
-            mail_status="SENT",
+            mail_status=EmailStatus.SENT.value,
         )
 
         submission.activity_start_time = submission.invitation_creation_dateandtime

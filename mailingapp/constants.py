@@ -19,6 +19,11 @@ class EmailTemplatePlaceholder(Enum):
     ACTIVITY_LEFT_TIME = "activity_left_time"
 
 
+class EmailStatus(Enum):
+    SENT = "sent"
+    NOT_SENT = "not_sent"
+
+
 SCOPES = [
     "https://www.googleapis.com/auth/gmail.readonly",
     "https://www.googleapis.com/auth/userinfo.email",

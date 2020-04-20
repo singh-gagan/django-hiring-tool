@@ -8,7 +8,7 @@ from hiringapp.constants import ActivityStatus
 from .constants import EmailType
 from .mailservices import GmailServices
 from .mailutils import MailUtils
-from .models import EmailLog
+from .models import EmailLog, EmailStatus
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ def send_emails(activity_uuid, email_type):
 
     submission = Submission.get_submission(activity_uuid)
     email_log = EmailLog.add_new_email_log(
-        email_type, activity_uuid, submission.candidate_name, "NOTSENT"
+        email_type, activity_uuid, submission.candidate_name, EmailStatus.NOT_SENT.value
     )
 
     try:
@@ -39,7 +39,7 @@ def send_emails(activity_uuid, email_type):
 
     sent_message = GmailServices.send_message(submission.invitation_host, message)
     if sent_message is not None:
-        email_log.mail_status = "SENT"
+        email_log.mail_status = EmailStatus.SENT.value
         email_log.message_id = sent_message["id"]
         email_log.save(update_fields=["mail_status", "message_id"])
         logger.info(
