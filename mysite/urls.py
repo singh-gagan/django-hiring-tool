@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include
+
 import hiringapp.urls
 import mailingapp.urls
 

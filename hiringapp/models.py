@@ -95,7 +95,9 @@ class Submission(models.Model):
 
     @classmethod
     def get_admin_change_list_url(cls):
-        return reverse("admin:hiringapp_submission_changelist")
+        app_name = (Submission._meta.app_label).lower()
+        class_name = (cls.__name__).lower()
+        return reverse("admin:" + app_name + "_" + class_name + "_" + "changelist")
 
     @classmethod
     def get_all_submission(cls):
