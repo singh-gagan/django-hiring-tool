@@ -43,7 +43,9 @@ class MailUtils:
         mail_body_keywords = {
             EmailTemplatePlaceholder.CANDIDATE_NAME.value: submission.candidate_name,
             EmailTemplatePlaceholder.CANDIDATE_EMAIL.value: submission.candidate_email,
-            EmailTemplatePlaceholder.ACTIVITY_DURATION.value: submission.activity_duration,
+            EmailTemplatePlaceholder.ACTIVITY_DURATION.value: (
+                submission.activity_duration
+            ),
             EmailTemplatePlaceholder.ACTIVITY_URL.value: (
                 local_settings.HOST
                 + reverse("submission_invite", args=(submission.activity_uuid,))
