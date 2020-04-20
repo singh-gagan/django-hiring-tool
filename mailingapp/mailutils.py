@@ -47,7 +47,7 @@ class MailUtils:
                 submission.activity_duration
             ),
             EmailTemplatePlaceholder.ACTIVITY_URL.value: (
-                settings.HOST
+                settings.HOST.split("//", 1)[1]
                 + reverse("submission_invite", args=(submission.activity_uuid,))
             ),
             EmailTemplatePlaceholder.ACTIVITY_START_TIME.value: (
