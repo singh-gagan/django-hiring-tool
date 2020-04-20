@@ -1,4 +1,5 @@
 from django.urls import resolve, reverse
+
 from mailingapp.views import GmailAuthCallbackView, GmailAuthenticateView
 
 

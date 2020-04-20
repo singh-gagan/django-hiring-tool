@@ -7,6 +7,7 @@ from django.views import View
 from hiringapp.constants import ActivityStatus
 from mailingapp.constants import EmailType
 from mailingapp.tasks import send_emails
+
 from .models import Submission
 
 

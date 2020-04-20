@@ -4,6 +4,7 @@ from unittest.mock import patch
 from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils import timezone
+
 from hiringapp.constants import ActivityStatus
 from hiringapp.models import Submission
 

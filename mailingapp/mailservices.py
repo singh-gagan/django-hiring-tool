@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from googleapiclient.discovery import build
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.contrib import xsrfutil
+
 from mysite.settings import local_settings
 
 from .constants import GOOGLE_AUTHENTICATION_HOST, GOOGLE_SIGN_IN_REDIRECTURI, SCOPES

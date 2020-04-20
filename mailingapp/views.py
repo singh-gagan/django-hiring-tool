@@ -1,5 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.views import View
+
 from hiringapp.models import Submission
 
 from .mailservices import GmailServices

@@ -6,6 +6,7 @@ import pytz
 from django.urls import reverse
 
 from mysite.settings import local_settings
+
 from .constants import EmailTemplatePlaceholder, EmailType
 from .mailservices import GmailServices
 from .models import EmailTemplate

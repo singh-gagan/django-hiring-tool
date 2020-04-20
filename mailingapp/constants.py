@@ -1,4 +1,5 @@
 from enum import Enum
+
 from mysite.settings import local_settings
 
 
