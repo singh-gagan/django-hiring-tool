@@ -2,13 +2,12 @@ import logging
 
 import requests
 from apiclient import errors
+from django.conf import settings
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 from googleapiclient.discovery import build
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.contrib import xsrfutil
-
-from django.conf import settings
-from django.urls import reverse
 
 from .constants import GOOGLE_AUTHENTICATION_HOST, SCOPES
 from .models import GmailCredential

@@ -3,9 +3,8 @@ import logging
 from email.mime.text import MIMEText
 
 import pytz
+from django.conf import settings
 from django.urls import reverse
-
-from mysite.settings import local_settings
 
 from .constants import EmailTemplatePlaceholder, EmailType
 from .mailservices import GmailServices
@@ -39,7 +38,7 @@ class MailUtils:
 
     @classmethod
     def create_mail_body(cls, submission, message):
-        user_time_zone = pytz.timezone(local_settings.TIME_ZONE)
+        user_time_zone = pytz.timezone(settings.TIME_ZONE)
 
         mail_body_keywords = {
             EmailTemplatePlaceholder.CANDIDATE_NAME.value: submission.candidate_name,
@@ -48,7 +47,7 @@ class MailUtils:
                 submission.activity_duration
             ),
             EmailTemplatePlaceholder.ACTIVITY_URL.value: (
-                local_settings.HOST
+                settings.HOST
                 + reverse("submission_invite", args=(submission.activity_uuid,))
             ),
             EmailTemplatePlaceholder.ACTIVITY_START_TIME.value: (
