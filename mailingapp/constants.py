@@ -1,7 +1,5 @@
 from enum import Enum
 
-from mysite.settings import local_settings
-
 
 class EmailType(Enum):
     INVITATION = "invitation"
@@ -28,9 +26,6 @@ SCOPES = [
     "https://www.googleapis.com/auth/gmail.send",
     "https://www.googleapis.com/auth/gmail.compose",
 ]
-
-
-GOOGLE_SIGN_IN_REDIRECTURI = "http://" + local_settings.HOST + "/gmail/oauth2callback"
 
 
 GOOGLE_AUTHENTICATION_HOST = "www.googleapis.com"

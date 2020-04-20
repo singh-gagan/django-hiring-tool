@@ -7,9 +7,10 @@ from googleapiclient.discovery import build
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.contrib import xsrfutil
 
-from mysite.settings import local_settings
+from django.conf import settings
+from django.urls import reverse
 
-from .constants import GOOGLE_AUTHENTICATION_HOST, GOOGLE_SIGN_IN_REDIRECTURI, SCOPES
+from .constants import GOOGLE_AUTHENTICATION_HOST, SCOPES
 from .models import GmailCredential
 
 logger = logging.getLogger(__name__)
@@ -19,9 +20,9 @@ class GmailServices:
     @classmethod
     def get_flow(cls,):
         flow = flow_from_clientsecrets(
-            local_settings.GOOGLE_OAUTH2_CLIENT_SECRETS_JSON,
+            settings.GOOGLE_OAUTH2_CLIENT_SECRETS_JSON,
             scope=SCOPES,
-            redirect_uri=GOOGLE_SIGN_IN_REDIRECTURI,
+            redirect_uri=settings.HOST + reverse("oauth2callback"),
             prompt="consent",
         )
 
@@ -48,13 +49,13 @@ class GmailServices:
     @classmethod
     def get_gmail_authorize_url(cls, user):
         flow = cls.get_flow()
-        flow.params["state"] = xsrfutil.generate_token(local_settings.SECRET_KEY, user)
+        flow.params["state"] = xsrfutil.generate_token(settings.SECRET_KEY, user)
 
         return flow.step1_get_authorize_url()
 
     @classmethod
     def get_gmail_auth_callback_credential(cls, state, authorization_code, user):
-        if not xsrfutil.validate_token(local_settings.SECRET_KEY, state, user):
+        if not xsrfutil.validate_token(settings.SECRET_KEY, state, user):
             return None
 
         flow = cls.get_flow()
@@ -68,9 +69,7 @@ class GmailServices:
 
         if credential is None or credential.invalid:
             flow = cls.get_flow()
-            flow.params["state"] = xsrfutil.generate_token(
-                local_settings.SECRET_KEY, user
-            )
+            flow.params["state"] = xsrfutil.generate_token(settings.SECRET_KEY, user)
             authorize_url = flow.step1_get_authorize_url()
             return HttpResponseRedirect(authorize_url)
 
