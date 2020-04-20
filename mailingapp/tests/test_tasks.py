@@ -16,7 +16,7 @@ class TestTasks(TestCase):
         settings.CELERY_TASK_ALWAYS_EAGER = True
 
     @patch("mailingapp.tasks.send_emails.delay")
-    def test_checkout_pending_tas_to_send_reminders_to_start_mails(
+    def test_checkout_pending_task_to_send_reminders_to_start_mails(
         self, mocked_send_emails
     ):
         # Creating submission objects having gap of 1-7 days between invitation creation datetime and todays date.

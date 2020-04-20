@@ -19,7 +19,7 @@ class MailUtils:
         mail = EmailTemplate.get_mail(email_type)
 
         message = mail.mail_content
-        mail_body = cls.create_mail_body(submission, email_type, message)
+        mail_body = cls.create_mail_body(submission, message)
         message = MIMEText(mail_body, "html")
 
         if (
@@ -37,7 +37,7 @@ class MailUtils:
         return {"raw": base64.urlsafe_b64encode(message.as_string().encode()).decode()}
 
     @classmethod
-    def create_mail_body(cls, submission, email_type, message):
+    def create_mail_body(cls, submission, message):
         user_time_zone = pytz.timezone(local_settings.TIME_ZONE)
 
         mail_body_keywords = {
