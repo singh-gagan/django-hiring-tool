@@ -27,7 +27,7 @@ class Submission(models.Model):
     activity_drive_link = models.URLField(
         max_length=500,
         blank=False,
-        help_text="Under the file menu in google doc click Publish to the web and"
+        help_text="Under the file menu in google doc click Publish to the web and "
         + "copy the iframe link and paste here.",
     )
     activity_uuid = models.UUIDField(
