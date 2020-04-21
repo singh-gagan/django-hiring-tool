@@ -5,7 +5,7 @@ from .models import EmailLog, EmailTemplate, GmailCredential
 
 
 admin.site.unregister(Attachment)
-admin.site.site_header = "Hiring Bot"
+admin.site.site_header = "HIRING BOT"
 admin.site.site_title = "Hiring Bot admin"
 
 
