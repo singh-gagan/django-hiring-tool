@@ -5,8 +5,8 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from hiringapp.constants import ActivityStatus
-from hiringapp.models import Submission
+from activitylauncher.constants import ActivityStatus
+from activitylauncher.models import Submission
 
 
 class TestViews(TestCase):
@@ -33,7 +33,7 @@ class TestViews(TestCase):
         response = self.client.get(self.submission_invite_url_with_random_uuid)
 
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, "hiringapp/activity_index.html")
+        self.assertTemplateUsed(response, "activitylauncher/activity_index.html")
 
     @patch("mailingapp.tasks.send_emails.delay")
     def test_submission_invite_with_radom_uuid_POST(self, mocked_send_emails):

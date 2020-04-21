@@ -17,12 +17,12 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include
 
-import hiringapp.urls
+import activitylauncher.urls
 import mailingapp.urls
 
 urlpatterns = [
     url("admin/", admin.site.urls),
     url("summernote/", include("django_summernote.urls")),
-    url("", include(hiringapp.urls)),
+    url("", include(activitylauncher.urls)),
     url("mail/", include(mailingapp.urls)),
 ]

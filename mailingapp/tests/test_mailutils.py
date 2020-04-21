@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.utils import timezone
 
-from hiringapp.models import Submission
+from activitylauncher.models import Submission
 from mailingapp.mailutils import MailUtils
 
 

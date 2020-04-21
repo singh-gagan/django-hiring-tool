@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.views import View
 
-from hiringapp.models import Submission
+from activitylauncher.models import Submission
 
 from .mailservices import GmailServices
 from .models import GmailCredential

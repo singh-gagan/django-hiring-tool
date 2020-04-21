@@ -3,7 +3,7 @@ import uuid
 from django.test import TestCase
 from django.urls import resolve, reverse
 
-from hiringapp.views import SubmissionInviteView, SubmitSolutionView
+from activitylauncher.views import SubmissionInviteView, SubmitSolutionView
 
 
 class TestUrls(TestCase):

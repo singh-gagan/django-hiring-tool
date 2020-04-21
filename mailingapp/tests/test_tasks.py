@@ -5,8 +5,8 @@ from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 
-from hiringapp.constants import ActivityStatus
-from hiringapp.models import Submission
+from activitylauncher.constants import ActivityStatus
+from activitylauncher.models import Submission
 from mailingapp.models import EmailLog
 from mailingapp.tasks import checkout_pending_tasks
 from mailingapp.constants import EmailStatus

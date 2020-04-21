@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("hiringapp", "0001_initial"),
+        ("activitylauncher", "0001_initial"),
     ]
 
     operations = [

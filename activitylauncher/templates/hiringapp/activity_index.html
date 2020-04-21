@@ -1,4 +1,4 @@
-{% extends 'hiringapp/base.html' %}
+{% extends 'activitylauncher/base.html' %}
 
     {% block content %}
 
@@ -12,27 +12,27 @@
 
 
         {% if invalid %}
-            {% include "hiringapp/invalid_activity.html" %}
+            {% include "activitylauncher/invalid_activity.html" %}
         {% endif %}
 
 
         {% ifequal submission.activity_status "not_yet_started" %}
-            {% include "hiringapp/start_activity.html" %}
+            {% include "activitylauncher/start_activity.html" %}
         {% endifequal %}
 
 
         {% ifequal submission.activity_status "started"  %}
-            {% include "hiringapp/display_activity.html" %}
+            {% include "activitylauncher/display_activity.html" %}
         {% endifequal %}
 
 
         {% ifequal submission.activity_status "submitted" %}
-            {% include "hiringapp/activity_submitted.html" %}
+            {% include "activitylauncher/activity_submitted.html" %}
         {% endifequal %}
 
 
         {% ifequal submission.activity_status "expired" %}
-            {% include "hiringapp/activity_expired.html" %}
+            {% include "activitylauncher/activity_expired.html" %}
         {% endifequal %}
 
 

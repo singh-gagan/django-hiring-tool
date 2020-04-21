@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from django.test import TestCase
 
-from hiringapp.models import Submission
+from activitylauncher.models import Submission
 
 
 class TestModels(TestCase):

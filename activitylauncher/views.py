@@ -4,7 +4,7 @@ from django.shortcuts import render, reverse
 from django.utils import timezone
 from django.views import View
 
-from hiringapp.constants import ActivityStatus
+from activitylauncher.constants import ActivityStatus
 from mailingapp.constants import EmailType
 from mailingapp.tasks import send_emails
 
@@ -19,17 +19,21 @@ class SubmissionInviteView(View):
         submission = Submission.get_submission(activity_uuid)
 
         if submission is None:
-            return render(request, "hiringapp/activity_index.html", {"invalid": True})
+            return render(
+                request, "activitylauncher/activity_index.html", {"invalid": True}
+            )
 
         if submission.activity_start_time is None:
             return render(
-                request, "hiringapp/activity_index.html", {"submission": submission}
+                request,
+                "activitylauncher/activity_index.html",
+                {"submission": submission},
             )
 
         else:
             return render(
                 request,
-                "hiringapp/activity_index.html",
+                "activitylauncher/activity_index.html",
                 {
                     "submission": submission,
                     "activity_end_time": submission.activity_end_time,
@@ -41,7 +45,9 @@ class SubmissionInviteView(View):
         submission = Submission.get_submission(activity_uuid)
 
         if submission is None:
-            return render(request, "hiringapp/activity_index.html", {"invalid": True})
+            return render(
+                request, "activitylauncher/activity_index.html", {"invalid": True}
+            )
 
         elif submission.activity_start_time is not None:
             messages.error(request, "Activity has already started.")
@@ -64,7 +70,9 @@ class SubmitSolutionView(View):
         submission = Submission.get_submission(activity_uuid)
 
         if submission is None:
-            return render(request, "hiringapp/activity_index.html", {"invalid": True})
+            return render(
+                request, "activitylauncher/activity_index.html", {"invalid": True}
+            )
 
         elif timezone.now() >= submission.activity_end_time:
             messages.error(request, "Solution not submitted.")

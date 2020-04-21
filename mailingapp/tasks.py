@@ -3,7 +3,7 @@ import logging
 from celery import shared_task
 from django.utils import timezone
 
-from hiringapp.constants import ActivityStatus
+from activitylauncher.constants import ActivityStatus
 
 from .constants import EmailType
 from .mailservices import GmailServices
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 @shared_task
 def send_emails(activity_uuid, email_type):
-    from hiringapp.models import Submission
+    from activitylauncher.models import Submission
 
     logger.info(
         "Sending {email_type} email. Actiivty UUID-{activity_uuid}".format(
@@ -53,7 +53,7 @@ def send_emails(activity_uuid, email_type):
 
 @shared_task
 def checkout_pending_tasks():
-    from hiringapp.models import Submission
+    from activitylauncher.models import Submission
 
     all_submissions = Submission.get_all_submission()
     for submission in all_submissions:
@@ -68,7 +68,7 @@ def checkout_pending_tasks():
 
 @shared_task
 def send_reminder_to_start_email(activity_uuid):
-    from hiringapp.models import Submission
+    from activitylauncher.models import Submission
 
     submission = Submission.get_submission(activity_uuid)
     reminders_gap_list = [1, 3, 6]
@@ -86,7 +86,7 @@ def send_reminder_to_start_email(activity_uuid):
 
 @shared_task
 def send_reminder_to_submit_email(activity_uuid):
-    from hiringapp.models import Submission
+    from activitylauncher.models import Submission
 
     submission = Submission.get_submission(activity_uuid)
     latest_mail_sent_type = EmailLog.get_latest_mail_sent_type(submission)
@@ -104,7 +104,7 @@ def send_reminder_to_submit_email(activity_uuid):
 
 @shared_task
 def send_activity_expired_email(activity_uuid):
-    from hiringapp.models import Submission
+    from activitylauncher.models import Submission
 
     submission = Submission.get_submission(activity_uuid)
     submission.activity_status = ActivityStatus.EXPIRED.value
