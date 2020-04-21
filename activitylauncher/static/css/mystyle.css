@@ -26,7 +26,6 @@ h1, h2, h3, h4 {
     float: right;
 }
 
-
 .top-menu, .top-menu:hover, .top-menu:visited {
     color: #ffffff;
     float: right;
@@ -53,6 +52,7 @@ h1, h2, h3, h4 {
     background-color: white;
     color: black;
     border: 1.5px solid #4CAF50;
+    font-size: 30px;
 }
 
 .button1:hover {
@@ -65,13 +65,14 @@ h1, h2, h3, h4 {
     color: black;
     border: 0.5px solid #4CAF50;
     height: 50px;
-    font-size: 10px;
+    font-size: 15px;
 }
 
 .button2:hover {
     background-color: #4CAF50;
     color: white;
 }
+
 p {
     text-align: "right";
     font-size: 60px;
