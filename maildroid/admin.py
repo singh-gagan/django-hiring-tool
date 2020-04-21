@@ -1,7 +1,10 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
-
+from django_summernote.models import Attachment
 from .models import EmailLog, EmailTemplate, GmailCredential
+
+
+admin.site.unregister(Attachment)
 
 
 @admin.register(EmailTemplate)
