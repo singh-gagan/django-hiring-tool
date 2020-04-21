@@ -63,6 +63,7 @@ class Submission(models.Model):
     def save(self, *args, **kwargs):
         if self._state.adding is True:
             send_emails.delay(self.activity_uuid, EmailType.INVITATION.value)
+
         super(Submission, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -75,6 +76,7 @@ class Submission(models.Model):
             submission = Submission.objects.get(activity_uuid=activity_uuid)
         except Submission.DoesNotExist:
             submission = None
+
         return submission
 
     @property
