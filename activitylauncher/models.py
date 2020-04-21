@@ -6,8 +6,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
-from mailingapp.constants import EmailType
-from mailingapp.tasks import send_emails
+from maildroid.constants import EmailType
+from maildroid.tasks import send_emails
 
 from .constants import ActivityStatus
 

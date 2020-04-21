@@ -10,7 +10,7 @@ from activitylauncher.models import Submission
 
 
 class TestViews(TestCase):
-    @patch("mailingapp.tasks.send_emails.delay")
+    @patch("maildroid.tasks.send_emails.delay")
     def setUp(self, mocked_send_emails):
         self.client = Client()
 
@@ -35,13 +35,13 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, "activitylauncher/activity_index.html")
 
-    @patch("mailingapp.tasks.send_emails.delay")
+    @patch("maildroid.tasks.send_emails.delay")
     def test_submission_invite_with_radom_uuid_POST(self, mocked_send_emails):
         response = self.client.post(self.submission_invite_url_with_random_uuid)
 
         self.assertEquals(response.status_code, 200)
 
-    @patch("mailingapp.tasks.send_emails.delay")
+    @patch("maildroid.tasks.send_emails.delay")
     def test_submission_invite_with_valid_uuid_POST(self, mocked_send_emails):
         response = self.client.post(self.submission_invite_url_with_valid_uuid)
         self.submission.refresh_from_db()
@@ -56,7 +56,7 @@ class TestViews(TestCase):
 
         self.assertEquals(response.status_code, 200)
 
-    @patch("mailingapp.tasks.send_emails.delay")
+    @patch("maildroid.tasks.send_emails.delay")
     def test_submission_solution_with_valid_uuid_POST(self, mocked_send_emails):
         self.submission.activity_status = ActivityStatus.STARTED.value
         self.submission.activity_start_time = timezone.now()

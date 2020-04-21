@@ -18,11 +18,11 @@ from django.contrib import admin
 from django.urls import include
 
 import activitylauncher.urls
-import mailingapp.urls
+import maildroid.urls
 
 urlpatterns = [
     url("admin/", admin.site.urls),
     url("summernote/", include("django_summernote.urls")),
     url("", include(activitylauncher.urls)),
-    url("mail/", include(mailingapp.urls)),
+    url("mail/", include(maildroid.urls)),
 ]

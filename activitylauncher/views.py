@@ -5,8 +5,8 @@ from django.utils import timezone
 from django.views import View
 
 from activitylauncher.constants import ActivityStatus
-from mailingapp.constants import EmailType
-from mailingapp.tasks import send_emails
+from maildroid.constants import EmailType
+from maildroid.tasks import send_emails
 
 from .models import Submission
 

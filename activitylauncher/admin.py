@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 
-from mailingapp.mailservices import GmailServices
-from mailingapp.models import GmailCredential
+from maildroid.mailservices import GmailServices
+from maildroid.models import GmailCredential
 
 from .constants import ActivityStatus
 from .models import Submission

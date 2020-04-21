@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from activitylauncher.models import Submission
-from mailingapp.mailutils import MailUtils
+from maildroid.mailutils import MailUtils
 
 
 class TestMailUtils(TestCase):

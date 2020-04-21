@@ -7,16 +7,16 @@ from django.utils import timezone
 
 from activitylauncher.constants import ActivityStatus
 from activitylauncher.models import Submission
-from mailingapp.models import EmailLog
-from mailingapp.tasks import checkout_pending_tasks
-from mailingapp.constants import EmailStatus
+from maildroid.models import EmailLog
+from maildroid.tasks import checkout_pending_tasks
+from maildroid.constants import EmailStatus
 
 
 class TestTasks(TestCase):
     def setUp(self):
         settings.CELERY_TASK_ALWAYS_EAGER = True
 
-    @patch("mailingapp.tasks.send_emails.delay")
+    @patch("maildroid.tasks.send_emails.delay")
     def test_checkout_pending_task_to_send_reminders_to_start_mails(
         self, mocked_send_emails
     ):
@@ -41,7 +41,7 @@ class TestTasks(TestCase):
         # 3 more reminders to start which are in the gap of 1,3 and 6
         self.assertEqual(mocked_send_emails.call_count, 9)
 
-    @patch("mailingapp.tasks.send_emails.delay")
+    @patch("maildroid.tasks.send_emails.delay")
     def test_checkout_pending_task_to_send_reminder_to_submit_mails(
         self, mocked_send_emails
     ):
@@ -63,7 +63,7 @@ class TestTasks(TestCase):
 
         self.assertEqual(mocked_send_emails.call_count, 2)
 
-    @patch("mailingapp.tasks.send_emails.delay")
+    @patch("maildroid.tasks.send_emails.delay")
     def test_checkout_pending_task_to_send_expiry_mails_to_admin(
         self, mocked_send_emails
     ):

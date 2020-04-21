@@ -1,6 +1,6 @@
 from django.urls import resolve, reverse
 
-from mailingapp.views import GmailAuthCallbackView, GmailAuthenticateView
+from maildroid.views import GmailAuthCallbackView, GmailAuthenticateView
 
 
 def test_authenticate_url_resolved(self):

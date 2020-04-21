@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "activitylauncher",
-    "mailingapp",
+    "maildroid",
     "django_summernote",
 ]
 
@@ -98,7 +98,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 CELERY_BROKER_URL = "amqp://localhost"
 CELERY_BEAT_SCHEDULE = {
     "send_pending_mails": {
-        "task": "mailingapp.tasks.checkout_pending_tasks",
+        "task": "maildroid.tasks.checkout_pending_tasks",
         "schedule": 120,
     },
 }
@@ -131,6 +131,6 @@ LOGGING = {
             "level": "ERROR",
             "propagate": False,
         },
-        "mailingapp": {"handlers": ["file"], "level": "DEBUG"},
+        "maildroid": {"handlers": ["file"], "level": "DEBUG"},
     },
 }
