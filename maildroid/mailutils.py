@@ -9,6 +9,7 @@ from django.urls import reverse
 from .constants import EmailTemplatePlaceholder, EmailType
 from .mailservices import GmailServices
 from .models import EmailTemplate
+from .utils import convert_timedelta_to_string
 
 logger = logging.getLogger(__name__)
 
@@ -63,14 +64,7 @@ class MailUtils:
             EmailTemplatePlaceholder.ACTIVITY_LEFT_TIME.value: (
                 ""
                 if submission.activity_left_time is None
-                else (
-                    str(submission.activity_left_time.days)
-                    + " days "
-                    + str(submission.activity_left_time.seconds // 3600)
-                    + " hours "
-                    + str((submission.activity_left_time.seconds // 60) % 60)
-                    + " minutes "
-                )
+                else convert_timedelta_to_string(submission.activity_left_time)
             ),
         }
 
