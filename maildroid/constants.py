@@ -34,3 +34,6 @@ SCOPES = [
 
 
 GOOGLE_AUTHENTICATION_HOST = "www.googleapis.com"
+
+
+REMINDERS_TO_START_GAP_LIST = [1, 3, 6]

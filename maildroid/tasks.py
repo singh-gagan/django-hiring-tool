@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from activitylauncher.constants import ActivityStatus
 
-from .constants import EmailType
+from .constants import EmailType, REMINDERS_TO_START_GAP_LIST
 from .mailservices import GmailServices
 from .mailutils import MailUtils
 from .models import EmailLog, EmailStatus
@@ -71,7 +71,7 @@ def send_reminder_to_start_email(activity_uuid):
     from activitylauncher.models import Submission
 
     submission = Submission.get_submission(activity_uuid)
-    reminders_gap_list = [1, 3, 6]
+    reminders_gap_list = REMINDERS_TO_START_GAP_LIST
     current_date = timezone.now().date()
     latest_mail_sent_date = EmailLog.get_latest_mail_sent_date(submission)
     if latest_mail_sent_date is None:
