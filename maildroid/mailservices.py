@@ -79,6 +79,7 @@ class GmailServices:
     @classmethod
     def send_message(cls, submission_invitation_host, message):
         service = cls.get_gmail_service(submission_invitation_host)
+
         try:
             message = (
                 service.users().messages().send(userId="me", body=message).execute()
