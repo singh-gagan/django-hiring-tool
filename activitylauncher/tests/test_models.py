@@ -21,6 +21,7 @@ class TestModels(TestCase):
         submission = Submission.objects.create()
         self.assertIsNotNone(submission)
 
+    @patch("maildroid.tasks.send_emails.delay")
     def test_activity_end_time_property(self):
         submission = Submission.objects.create()
         end_time_without_starting_activity = submission.activity_end_time
@@ -34,6 +35,7 @@ class TestModels(TestCase):
             end_time_after_starting_activity, submission.activity_end_time
         )
 
+    @patch("maildroid.tasks.send_emails.delay")
     def test_activity_left_time_property(self):
         submission = Submission.objects.create()
         self.assertEquals(None, submission.activity_end_time)
