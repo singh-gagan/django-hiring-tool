@@ -1,12 +1,15 @@
 from django.contrib import admin
+from django.contrib.auth.models import Group, User
 from django.http import HttpResponseRedirect
 from django.utils import timezone
-
 from maildroid.mailservices import GmailServices
 from maildroid.models import GmailCredential
 
 from .constants import ActivityStatus
 from .models import Submission
+
+admin.site.unregister(User)
+admin.site.unregister(Group)
 
 
 @admin.register(Submission)
