@@ -3,7 +3,7 @@
 <body>
     <form action={% url 'submission_invite' activity_uuid=submission.activity_uuid %} method="POST">
         {% csrf_token %}
-        <button type="submit" class="button button1">START ACTIVITY</button>
+        <button type="submit" class="btn btn-primary btn-lg">START ACTIVITY</button>
     </form>
 </body>
 </html>

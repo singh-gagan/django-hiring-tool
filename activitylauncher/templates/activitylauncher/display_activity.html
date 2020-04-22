@@ -2,10 +2,13 @@
 <html>
 <body>
 
-<form action={% url 'submission_solution' activity_uuid=submission.activity_uuid %} method="post">
+<form class="form-inline" action={% url 'submission_solution' activity_uuid=submission.activity_uuid %} method="post">
   {% csrf_token %}
-  <input type = "text" name = "solution_link" size=30 placeholder = "Solution link" style="font-size:19pt;" required >
-  <button id = "btn" type = "submit" class = "button button2" > Submit Solution </button>
+  <div class="form-group mx-sm-3 mb-2">
+    <label for="inputSolutionLink" class="sr-only">Solution link</label>
+    <input type = "text" name = "solution_link" size=30 placeholder = "Solution link"  class="form-control" id="inputSolutionLink" style="font-size:17pt;" class="form-control" required >
+    <button id = "btn" type = "submit" class="btn btn-primary btn-lg" > Submit Solution </button>
+  </div>
 </form>
 <br>
 
@@ -20,11 +23,11 @@ var x = setInterval(function() {
     var hours=Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
     var minutes=Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
     var seconds=Math.floor((distance % (1000 * 60)) / 1000)
-    document.getElementById("timer").style.textAlign="right"
     document.getElementById("timer").style.fontSize="large"
     document.getElementById(
         "timer").innerHTML="Time Left : "+days + "d " + hours + "h "
     + minutes + "m " + seconds + "s"
+    document.getElementById("timer").style.textAlign="right"
     if (distance < 0) {
         clearInterval(x)
         document.getElementById(
