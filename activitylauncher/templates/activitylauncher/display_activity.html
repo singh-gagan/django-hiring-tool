@@ -1,19 +1,29 @@
 <!DOCTYPE html>
 <html>
 <body>
-
-<form class="form-inline" action={% url 'submission_solution' activity_uuid=submission.activity_uuid %} method="post">
-  {% csrf_token %}
-  <div class="form-group mx-sm-3 mb-2">
-    <label for="inputSolutionLink" class="sr-only">Solution link</label>
-    <input type = "text" name = "solution_link" size=30 placeholder = "Solution link"  class="form-control" id="inputSolutionLink" style="font-size:17pt;" class="form-control" required >
-    <button id = "btn" type = "submit" class="btn btn-primary btn-lg" > Submit Solution </button>
+<div class="content container">
+  <div class="row">
+    <div class="col-md-8">
+      <form class="form-inline" action={% url 'submission_solution' activity_uuid=submission.activity_uuid %} method="post">
+        {% csrf_token %}
+        <div class="form-group mx-sm-3 mb-2">
+          <label for="inputSolutionLink" class="sr-only">Solution link</label>
+          <input type = "text" name = "solution_link" size=30 placeholder = "Solution link"  class="form-control" id="inputSolutionLink" style="font-size:17pt;" class="form-control" required >
+          <button id = "btn" type = "submit" class="btn btn-primary btn-lg" > Submit Solution </button>
+        </div>
+      </form>
+    </div>
   </div>
-</form>
+</div>
 <br>
 
+<div class="content container">
+<div class="row">
+<div class="col-md-6">
+<h3>ACTIVITY INSTRUCTIONS</h3>
+</div>
+<div class="col-md-6">
 <p id = "timer"> </p>
-
 <script>
 var countDownDate = new Date("{{ activity_end_time|date:'U' }}" * 1000).getTime()
 var x = setInterval(function() {
@@ -39,7 +49,9 @@ var x = setInterval(function() {
     }
 }, 1000)
 </script>
-
 <iframe src = "{{submission.activity_drive_link}}" width = "800"height = "450" style="border:none" frameBorder="0"> </iframe>
+</div>
+</div>
+</div>
 </body>
 </html>
