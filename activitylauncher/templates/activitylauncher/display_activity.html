@@ -31,6 +31,9 @@ var x = setInterval(function() {
             "timer").innerHTML="This activity has expired.Contact the recruiter for any communication"
         document.getElementById("btn").disabled=true
     }
+    else if(days==0 && hours==0 && minutes==0 && seconds<10){
+      document.getElementById("timer").style.color = "red";
+    }
 }, 1000)
 </script>
 
