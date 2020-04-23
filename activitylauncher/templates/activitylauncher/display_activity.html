@@ -7,9 +7,8 @@
       <form class="form-inline" action={% url 'submission_solution' activity_uuid=submission.activity_uuid %} method="post">
         {% csrf_token %}
         <div class="form-group mx-sm-3 mb-2">
-          <label for="inputSolutionLink" class="sr-only">Solution link</label>
-          <input type = "text" name = "solution_link" size=30 placeholder = "Solution link"  class="form-control" id="inputSolutionLink" style="font-size:17pt;" class="form-control" required >
-          <button id = "btn" type = "submit" class="btn btn-primary btn-lg" > Submit Solution </button>
+          <input type = "text" name = "solution_link" size = 60 placeholder = "Solution link"  class="form-control" required>
+          <button id = "btn" type = "submit" class="btn btn-primary btn-md"> Submit Solution </button>
         </div>
       </form>
     </div>
