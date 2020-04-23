@@ -3,11 +3,19 @@
 <body>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-6">
           <form action={% url 'submission_invite' activity_uuid=submission.activity_uuid %} method="POST">
             {% csrf_token %}
             <button type="submit" class="btn btn-primary btn-lg">START ACTIVITY</button>
           </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <p style="white-space: pre-line;">ACTIVITY INSTRUCTIONS
+            <br>
+            {{ activity_instructions }}
+          </p>
         </div>
       </div>
     </div>

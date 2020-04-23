@@ -4,7 +4,7 @@ from django.shortcuts import render, reverse
 from django.utils import timezone
 from django.views import View
 
-from activitylauncher.constants import ActivityStatus
+from activitylauncher.constants import ActivityStatus, ActivityInstructions
 from maildroid.constants import EmailType
 from maildroid.tasks import send_emails
 
@@ -27,7 +27,10 @@ class SubmissionInviteView(View):
             return render(
                 request,
                 "activitylauncher/activity_index.html",
-                {"submission": submission},
+                {
+                    "submission": submission,
+                    "activity_instructions": ActivityInstructions,
+                },
             )
 
         else:
@@ -37,6 +40,7 @@ class SubmissionInviteView(View):
                 {
                     "submission": submission,
                     "activity_end_time": submission.activity_end_time,
+                    "activity_instructions": ActivityInstructions,
                 },
             )
 
