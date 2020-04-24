@@ -77,8 +77,8 @@ class GmailServices:
         return service
 
     @classmethod
-    def send_message(cls, submission_invitation_host, message):
-        service = cls.get_gmail_service(submission_invitation_host)
+    def send_message(cls, invitation_host, message):
+        service = cls.get_gmail_service(invitation_host)
 
         try:
             message = (

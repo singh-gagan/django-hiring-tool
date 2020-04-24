@@ -100,5 +100,5 @@ class Submission(models.Model):
         return reverse("admin:" + app_name + "_" + class_name + "_" + "changelist")
 
     @classmethod
-    def get_all_submission(cls):
+    def get_all_invitation(cls):
         return Submission.objects.all()

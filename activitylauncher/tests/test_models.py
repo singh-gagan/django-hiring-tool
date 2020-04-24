@@ -14,7 +14,7 @@ class TestModels(TestCase):
         self.assertEqual(mocked_send_emails.call_count, 1)
 
     @patch("maildroid.tasks.send_emails.delay")
-    def test_get_submission(self, mocked_send_emails):
+    def test_get_invitation(self, mocked_send_emails):
         invitation = Submission.get_invitation(uuid.uuid4())
         self.assertEquals(invitation, None)
 

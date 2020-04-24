@@ -55,8 +55,8 @@ def send_emails(activity_uuid, email_type):
 def checkout_pending_tasks():
     from activitylauncher.models import Submission
 
-    all_submissions = Submission.get_all_submission()
-    for invitation in all_submissions:
+    all_invitations = Submission.get_all_invitation()
+    for invitation in all_invitations:
         if invitation.activity_status == ActivityStatus.NOT_YET_STARTED.value:
             send_reminder_to_start_email.delay(invitation.activity_uuid)
 
