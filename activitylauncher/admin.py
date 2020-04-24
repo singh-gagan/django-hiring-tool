@@ -13,7 +13,7 @@ admin.site.unregister(Group)
 
 
 @admin.register(Invitation)
-class SubmissionAdmin(admin.ModelAdmin):
+class InvitationAdmin(admin.ModelAdmin):
 
     change_list_template = "change_list.html"
     actions = ["cancel_flow"]
@@ -33,7 +33,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         extra_context = extra_context or {}
         extra_context["gmail_authenticated"] = gmail_authenticated
 
-        return super(SubmissionAdmin, self).changelist_view(
+        return super(InvitationAdmin, self).changelist_view(
             request, extra_context=extra_context
         )
 
