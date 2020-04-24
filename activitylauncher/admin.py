@@ -39,7 +39,7 @@ class SubmissionAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if not change:
-            obj.activity_host = request.user
+            obj.invitation_host = request.user
             obj.invitation_creation_dateandtime = timezone.now()
 
         return super().save_model(request, obj, form, change)

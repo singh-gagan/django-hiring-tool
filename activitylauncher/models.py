@@ -53,7 +53,7 @@ class Submission(models.Model):
     )
 
     # Invitation realted Info who and when
-    activity_host = models.ForeignKey(
+    invitation_host = models.ForeignKey(
         User, on_delete=models.CASCADE, editable=False, blank=True, null=True
     )
     invitation_creation_dateandtime = models.DateTimeField(
