@@ -37,7 +37,7 @@ def send_emails(activity_uuid, email_type):
         )
         return
 
-    sent_message = GmailServices.send_message(submission.invitation_host, message)
+    sent_message = GmailServices.send_message(submission.activity_host, message)
     if sent_message is not None:
         email_log.mail_status = EmailStatus.SENT.value
         email_log.message_id = sent_message["id"]

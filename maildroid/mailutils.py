@@ -28,7 +28,7 @@ class MailUtils:
             or email_type == EmailType.ACTIVITY_SOLUTION.value
         ):
             message["to"] = GmailServices.get_invitation_host_email(
-                submission.invitation_host
+                submission.activity_host
             )
         else:
             message["to"] = submission.candidate_email

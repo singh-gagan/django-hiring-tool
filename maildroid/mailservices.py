@@ -90,8 +90,8 @@ class GmailServices:
             return None
 
     @classmethod
-    def get_invitation_host_email(cls, invitation_host):
-        service = cls.get_gmail_service(invitation_host)
+    def get_invitation_host_email(cls, activity_host):
+        service = cls.get_gmail_service(activity_host)
         profile = service.users().getProfile(userId="me").execute()
 
         return profile["emailAddress"]
