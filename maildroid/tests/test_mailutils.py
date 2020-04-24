@@ -1,8 +1,10 @@
+from unittest.mock import patch
+
 import pytz
-from django.test import TestCase
-from django.utils import timezone
 from django.conf import settings
+from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from activitylauncher.models import Submission
 from maildroid.mailutils import MailUtils
@@ -10,7 +12,8 @@ from maildroid.utils import convert_timedelta_to_string
 
 
 class TestMailUtils(TestCase):
-    def setUp(self):
+    @patch("maildroid.tasks.send_emails.delay")
+    def setUp(self, mocked_send_emails):
         self.list_of_placeholders = [
             "{candidate_name}",
             "{candidate_email}",
