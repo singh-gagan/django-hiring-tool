@@ -38,14 +38,14 @@
       }
       }, 1000)
       </script>
-      <iframe src = "{{submission.activity_drive_link}}" width = "700"height = "450" style="border:2px solid black;" frameBorder="0"> </iframe>
+      <iframe src = "{{invitation.activity_drive_link}}" width = "700"height = "450" style="border:2px solid black;" frameBorder="0"> </iframe>
     </div>
   </div>
 </div>
 <div class="container-fluid">
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
-      <form class="form-inline" action={% url 'submission_solution' activity_uuid=submission.activity_uuid %} method="post">
+      <form class="form-inline" action={% url 'submission_solution' activity_uuid=invitation.activity_uuid %} method="post">
         {% csrf_token %}
         <div class="form-group mx-sm-3 mb-2">
           <input type = "text" name = "solution_link" size = 60 placeholder = "Solution link"  class="form-control" required>

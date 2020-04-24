@@ -48,8 +48,8 @@ class SubmissionAdmin(admin.ModelAdmin):
         return GmailCredential.has_credentials(request.user)
 
     def cancel_flow(self, request, queryset):
-        for submission in queryset:
-            submission.activity_status = ActivityStatus.EXPIRED.value
-            submission.save()
+        for invitation in queryset:
+            invitation.activity_status = ActivityStatus.EXPIRED.value
+            invitation.save(update_fields=["activity_status"])
 
     cancel_flow.short_description = "Cancel process flow"

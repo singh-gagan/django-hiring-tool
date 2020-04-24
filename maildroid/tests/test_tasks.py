@@ -20,28 +20,28 @@ class TestTasks(TestCase):
     def test_checkout_pending_task_to_send_reminders_to_start_mails(
         self, mocked_send_emails
     ):
-        # Creating submission objects having gap of 1-7 days between
+        # Creating invitation objects having gap of 1-7 days between
         # invitation creation datetime and today's date.
         # Given gap pattern is [1,3,6] so out of these 6 objects created
         # only 3 objects are eligible for reminders to start the activity.
 
         uuid_list_to_send_reminders = []
         for day in range(1, 7):
-            submission = Submission.objects.create(
+            invitation = Submission.objects.create(
                 invitation_creation_dateandtime=timezone.now()
                 - datetime.timedelta(days=day)
             )
 
             if day == 1 or day == 3 or day == 6:
-                uuid_list_to_send_reminders.append(submission.activity_uuid)
+                uuid_list_to_send_reminders.append(invitation.activity_uuid)
 
             EmailLog.objects.create(
-                activity_uuid=submission.activity_uuid,
-                date_of_mail=submission.invitation_creation_dateandtime,
+                activity_uuid=invitation.activity_uuid,
+                date_of_mail=invitation.invitation_creation_dateandtime,
                 mail_status=EmailStatus.SENT.value,
             )
 
-        # 6 invitaion mails after creating submission objects
+        # 6 invitaion mails after creating invitation objects
         self.assertEqual(mocked_send_emails.call_count, 6)
 
         # 3 more reminders to start should be send for the submission
@@ -63,19 +63,19 @@ class TestTasks(TestCase):
     def test_checkout_pending_task_to_send_reminder_to_submit_mails(
         self, mocked_send_emails
     ):
-        submission = Submission.objects.create(
+        invitation = Submission.objects.create(
             invitation_creation_dateandtime=timezone.now()
             - datetime.timedelta(days=1, hours=22)
         )
         EmailLog.objects.create(
-            activity_uuid=submission.activity_uuid,
-            date_of_mail=submission.invitation_creation_dateandtime,
+            activity_uuid=invitation.activity_uuid,
+            date_of_mail=invitation.invitation_creation_dateandtime,
             mail_status=EmailStatus.SENT.value,
         )
 
-        submission.activity_start_time = submission.invitation_creation_dateandtime
-        submission.activity_status = ActivityStatus.STARTED.value
-        submission.save()
+        invitation.activity_start_time = invitation.invitation_creation_dateandtime
+        invitation.activity_status = ActivityStatus.STARTED.value
+        invitation.save()
 
         checkout_pending_tasks.apply()
 
@@ -85,21 +85,21 @@ class TestTasks(TestCase):
     def test_checkout_pending_task_to_send_expiry_mails_to_admin(
         self, mocked_send_emails
     ):
-        submission = Submission.objects.create(
+        invitation = Submission.objects.create(
             invitation_creation_dateandtime=timezone.now() - datetime.timedelta(days=2)
         )
         EmailLog.objects.create(
-            activity_uuid=submission.activity_uuid,
-            date_of_mail=submission.invitation_creation_dateandtime,
+            activity_uuid=invitation.activity_uuid,
+            date_of_mail=invitation.invitation_creation_dateandtime,
         )
 
-        submission.activity_start_time = submission.invitation_creation_dateandtime
-        submission.activity_status = ActivityStatus.STARTED.value
-        submission.save()
+        invitation.activity_start_time = invitation.invitation_creation_dateandtime
+        invitation.activity_status = ActivityStatus.STARTED.value
+        invitation.save()
 
         checkout_pending_tasks.apply()
 
-        submission.refresh_from_db()
+        invitation.refresh_from_db()
 
         self.assertEqual(mocked_send_emails.call_count, 2)
-        self.assertEqual(submission.activity_status, ActivityStatus.EXPIRED.value)
+        self.assertEqual(invitation.activity_status, ActivityStatus.EXPIRED.value)

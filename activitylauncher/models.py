@@ -71,7 +71,7 @@ class Submission(models.Model):
         return str
 
     @classmethod
-    def get_submission(cls, activity_uuid):
+    def get_invitation(cls, activity_uuid):
         try:
             return Submission.objects.get(activity_uuid=activity_uuid)
         except Submission.DoesNotExist:

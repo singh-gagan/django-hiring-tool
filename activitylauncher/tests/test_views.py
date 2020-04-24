@@ -21,12 +21,12 @@ class TestViews(TestCase):
             "submission_solution", args=(uuid.uuid4(),)
         )
 
-        self.submission = Submission.objects.create()
+        self.invitation = Submission.objects.create()
         self.submission_invite_url_with_valid_uuid = reverse(
-            "submission_invite", args=(self.submission.activity_uuid,)
+            "submission_invite", args=(self.invitation.activity_uuid,)
         )
         self.submission_solution_url_with_valid_uuid = reverse(
-            "submission_solution", args=(self.submission.activity_uuid,)
+            "submission_solution", args=(self.invitation.activity_uuid,)
         )
 
     def test_submission_invite_GET(self):
@@ -44,10 +44,10 @@ class TestViews(TestCase):
     @patch("maildroid.tasks.send_emails.delay")
     def test_submission_invite_with_valid_uuid_POST(self, mocked_send_emails):
         response = self.client.post(self.submission_invite_url_with_valid_uuid)
-        self.submission.refresh_from_db()
+        self.invitation.refresh_from_db()
 
         self.assertEquals(response.status_code, 302)
-        self.assertEquals(self.submission.activity_status, ActivityStatus.STARTED.value)
+        self.assertEquals(self.invitation.activity_status, ActivityStatus.STARTED.value)
 
     def test_submission_solution_with_random_uuid_POST(self):
         response = self.client.post(
@@ -58,16 +58,16 @@ class TestViews(TestCase):
 
     @patch("maildroid.tasks.send_emails.delay")
     def test_submission_solution_with_valid_uuid_POST(self, mocked_send_emails):
-        self.submission.activity_status = ActivityStatus.STARTED.value
-        self.submission.activity_start_time = timezone.now()
-        self.submission.save()
+        self.invitation.activity_status = ActivityStatus.STARTED.value
+        self.invitation.activity_start_time = timezone.now()
+        self.invitation.save()
 
         response = self.client.post(
             self.submission_solution_url_with_valid_uuid, {"solution_link": "link"}
         )
-        self.submission.refresh_from_db()
+        self.invitation.refresh_from_db()
 
         self.assertEquals(response.status_code, 302)
         self.assertEquals(
-            self.submission.activity_status, ActivityStatus.SUBMITTED.value
+            self.invitation.activity_status, ActivityStatus.SUBMITTED.value
         )

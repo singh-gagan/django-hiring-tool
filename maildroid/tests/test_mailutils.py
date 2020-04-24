@@ -23,7 +23,7 @@ class TestMailUtils(TestCase):
             "{activity_solution_link}",
             "{activity_left_time}",
         ]
-        self.submission = Submission.objects.create(
+        self.invitation = Submission.objects.create(
             candidate_name="test_name",
             candidate_email="test@example.com",
             activity_start_time=timezone.now(),
@@ -40,24 +40,24 @@ class TestMailUtils(TestCase):
         message = message_with_all_placeholders
 
         dict_for_message = {
-            "candidate_name": self.submission.candidate_name,
-            "candidate_email": self.submission.candidate_email,
-            "activity_duration": self.submission.activity_duration,
+            "candidate_name": self.invitation.candidate_name,
+            "candidate_email": self.invitation.candidate_email,
+            "activity_duration": self.invitation.activity_duration,
             "activity_url": settings.HOST.split("//", 1)[1]
-            + reverse("submission_invite", args=(self.submission.activity_uuid,)),
-            "activity_start_time": self.submission.activity_start_time.astimezone(
+            + reverse("submission_invite", args=(self.invitation.activity_uuid,)),
+            "activity_start_time": self.invitation.activity_start_time.astimezone(
                 user_time_zone
             ).strftime("%Y-%m-%d %H:%M:%S"),
-            "activity_solution_link": self.submission.activity_solution_link,
+            "activity_solution_link": self.invitation.activity_solution_link,
             "activity_left_time": convert_timedelta_to_string(
-                self.submission.activity_left_time
+                self.invitation.activity_left_time
             ),
         }
 
         formatted_message = message.format(**dict_for_message)
 
         returned_message = MailUtils.create_mail_body(
-            self.submission, message_with_all_placeholders
+            self.invitation, message_with_all_placeholders
         )
 
         self.assertTrue(isinstance(returned_message, str))

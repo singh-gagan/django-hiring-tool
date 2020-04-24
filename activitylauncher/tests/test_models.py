@@ -15,31 +15,31 @@ class TestModels(TestCase):
 
     @patch("maildroid.tasks.send_emails.delay")
     def test_get_submission(self, mocked_send_emails):
-        submission = Submission.get_submission(uuid.uuid4())
-        self.assertEquals(submission, None)
+        invitation = Submission.get_invitation(uuid.uuid4())
+        self.assertEquals(invitation, None)
 
-        submission = Submission.objects.create()
-        self.assertIsNotNone(submission)
+        invitation = Submission.objects.create()
+        self.assertIsNotNone(invitation)
 
     @patch("maildroid.tasks.send_emails.delay")
     def test_activity_end_time_property(self, mocked_send_emails):
-        submission = Submission.objects.create()
-        end_time_without_starting_activity = submission.activity_end_time
+        invitation = Submission.objects.create()
+        end_time_without_starting_activity = invitation.activity_end_time
         self.assertEquals(None, end_time_without_starting_activity)
-        submission.activity_start_time = timezone.now()
-        submission.save()
+        invitation.activity_start_time = timezone.now()
+        invitation.save()
         end_time_after_starting_activity = (
-            submission.activity_start_time + submission.activity_duration
+            invitation.activity_start_time + invitation.activity_duration
         )
         self.assertEquals(
-            end_time_after_starting_activity, submission.activity_end_time
+            end_time_after_starting_activity, invitation.activity_end_time
         )
 
     @patch("maildroid.tasks.send_emails.delay")
     def test_activity_left_time_property(self, mocked_send_emails):
-        submission = Submission.objects.create()
-        self.assertEquals(None, submission.activity_end_time)
-        submission.activity_start_time = timezone.now()
-        submission.save()
-        left_time_after_starting = submission.activity_end_time - timezone.now()
-        self.assertEquals(left_time_after_starting, submission.activity_left_time)
+        invitation = Submission.objects.create()
+        self.assertEquals(None, invitation.activity_end_time)
+        invitation.activity_start_time = timezone.now()
+        invitation.save()
+        left_time_after_starting = invitation.activity_end_time - timezone.now()
+        self.assertEquals(left_time_after_starting, invitation.activity_left_time)

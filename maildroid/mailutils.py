@@ -16,11 +16,11 @@ logger = logging.getLogger(__name__)
 
 class MailUtils:
     @classmethod
-    def create_messages(cls, submission, email_type):
+    def create_messages(cls, invitation, email_type):
         mail = EmailTemplate.get_mail(email_type)
 
         message = mail.mail_content
-        mail_body = cls.create_mail_body(submission, message)
+        mail_body = cls.create_mail_body(invitation, message)
         message = MIMEText(mail_body, "html")
 
         if (
@@ -28,43 +28,43 @@ class MailUtils:
             or email_type == EmailType.ACTIVITY_SOLUTION.value
         ):
             message["to"] = GmailServices.get_invitation_host_email(
-                submission.invitation_host
+                invitation.invitation_host
             )
         else:
-            message["to"] = submission.candidate_email
+            message["to"] = invitation.candidate_email
 
         message["subject"] = mail.mail_subject
 
         return {"raw": base64.urlsafe_b64encode(message.as_string().encode()).decode()}
 
     @classmethod
-    def create_mail_body(cls, submission, message):
+    def create_mail_body(cls, invitation, message):
         user_time_zone = pytz.timezone(settings.TIME_ZONE)
 
         mail_body_keywords = {
-            EmailTemplatePlaceholder.CANDIDATE_NAME.value: submission.candidate_name,
-            EmailTemplatePlaceholder.CANDIDATE_EMAIL.value: submission.candidate_email,
+            EmailTemplatePlaceholder.CANDIDATE_NAME.value: invitation.candidate_name,
+            EmailTemplatePlaceholder.CANDIDATE_EMAIL.value: invitation.candidate_email,
             EmailTemplatePlaceholder.ACTIVITY_DURATION.value: (
-                submission.activity_duration
+                invitation.activity_duration
             ),
             EmailTemplatePlaceholder.ACTIVITY_URL.value: (
                 settings.HOST.split("//", 1)[1]
-                + reverse("submission_invite", args=(submission.activity_uuid,))
+                + reverse("submission_invite", args=(invitation.activity_uuid,))
             ),
             EmailTemplatePlaceholder.ACTIVITY_START_TIME.value: (
                 ""
-                if submission.activity_start_time is None
-                else submission.activity_start_time.astimezone(user_time_zone).strftime(
+                if invitation.activity_start_time is None
+                else invitation.activity_start_time.astimezone(user_time_zone).strftime(
                     "%Y-%m-%d %H:%M:%S"
                 )
             ),
             EmailTemplatePlaceholder.ACTIVITY_SOLUTION_LINK.value: (
-                submission.activity_solution_link
+                invitation.activity_solution_link
             ),
             EmailTemplatePlaceholder.ACTIVITY_LEFT_TIME.value: (
                 ""
-                if submission.activity_left_time is None
-                else convert_timedelta_to_string(submission.activity_left_time)
+                if invitation.activity_left_time is None
+                else convert_timedelta_to_string(invitation.activity_left_time)
             ),
         }
 

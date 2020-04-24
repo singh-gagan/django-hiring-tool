@@ -16,22 +16,22 @@
         {% endif %}
 
 
-        {% ifequal submission.activity_status "not_yet_started" %}
+        {% ifequal invitation.activity_status "not_yet_started" %}
             {% include "activitylauncher/start_activity.html" %}
         {% endifequal %}
 
 
-        {% ifequal submission.activity_status "started"  %}
+        {% ifequal invitation.activity_status "started"  %}
             {% include "activitylauncher/display_activity.html" %}
         {% endifequal %}
 
 
-        {% ifequal submission.activity_status "submitted" %}
+        {% ifequal invitation.activity_status "submitted" %}
             {% include "activitylauncher/activity_submitted.html" %}
         {% endifequal %}
 
 
-        {% ifequal submission.activity_status "expired" %}
+        {% ifequal invitation.activity_status "expired" %}
             {% include "activitylauncher/activity_expired.html" %}
         {% endifequal %}
 
