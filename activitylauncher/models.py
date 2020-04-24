@@ -73,11 +73,9 @@ class Submission(models.Model):
     @classmethod
     def get_submission(cls, activity_uuid):
         try:
-            submission = Submission.objects.get(activity_uuid=activity_uuid)
+            return Submission.objects.get(activity_uuid=activity_uuid)
         except Submission.DoesNotExist:
-            submission = None
-
-        return submission
+            return None
 
     @property
     def activity_end_time(self):
