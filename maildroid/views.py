@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.views import View
 
-from activitylauncher.models import Submission
+from activitylauncher.models import Invitation
 
 from .mailservices import GmailServices
 from .models import GmailCredential
@@ -23,4 +23,4 @@ class GmailAuthCallbackView(View):
         )
         GmailCredential.add_credentials(request.user, credential)
 
-        return HttpResponseRedirect(Submission.get_admin_change_list_url())
+        return HttpResponseRedirect(Invitation.get_admin_change_list_url())

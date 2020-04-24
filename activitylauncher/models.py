@@ -12,7 +12,7 @@ from maildroid.tasks import send_emails
 from .constants import ActivityStatus
 
 
-class Submission(models.Model):
+class Invitation(models.Model):
 
     # Candidate's related Info
     candidate_name = models.CharField(max_length=50)
@@ -64,7 +64,7 @@ class Submission(models.Model):
         if self._state.adding is True:
             send_emails.delay(self.activity_uuid, EmailType.INVITATION.value)
 
-        super(Submission, self).save(*args, **kwargs)
+        super(Invitation, self).save(*args, **kwargs)
 
     def __str__(self):
         str = "Invitation {}".format(self.candidate_name)
@@ -73,8 +73,8 @@ class Submission(models.Model):
     @classmethod
     def get_invitation(cls, activity_uuid):
         try:
-            return Submission.objects.get(activity_uuid=activity_uuid)
-        except Submission.DoesNotExist:
+            return Invitation.objects.get(activity_uuid=activity_uuid)
+        except Invitation.DoesNotExist:
             return None
 
     @property
@@ -95,10 +95,10 @@ class Submission(models.Model):
 
     @classmethod
     def get_admin_change_list_url(cls):
-        app_name = (Submission._meta.app_label).lower()
+        app_name = (Invitation._meta.app_label).lower()
         class_name = (cls.__name__).lower()
         return reverse("admin:" + app_name + "_" + class_name + "_" + "changelist")
 
     @classmethod
     def get_all_invitation(cls):
-        return Submission.objects.all()
+        return Invitation.objects.all()

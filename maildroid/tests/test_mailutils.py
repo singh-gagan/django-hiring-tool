@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from activitylauncher.models import Submission
+from activitylauncher.models import Invitation
 from maildroid.mailutils import MailUtils
 from maildroid.utils import convert_timedelta_to_string
 
@@ -23,7 +23,7 @@ class TestMailUtils(TestCase):
             "{activity_solution_link}",
             "{activity_left_time}",
         ]
-        self.invitation = Submission.objects.create(
+        self.invitation = Invitation.objects.create(
             candidate_name="test_name",
             candidate_email="test@example.com",
             activity_start_time=timezone.now(),

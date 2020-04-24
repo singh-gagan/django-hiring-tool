@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from activitylauncher.constants import ActivityStatus
-from activitylauncher.models import Submission
+from activitylauncher.models import Invitation
 from maildroid.models import EmailLog
 from maildroid.tasks import checkout_pending_tasks
 from maildroid.constants import EmailStatus, EmailType
@@ -27,7 +27,7 @@ class TestTasks(TestCase):
 
         uuid_list_to_send_reminders = []
         for day in range(1, 7):
-            invitation = Submission.objects.create(
+            invitation = Invitation.objects.create(
                 invitation_creation_dateandtime=timezone.now()
                 - datetime.timedelta(days=day)
             )
@@ -63,7 +63,7 @@ class TestTasks(TestCase):
     def test_checkout_pending_task_to_send_reminder_to_submit_mails(
         self, mocked_send_emails
     ):
-        invitation = Submission.objects.create(
+        invitation = Invitation.objects.create(
             invitation_creation_dateandtime=timezone.now()
             - datetime.timedelta(days=1, hours=22)
         )
@@ -85,7 +85,7 @@ class TestTasks(TestCase):
     def test_checkout_pending_task_to_send_expiry_mails_to_admin(
         self, mocked_send_emails
     ):
-        invitation = Submission.objects.create(
+        invitation = Invitation.objects.create(
             invitation_creation_dateandtime=timezone.now() - datetime.timedelta(days=2)
         )
         EmailLog.objects.create(

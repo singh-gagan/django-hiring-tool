@@ -6,13 +6,13 @@ from maildroid.mailservices import GmailServices
 from maildroid.models import GmailCredential
 
 from .constants import ActivityStatus
-from .models import Submission
+from .models import Invitation
 
 admin.site.unregister(User)
 admin.site.unregister(Group)
 
 
-@admin.register(Submission)
+@admin.register(Invitation)
 class SubmissionAdmin(admin.ModelAdmin):
 
     change_list_template = "change_list.html"

@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from activitylauncher.constants import ActivityStatus
-from activitylauncher.models import Submission
+from activitylauncher.models import Invitation
 
 
 class TestViews(TestCase):
@@ -21,7 +21,7 @@ class TestViews(TestCase):
             "submission_solution", args=(uuid.uuid4(),)
         )
 
-        self.invitation = Submission.objects.create()
+        self.invitation = Invitation.objects.create()
         self.submission_invite_url_with_valid_uuid = reverse(
             "submission_invite", args=(self.invitation.activity_uuid,)
         )

@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 @shared_task
 def send_emails(activity_uuid, email_type):
-    from activitylauncher.models import Submission
+    from activitylauncher.models import Invitation
 
     logger.info(
         "Sending {email_type} email. Actiivty UUID-{activity_uuid}".format(
@@ -23,7 +23,7 @@ def send_emails(activity_uuid, email_type):
         )
     )
 
-    invitation = Submission.get_invitation(activity_uuid)
+    invitation = Invitation.get_invitation(activity_uuid)
     email_log = EmailLog.add_new_email_log(
         email_type, activity_uuid, invitation.candidate_name, EmailStatus.NOT_SENT.value
     )
@@ -53,9 +53,9 @@ def send_emails(activity_uuid, email_type):
 
 @shared_task
 def checkout_pending_tasks():
-    from activitylauncher.models import Submission
+    from activitylauncher.models import Invitation
 
-    all_invitations = Submission.get_all_invitation()
+    all_invitations = Invitation.get_all_invitation()
     for invitation in all_invitations:
         if invitation.activity_status == ActivityStatus.NOT_YET_STARTED.value:
             send_reminder_to_start_email.delay(invitation.activity_uuid)
@@ -69,9 +69,9 @@ def checkout_pending_tasks():
 
 @shared_task
 def send_reminder_to_start_email(activity_uuid):
-    from activitylauncher.models import Submission
+    from activitylauncher.models import Invitation
 
-    invitation = Submission.get_invitation(activity_uuid)
+    invitation = Invitation.get_invitation(activity_uuid)
     reminders_gap_list = REMINDERS_TO_START_GAP_LIST
     current_date = timezone.now().date()
     latest_mail_sent_date = EmailLog.get_latest_mail_sent_date(invitation)
@@ -88,9 +88,9 @@ def send_reminder_to_start_email(activity_uuid):
 
 @shared_task
 def send_reminder_to_submit_email(activity_uuid):
-    from activitylauncher.models import Submission
+    from activitylauncher.models import Invitation
 
-    invitation = Submission.get_invitation(activity_uuid)
+    invitation = Invitation.get_invitation(activity_uuid)
     latest_mail_sent_type = EmailLog.get_latest_mail_sent_type(invitation)
 
     if latest_mail_sent_type is None:
@@ -107,9 +107,9 @@ def send_reminder_to_submit_email(activity_uuid):
 
 @shared_task
 def send_activity_expired_email(activity_uuid):
-    from activitylauncher.models import Submission
+    from activitylauncher.models import Invitation
 
-    invitation = Submission.get_invitation(activity_uuid)
+    invitation = Invitation.get_invitation(activity_uuid)
     invitation.activity_status = ActivityStatus.EXPIRED.value
     invitation.save(update_fields=["activity_status"])
 

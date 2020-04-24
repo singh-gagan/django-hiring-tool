@@ -8,7 +8,7 @@ from activitylauncher.constants import ActivityStatus, ActivityInstructions
 from maildroid.constants import EmailType
 from maildroid.tasks import send_emails
 
-from .models import Submission
+from .models import Invitation
 
 
 class SubmissionInviteView(View):
@@ -16,7 +16,7 @@ class SubmissionInviteView(View):
     # This will run every time whenever the invite link is loaded whether the status
     # is started,not_started,expired,finished
     def get(self, request, activity_uuid):
-        invitation = Submission.get_invitation(activity_uuid)
+        invitation = Invitation.get_invitation(activity_uuid)
 
         if invitation is None:
             return render(
@@ -46,7 +46,7 @@ class SubmissionInviteView(View):
 
     # This will only arise when the candidate clicks on start button
     def post(self, request, activity_uuid):
-        invitation = Submission.get_invitation(activity_uuid)
+        invitation = Invitation.get_invitation(activity_uuid)
 
         if invitation is None:
             return render(
@@ -71,7 +71,7 @@ class SubmissionInviteView(View):
 class SubmitSolutionView(View):
     def post(self, request, activity_uuid):
         input_solution_link = request.POST["solution_link"]
-        invitation = Submission.get_invitation(activity_uuid)
+        invitation = Invitation.get_invitation(activity_uuid)
 
         if invitation is None:
             return render(
