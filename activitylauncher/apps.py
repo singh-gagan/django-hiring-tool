@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class HiringappConfig(AppConfig):
+class ActivitylauncherConfig(AppConfig):
     name = "activitylauncher"
