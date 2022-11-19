@@ -1,0 +1,39 @@
+{% extends 'activitylauncher/base.html' %}
+
+    {% block content %}
+
+
+        {% if messages %}
+            {% for message in messages %}
+                <p style="font-size:20px" >{{ message }}</p>
+            {% endfor %}
+            <hr>
+        {% endif %}
+
+
+        {% if invalid %}
+            {% include "activitylauncher/invalid_activity.html" %}
+        {% endif %}
+
+
+        {% ifequal invitation.activity_status "not_yet_started" %}
+            {% include "activitylauncher/start_activity.html" %}
+        {% endifequal %}
+
+
+        {% ifequal invitation.activity_status "started"  %}
+            {% include "activitylauncher/display_activity.html" %}
+        {% endifequal %}
+
+
+        {% ifequal invitation.activity_status "submitted" %}
+            {% include "activitylauncher/activity_submitted.html" %}
+        {% endifequal %}
+
+
+        {% ifequal invitation.activity_status "expired" %}
+            {% include "activitylauncher/activity_expired.html" %}
+        {% endifequal %}
+
+
+    {% endblock %}

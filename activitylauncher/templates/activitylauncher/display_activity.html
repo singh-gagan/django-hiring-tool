@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<body>
+<br>
+<br>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <p style="white-space: pre-line;">ACTIVITY INSTRUCTIONS
+        <br>
+        {{ activity_instructions }}
+      </p>
+    </div>
+    <div class="col-md-6">
+      <p id = "timer"> </p>
+      <script>
+      var countDownDate = new Date("{{ activity_end_time|date:'U' }}" * 1000).getTime()
+      var x = setInterval(function() {
+      var now=new Date().getTime()
+      var distance=countDownDate - now
+      var days=Math.floor(distance / (1000 * 60 * 60 * 24))
+      var hours=Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+      var minutes=Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+      var seconds=Math.floor((distance % (1000 * 60)) / 1000)
+      document.getElementById("timer").style.fontSize="large"
+      document.getElementById(
+          "timer").innerHTML="TIME  LEFT : "+days + "d " + hours + "h "
+      + minutes + "m " + seconds + "s"
+      document.getElementById("timer").style.textAlign="center"
+      if (distance < 0) {
+          clearInterval(x)
+          document.getElementById(
+              "timer").innerHTML="This activity has expired.Contact the recruiter for any communication"
+          document.getElementById("btn").disabled=true
+      }
+      else if(days==0 && hours==0 && minutes==0 && seconds<10){
+        document.getElementById("timer").style.color = "red";
+      }
+      }, 1000)
+      </script>
+      <iframe src = "{{invitation.activity_drive_link}}" width = "700"height = "450" style="border:2px solid black;" frameBorder="0"> </iframe>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <form class="form-inline" action={% url 'submission_solution' activity_uuid=invitation.activity_uuid %} method="post">
+        {% csrf_token %}
+        <div class="form-group mx-sm-3 mb-2">
+          <input type = "text" name = "solution_link" size = 60 placeholder = "Solution link"  class="form-control" required>
+          <button id = "btn" type = "submit" class="btn btn-primary btn-md"> Submit Solution </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>
